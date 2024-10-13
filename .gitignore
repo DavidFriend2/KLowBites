@@ -1,0 +1,40 @@
+
+# Byte Code #
+*.class
+
+# Eclipse #
+.settings/
+bin/
+tmp/
+.metadata
+.classpath
+.project
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.factorypath
+.checkstyle
+
+# Log Files #
+*.log
+
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual Machine Crash Logs (see http://www.java.com/en/download/help/error_hotspot.xml) #
+hs_err_pid*
+
+
+# OS X #
+.DS_Store
+
