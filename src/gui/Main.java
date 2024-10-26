@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * @Author Jayden S
  * Creates the Basic Main Window for KILowBites
  * 
  * TODO Add KIlowBites png to the main screen
@@ -46,6 +47,20 @@ public class Main extends JFrame
     // Create Tools menu
     JMenu toolsMenu = new JMenu("Tools");
     menuBar.add(toolsMenu);
+    
+    // Calories Calculator and Units Converter to Tools menu
+    JMenuItem caloriesCalculatorItem = new JMenuItem("Calories Calculator");
+    JMenuItem unitsConverterItem = new JMenuItem("Units Converter");
+    toolsMenu.add(caloriesCalculatorItem);
+    toolsMenu.add(unitsConverterItem);
+    
+    
+    // Action listener to Units Converter menu item
+    unitsConverterItem.addActionListener(e -> {
+        UnitConverterWindow converterWindow = new UnitConverterWindow();
+        converterWindow.setVisible(true);
+    });
+
 
     // Create Configure menu
     JMenu configureMenu = new JMenu("Configure");
