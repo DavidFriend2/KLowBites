@@ -15,6 +15,8 @@ import java.awt.*;
  */
 public class Main extends JFrame
 {
+  private ImageIcon logoIcon;
+  private JLabel logoLabel;
 
   public Main()
   {
@@ -23,6 +25,14 @@ public class Main extends JFrame
     setSize(600, 400);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
+    
+    // Load the company image
+    logoIcon = createImageIcon("/img/logo.png");
+    if (logoIcon != null) {
+      logoLabel = new JLabel(logoIcon);
+    } else {
+      logoLabel = new JLabel("Logo not found");
+    }
 
     // Create a menu bar
     JMenuBar menuBar = new JMenuBar();
@@ -78,7 +88,20 @@ public class Main extends JFrame
     // Create main content panel
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
+    
+    // Add the logo label to the center of the main panel
+    mainPanel.add(logoLabel, BorderLayout.CENTER);
     add(mainPanel);
+  }
+  
+  private ImageIcon createImageIcon(String path) {
+    java.net.URL imgURL = getClass().getResource(path);
+    if (imgURL != null) {
+      return new ImageIcon(imgURL);
+    } else {
+      System.err.println("Couldn't find file: " + path);
+      return null;
+    }
   }
 
   public static void main(String[] args)
