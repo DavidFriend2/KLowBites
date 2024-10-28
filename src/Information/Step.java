@@ -1,31 +1,33 @@
 package Information;
 
+import java.util.List;
+
 public class Step
 {
   private String action;
-  private Ingredient ingredient;
   private String on;
   private String destinationUtensil;
   private String details;
+  private List<String> actions;
   
-  public Step(String action, Ingredient ingredient, String sourceUtensil, String destinationUtensil, String details)
+  public Step(String action, String on, String destinationUtensil, String details)
   {
     this.action = action;
-    this.ingredient = ingredient;
-    this.on = sourceUtensil;
+    this.on = on;
     this.destinationUtensil = destinationUtensil;
     this.details = details;
+    
+    actions.add("put");
+    actions.add("melt");
+    actions.add("simmer");
+    actions.add("heat");
+    actions.add("ignite");
     
   }
   
   public String getAction()
   {
     return this.action;
-  }
-
-  public Ingredient getIngredient()
-  {
-    return this.ingredient;
   }
 
   public String getSourceUtensilOrIngredient()

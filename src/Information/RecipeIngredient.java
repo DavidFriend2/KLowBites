@@ -5,10 +5,10 @@ public class RecipeIngredient
   private Ingredient ingredient;
   private String name;
   private String details;
-  private int amount;
+  private double amount;
   private String unit;
   
-  public RecipeIngredient(String name, String details, int amount, String unit)
+  public RecipeIngredient(String name, String details, double amount, String unit)
   {
     this.name = name;
     this.details = details;
@@ -27,7 +27,7 @@ public class RecipeIngredient
     return this.details;
   }
 
-  public int getAmount()
+  public double getAmount()
   {
     return this.amount;
   }
