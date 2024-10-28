@@ -7,11 +7,11 @@ public class Recipe
 {
   private String name;
   private int serves;
-  private List<Ingredient> ingredients;
+  private List<RecipeIngredient> ingredients;
   private Map<String, String> utensils;
   private List<Step> steps;
   
- public Recipe(String name, int serves, List<Ingredient> ingredients, Map<String, String> utensils, List<Step> steps)
+ public Recipe(String name, int serves, List<RecipeIngredient> ingredients, Map<String, String> utensils, List<Step> steps)
  {
    this.name = name;
    this.serves = serves;
@@ -31,7 +31,7 @@ public class Recipe
    return this.serves;
  }
  
- public List<Ingredient> getIngredients()
+ public List<RecipeIngredient> getIngredients()
  {
    return this.ingredients;
  }
