@@ -1,5 +1,6 @@
 package Information;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Step
@@ -8,7 +9,8 @@ public class Step
   private String on;
   private String destinationUtensil;
   private String details;
-  private List<String> actions;
+  
+  private static final List<String> actions = new ArrayList<>();; 
   
   public Step(String action, String on, String destinationUtensil, String details)
   {
@@ -17,11 +19,6 @@ public class Step
     this.destinationUtensil = destinationUtensil;
     this.details = details;
     
-    actions.add("put");
-    actions.add("melt");
-    actions.add("simmer");
-    actions.add("heat");
-    actions.add("ignite");
     
   }
   
@@ -39,9 +36,31 @@ public class Step
   {
     return this.destinationUtensil;
   }
+  
   public String getDetails()
   {
     return this.details;
+  }
+  
+  public static List<String> getActions()
+  {
+    return new ArrayList<>(actions);
+  }
+  
+  static 
+  {
+    actions.add("Bake");
+    actions.add("Boil");
+    actions.add("Cook");
+    actions.add("Dip");
+    actions.add("Drain");
+    actions.add("Heat");
+    actions.add("Ignite");
+    actions.add("Melt");
+    actions.add("Put");
+    actions.add("Saute");
+    actions.add("Simmer");
+    
   }
   
 }
