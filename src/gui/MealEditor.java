@@ -41,8 +41,11 @@ public class MealEditor extends JFrame
         
 	    buttonCreation buttonCreation = new buttonCreation();
 		//initialize buttons
-	    buttonCreation.addImageButton(imagePanel, "/img/calculate.png", "Calculate");
-        buttonCreation.addImageButton(imagePanel, "/img/reset.png", "Rest");
+	    buttonCreation.addImageButton(imagePanel, "/img/new.png", "New");
+        buttonCreation.addImageButton(imagePanel, "/img/open.png", "Open");
+        buttonCreation.addImageButton(imagePanel, "/img/save.png", "Save");
+        buttonCreation.addImageButton(imagePanel, "/img/saveAs.png", "Save As");
+        buttonCreation.addImageButton(imagePanel, "/img/close.png", "Close");
         
         // Add image panel to the top (NORTH) of the main panel
         mainPanel.add(imagePanel, BorderLayout.NORTH);

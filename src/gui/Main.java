@@ -27,7 +27,8 @@ public class Main extends JFrame
     setLocationRelativeTo(null);
     
     // Load the company image
-    logoIcon = createImageIcon("/img/logo.png");
+    buttonCreation buttonCreation = new buttonCreation();
+    logoIcon = buttonCreation.createImageIcon("/img/logo.png");
     if (logoIcon != null) {
       logoLabel = new JLabel(logoIcon);
     } else {
@@ -135,16 +136,6 @@ public class Main extends JFrame
     // Add the logo label to the center of the main panel
     mainPanel.add(logoLabel, BorderLayout.CENTER);
     add(mainPanel);
-  }
-  
-  private ImageIcon createImageIcon(String path) {
-    java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null) {
-      return new ImageIcon(imgURL);
-    } else {
-      System.err.println("Couldn't find file: " + path);
-      return null;
-    }
   }
 
   public static void main(String[] args)
