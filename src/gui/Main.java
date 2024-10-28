@@ -38,52 +38,95 @@ public class Main extends JFrame
     JMenuBar menuBar = new JMenuBar();
     setJMenuBar(menuBar);
 
-    // Create File menu
+    // Create File menu -------------------------------------------------------
     JMenu fileMenu = new JMenu("File");
     menuBar.add(fileMenu);
+    
+    // Add menu items to File menu
+    JMenuItem exitItem = new JMenuItem("Exit");
+    exitItem.addActionListener(e -> System.exit(0));
+    fileMenu.add(exitItem);
 
-    // Create Edit menu
+    // Create Edit menu ------------------------------------------------------------
     JMenu editMenu = new JMenu("Edit");
     menuBar.add(editMenu);
+    
+    //add drop downs for edit
+    JMenuItem recipeEditor = new JMenuItem("Recipe");
+    editMenu.add(recipeEditor);
+    JMenuItem mealEditor = new JMenuItem("Meal");
+    editMenu.add(mealEditor);
 
-    // Create Search menu
+    // Action listener to Meal menu item
+    mealEditor.addActionListener(e -> {
+        MealEditor conv = new MealEditor();
+        conv.setVisible(true);
+    });
+    
+    // Create Search menu --------------------------------------------------
     JMenu searchMenu = new JMenu("Search");
     menuBar.add(searchMenu);
-
-    // Create View menu
+    
+    // add drop downs to search
+    JMenuItem searchRecipes = new JMenuItem("Recipes");
+    searchMenu.add(searchRecipes);
+    JMenuItem searchMeals = new JMenuItem("Meals");
+    searchMenu.add(searchMeals);
+    
+    //ADD LISTENER 
+    
+    // Create View menu -------------------------------------------------
     JMenu viewMenu = new JMenu("View");
-    menuBar.add(viewMenu);
+   	menuBar.add(viewMenu);
+   	
+   	// add drop downs to view
+   	JMenuItem viewShoppingList = new JMenuItem("Shopping List");
+    viewMenu.add(viewShoppingList);
+    JMenuItem viewProcess = new JMenuItem("Process");
+    viewMenu.add(viewProcess);
+    
+    // ADD LISTENER
 
-    // Create Tools menu
+    // Create Tools menu -----------------------------------------------
     JMenu toolsMenu = new JMenu("Tools");
     menuBar.add(toolsMenu);
     
     // Calories Calculator and Units Converter to Tools menu
     JMenuItem caloriesCalculatorItem = new JMenuItem("Calories Calculator");
-    JMenuItem unitsConverterItem = new JMenuItem("Units Converter");
     toolsMenu.add(caloriesCalculatorItem);
+    JMenuItem unitsConverterItem = new JMenuItem("Units Converter");
     toolsMenu.add(unitsConverterItem);
-    
-    
+   
     // Action listener to Units Converter menu item
     unitsConverterItem.addActionListener(e -> {
         UnitConverterWindow converterWindow = new UnitConverterWindow();
         converterWindow.setVisible(true);
     });
 
+    // ADD CALORIES LISTENER
 
-    // Create Configure menu
+    // Create Configure menu ---------------------------------------------------
     JMenu configureMenu = new JMenu("Configure");
     menuBar.add(configureMenu);
 
-    // Create Help menu
+    // drop downs
+    JMenuItem preferences = new JMenuItem("Preferences");
+    configureMenu.add(preferences);
+    JMenuItem shortcuts = new JMenuItem("Shortcuts");
+    configureMenu.add(shortcuts);
+    
+    // ADD LISTENER
+    
+    // Create Help menu ---------------------------------------------
     JMenu helpMenu = new JMenu("Help");
     menuBar.add(helpMenu);
+    
+    //drop downs
+    JMenuItem about = new JMenuItem("About");
+    helpMenu.add(about);
+    JMenuItem userGuide = new JMenuItem("User Guide");
+    helpMenu.add(userGuide);
 
-    // Add menu items to File menu
-    JMenuItem exitItem = new JMenuItem("Exit");
-    exitItem.addActionListener(e -> System.exit(0));
-    fileMenu.add(exitItem);
 
     // Create main content panel
     JPanel mainPanel = new JPanel();
