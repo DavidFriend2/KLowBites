@@ -277,7 +277,7 @@ public class UnitConverterWindow extends JFrame {
   public static void main(String[] args)
   {
     SwingUtilities.invokeLater(() -> {
-      UnitConverter window = new UnitConverter();
+      UnitConverterWindow window = new UnitConverterWindow();
       window.setVisible(true);
     });
   }
