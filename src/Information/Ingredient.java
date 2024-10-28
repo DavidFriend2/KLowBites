@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ingredient implements Serializable
+public class Ingredient implements Serializable, Comparable<Ingredient>
 {
   
   private static final long serialVersionUID = 1L;
@@ -46,6 +46,11 @@ public class Ingredient implements Serializable
   {
     ingredients.sort(null);
     return ingredients;
+  }
+  
+  public int compareTo(Ingredient o)
+  {
+    return 0;
   }
   
   public static Ingredient getIngredientbyName(String name)
@@ -180,6 +185,5 @@ public class Ingredient implements Serializable
     ingredients.add(new Ingredient("Wine", 83, .99));
     
   }
-  
 
 }

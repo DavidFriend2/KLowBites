@@ -3,13 +3,13 @@ package UnitConversion;
 public class VolumeUnitConverter
 {
   private static final String P = "pinches";
-  private static final String TSP = "teaspoon";
-  private static final String TBS = "tablespoon";
+  private static final String TSP = "teaspoons";
+  private static final String TBS = "tablespoons";
   private static final String FLOZ = "fluid ounces";
-  private static final String CUP = "cup";
-  private static final String PT = "pint";
-  private static final String QT = "quart";
-  private static final String GAL = "gallon";
+  private static final String CUP = "cups";
+  private static final String PT = "pints";
+  private static final String QT = "quarts";
+  private static final String GAL = "gallons";
   private static final String ML = "milliliters";
   
   
