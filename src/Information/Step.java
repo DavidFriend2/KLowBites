@@ -14,6 +14,7 @@ public class Step
     this.ingredient = ingredient;
     this.on = sourceUtensil;
     this.destinationUtensil = destinationUtensil;
+    this.details = details;
     
   }
   
