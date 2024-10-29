@@ -7,9 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Recipe implements Serializable
 {
@@ -18,12 +16,12 @@ public class Recipe implements Serializable
   private String name;
   private int serves;
   private List<RecipeIngredient> ingredients;
-  private Map<String, String> utensils;
+  private List<Utensil> utensils;
   private List<Step> steps;
   
-  private static List<Recipe> recipes = new ArrayList<>();;
+  private static List<Recipe> recipes = new ArrayList<>();
   
- public Recipe(String name, int serves, List<RecipeIngredient> ingredients, Map<String, String> utensils, List<Step> steps)
+ public Recipe(String name, int serves, List<RecipeIngredient> ingredients, List<Utensil> utensils, List<Step> steps)
  {
    this.name = name;
    this.serves = serves;
@@ -48,7 +46,7 @@ public class Recipe implements Serializable
    return this.ingredients;
  }
  
- public Map<String, String> getUtenils()
+ public List<Utensil> getUtenils()
  {
    return this.utensils;
  }
@@ -95,10 +93,10 @@ public class Recipe implements Serializable
    ingredients.add(new RecipeIngredient("Ice cream", "vanilla", 2, "cup"));
    ingredients.add(new RecipeIngredient("Cinnamon", "ground", .25, "teaspoon"));
    
-   Map<String, String> utensils = new HashMap<>();
-   utensils.put("Skillet", "large");
-   utensils.put("Saucepan", null);
-   utensils.put("Plate", null);
+   List<Utensil> utensils = new ArrayList<>();
+   utensils.add(new Utensil("Skillet", "large"));
+   utensils.add(new Utensil("Saucepan", null));
+   utensils.add(new Utensil("Plate", null));
    
    List<Step> steps = new ArrayList<>();
    steps.add(new Step("Put", "butter","skillet", null));
@@ -133,11 +131,11 @@ public class Recipe implements Serializable
    ingredients2.add(new RecipeIngredient("American cheese", "shredded", 1.5, "cup"));
    ingredients2.add(new RecipeIngredient("Tomato", "sliced medium", 1, "indivudal"));
    
-   Map<String, String> utensils2 = new HashMap<>();
-   utensils2.put("Pot", "large");
-   utensils2.put("Saucepan", "medium");
-   utensils2.put("Casserole", "1-quart");
-   utensils2.put("strainer", null);
+   List<Utensil> utensils2 = new ArrayList<>();
+   utensils2.add(new Utensil("Pot", "large"));
+   utensils2.add(new Utensil("Saucepan", "medium"));
+   utensils2.add(new Utensil("Casserole", "1-quart"));
+   utensils2.add(new Utensil("strainer", null));
    
    List<Step> steps2 = new ArrayList<>();
    steps2.add(new Step("Boil", "macaroni","pot", "for 10 minutes"));
@@ -173,10 +171,10 @@ public class Recipe implements Serializable
    ingredients3.add(new RecipeIngredient("Pepper", "black", .1, "teaspoon"));
    ingredients3.add(new RecipeIngredient("Chicken", "pieces; skinned, rinsed and dried", 2, "pounds"));
    
-   Map<String, String> utensils3 = new HashMap<>();
-   utensils3.put("Dish", "shallow");
-   utensils3.put("Bowl", "small");
-   utensils3.put("Baking pan", "15x10x1 greased");
+   List<Utensil> utensils3 = new ArrayList<>();
+   utensils3.add(new Utensil("Dish", "shallow"));
+   utensils3.add(new Utensil("Bowl", "small"));
+   utensils3.add(new Utensil("Baking pan", "15x10x1 greased"));
    
    List<Step> steps3 = new ArrayList<>();
    steps3.add(new Step("Put", "egg","bowl", null));
