@@ -3,9 +3,11 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Image;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class buttonCreation {
 
@@ -17,6 +19,8 @@ public class buttonCreation {
             JButton button = new JButton(new ImageIcon(img));
             button.setPreferredSize(new Dimension(50, 50));
             button.setToolTipText(buttonName);
+            Border emptyBorder = BorderFactory.createEmptyBorder();
+            button.setBorder(emptyBorder);
             panel.add(button);
         }
     }
