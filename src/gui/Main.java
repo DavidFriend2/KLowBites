@@ -15,6 +15,8 @@ import java.awt.*;
  */
 public class Main extends JFrame
 {
+  private static final long serialVersionUID = 1293847237;
+
   private static final String LOGO_PATH = "/img/logo.png";
 
   private ImageIcon logoIcon;
