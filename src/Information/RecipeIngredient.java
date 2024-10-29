@@ -1,7 +1,10 @@
 package Information;
 
-public class RecipeIngredient
+import java.io.Serializable;
+
+public class RecipeIngredient implements Serializable
 {
+  private static final long serialVersionUID = 1L;
   private Ingredient ingredient;
   private String name;
   private String details;

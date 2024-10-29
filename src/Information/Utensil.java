@@ -1,7 +1,10 @@
 package Information;
 
-public class Utensil
+import java.io.Serializable;
+
+public class Utensil implements Serializable
 {
+  private static final long serialVersionUID = 1L;
   String name;
   String details;
   

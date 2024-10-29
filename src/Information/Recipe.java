@@ -51,6 +51,11 @@ public class Recipe implements Serializable
    return this.utensils;
  }
  
+ public static List<Recipe> getRecipes()
+ {
+   return recipes;
+ }
+ 
  public List<Step> getSteps()
  {
    return this.steps;
@@ -77,6 +82,29 @@ public class Recipe implements Serializable
      output.writeObject(recipes);
    }
  }
+ 
+ public String getFileName()
+ {
+   return "recipes/" +  this.name.replaceAll(" ", "_") + ".rcp";
+ }
+ 
+ public void saveRecipeToFile() throws IOException
+ {
+   try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(getFileName())))
+   {
+     output.writeObject(this);
+   }
+ }
+ 
+ public static Recipe loadRecipeFromFile(String file) throws IOException, ClassNotFoundException
+ {
+   try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file)))
+   {
+     return (Recipe) input.readObject();
+   }
+ }
+ 
+ 
  
  static {
    //Bananas Foster

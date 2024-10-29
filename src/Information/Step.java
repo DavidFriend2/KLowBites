@@ -1,16 +1,18 @@
 package Information;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Step
+public class Step implements Serializable
 {
+  private static final long serialVersionUID = 1L;
   private String action;
   private String on;
   private String destinationUtensil;
   private String details;
   
-  private static final List<String> actions = new ArrayList<>();; 
+  private static final List<String> actions = new ArrayList<>(); 
   
   public Step(String action, String on, String destinationUtensil, String details)
   {
