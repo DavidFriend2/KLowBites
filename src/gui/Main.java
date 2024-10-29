@@ -4,154 +4,177 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @Author Jayden S
  * Creates the Basic Main Window for KILowBites
  * 
-<<<<<<< HEAD
  * @author Jayden S
  * 
  * TODO Setup shortcuts 
  * TODO Add functionality to each menu header 
  * TODO DO NOT ADD THINGS THAT ARE NOT GOING TO BE DONE IN THIS SPRINT,
  * READ DOC FOR MORE DETAILS. 
-=======
- * TODO Add KIlowBites png to the main screen
- * TODO Setup shortcuts
- * TODO Add functionality to each menu header
- * TODO DO NOT ADD THINGS THAT ARE NOT GOING TO BE
- * DONE IN THIS SPRINT, READ DOC FOR MORE DETAILS
->>>>>>> branch 'main' of https://github.com/bernstdh/f24team3c
  */
 public class Main extends JFrame
 {
-<<<<<<< HEAD
   private static final long serialVersionUID = 1293847254;
 
   private static final String LOGO_PATH = "/img/logo.png";
 
-=======
->>>>>>> branch 'main' of https://github.com/bernstdh/f24team3c
   private ImageIcon logoIcon;
   private JLabel logoLabel;
 
   public Main()
   {
-    // Set up the frame
+    initializeWindow();
+    initializeLogo();
+    createMenuBar();
+    createMainPanel();
+  }
+
+  private void initializeWindow()
+  {
     setTitle("KiLowBites Main Window");
     setSize(600, 400);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
-    
-    // Load the company image
-    buttonCreation buttonCreation = new buttonCreation();
-    logoIcon = buttonCreation.createImageIcon("/img/logo.png");
-    if (logoIcon != null) {
+  }
+
+  private void initializeLogo()
+  {
+    logoIcon = createImageIcon(LOGO_PATH);
+    if (logoIcon != null)
+    {
       logoLabel = new JLabel(logoIcon);
-    } else {
+    }
+    else
+    {
       logoLabel = new JLabel("Logo not found");
     }
+  }
 
-    // Create a menu bar
+  private void createMenuBar()
+  {
     JMenuBar menuBar = new JMenuBar();
     setJMenuBar(menuBar);
 
-    // Create File menu -------------------------------------------------------
+    createFileMenu(menuBar);
+    createEditMenu(menuBar);
+    createSearchMenu(menuBar);
+    createViewMenu(menuBar);
+    createToolsMenu(menuBar);
+    createConfigureMenu(menuBar);
+    createHelpMenu(menuBar);
+  }
+
+  private void createFileMenu(JMenuBar menuBar)
+  {
     JMenu fileMenu = new JMenu("File");
     menuBar.add(fileMenu);
-    
-    // Add menu items to File menu
+
     JMenuItem exitItem = new JMenuItem("Exit");
     exitItem.addActionListener(e -> System.exit(0));
     fileMenu.add(exitItem);
+  }
 
-    // Create Edit menu ------------------------------------------------------------
+  private void createEditMenu(JMenuBar menuBar)
+  {
     JMenu editMenu = new JMenu("Edit");
     menuBar.add(editMenu);
-    
-    //add drop downs for edit
+
     JMenuItem recipeEditor = new JMenuItem("Recipe");
     editMenu.add(recipeEditor);
     JMenuItem mealEditor = new JMenuItem("Meal");
     editMenu.add(mealEditor);
 
-    // Action listener to Meal menu item
     mealEditor.addActionListener(e -> {
-        MealEditor conv = new MealEditor();
-        conv.setVisible(true);
+      MealEditor conv = new MealEditor();
+      conv.setVisible(true);
     });
-    
-    // Create Search menu --------------------------------------------------
+  }
+
+  private void createSearchMenu(JMenuBar menuBar)
+  {
     JMenu searchMenu = new JMenu("Search");
     menuBar.add(searchMenu);
-    
-    // add drop downs to search
+
     JMenuItem searchRecipes = new JMenuItem("Recipes");
     searchMenu.add(searchRecipes);
     JMenuItem searchMeals = new JMenuItem("Meals");
     searchMenu.add(searchMeals);
-    
-    //ADD LISTENER 
-    
-    // Create View menu -------------------------------------------------
+  }
+
+  private void createViewMenu(JMenuBar menuBar)
+  {
     JMenu viewMenu = new JMenu("View");
-   	menuBar.add(viewMenu);
-   	
-   	// add drop downs to view
-   	JMenuItem viewShoppingList = new JMenuItem("Shopping List");
+    menuBar.add(viewMenu);
+
+    JMenuItem viewShoppingList = new JMenuItem("Shopping List");
     viewMenu.add(viewShoppingList);
     JMenuItem viewProcess = new JMenuItem("Process");
     viewMenu.add(viewProcess);
-    
-    // ADD LISTENER
+  }
 
-    // Create Tools menu -----------------------------------------------
+  private void createToolsMenu(JMenuBar menuBar)
+  {
     JMenu toolsMenu = new JMenu("Tools");
     menuBar.add(toolsMenu);
-    
-    // Calories Calculator and Units Converter to Tools menu
+
     JMenuItem caloriesCalculatorItem = new JMenuItem("Calories Calculator");
     toolsMenu.add(caloriesCalculatorItem);
     JMenuItem unitsConverterItem = new JMenuItem("Units Converter");
     toolsMenu.add(unitsConverterItem);
-   
-    // Action listener to Units Converter menu item
+
     unitsConverterItem.addActionListener(e -> {
-        UnitConverterWindow converterWindow = new UnitConverterWindow();
-        converterWindow.setVisible(true);
+      UnitConverterWindow converterWindow = new UnitConverterWindow();
+      converterWindow.setVisible(true);
     });
+  }
 
-    // ADD CALORIES LISTENER
-
-    // Create Configure menu ---------------------------------------------------
+  private void createConfigureMenu(JMenuBar menuBar)
+  {
     JMenu configureMenu = new JMenu("Configure");
     menuBar.add(configureMenu);
 
-    // drop downs
     JMenuItem preferences = new JMenuItem("Preferences");
     configureMenu.add(preferences);
     JMenuItem shortcuts = new JMenuItem("Shortcuts");
     configureMenu.add(shortcuts);
-    
-    // ADD LISTENER
-    
-    // Create Help menu ---------------------------------------------
+  }
+
+  private void createHelpMenu(JMenuBar menuBar)
+  {
     JMenu helpMenu = new JMenu("Help");
     menuBar.add(helpMenu);
-    
-    //drop downs
+
     JMenuItem about = new JMenuItem("About");
     helpMenu.add(about);
     JMenuItem userGuide = new JMenuItem("User Guide");
     helpMenu.add(userGuide);
+  }
 
-
-    // Create main content panel
+  private void createMainPanel() {
     JPanel mainPanel = new JPanel();
+    mainPanel.setBackground(Color.WHITE);
     mainPanel.setLayout(new BorderLayout());
     
-    // Add the logo label to the center of the main panel
-    mainPanel.add(logoLabel, BorderLayout.CENTER);
+    if (logoLabel != null) {
+        mainPanel.add(logoLabel, BorderLayout.CENTER);
+    }
+    
     add(mainPanel);
+}
+
+  private ImageIcon createImageIcon(String path)
+  {
+    java.net.URL imgURL = getClass().getResource(path);
+    if (imgURL != null)
+    {
+      return new ImageIcon(imgURL);
+    }
+    else
+    {
+      System.err.println("Couldn't find file: " + path);
+      return null;
+    }
   }
 
   public static void main(String[] args)
