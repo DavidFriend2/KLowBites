@@ -11,11 +11,11 @@ import java.awt.*;
  * TODO Setup shortcuts 
  * TODO Add functionality to each menu header 
  * TODO DO NOT ADD THINGS THAT ARE NOT GOING TO BE DONE IN THIS SPRINT,
- * READ DOC FOR MORE DETAILS
+ * READ DOC FOR MORE DETAILS. 
  */
 public class Main extends JFrame
 {
-  private static final long serialVersionUID = 1293847237;
+  private static final long serialVersionUID = 1293847254;
 
   private static final String LOGO_PATH = "/img/logo.png";
 
