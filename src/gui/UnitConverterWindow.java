@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import Information.Ingredient;
 import UnitConversion.MassUnitConverter;
+import UnitConversion.MassVolumeConverter;
 import UnitConversion.VolumeUnitConverter;
 
 import java.awt.*;
@@ -13,73 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jayden S
+ * @author David Friend
  * Creates the UnitConverterWindow
- * TODO implement the nec. data
  */
-public class UnitConverterWindow extends JFrame {
-    
-    /*public UnitConverterWindow() {
-        setTitle("KiLowBites Unit Converter");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        // Create a menu bar
-        JMenuBar menuBar = new JMenuBar();
-        setJMenuBar(menuBar);
-
-        // Create main content panel
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        
-        // Create image panel with FlowLayout aligned to the left
-        JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        
-        // Add image buttons to the image panel
-        addImageButton(imagePanel, "/img/calculate.png", "Calculate");
-        addImageButton(imagePanel, "/img/reset.png", "Rest");
-
-        // Add image panel to the top (NORTH) of the main panel
-        mainPanel.add(imagePanel, BorderLayout.NORTH);
-
-        // Add a label to the center of the panel
-        JLabel label = new JLabel("TODO", SwingConstants.CENTER);
-        mainPanel.add(label, BorderLayout.CENTER);
-
-        add(mainPanel);
-    }
-
-    private void addImageButton(JPanel panel, String imagePath, String buttonName) {
-        ImageIcon icon = createImageIcon(imagePath);
-        if (icon != null) {
-            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-            JButton button = new JButton(new ImageIcon(img));
-            button.setPreferredSize(new Dimension(50, 50));
-            button.setToolTipText(buttonName);
-            panel.add(button);
-        }
-    }
-
-    private ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = getClass().getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new UnitConverterWindow().setVisible(true);
-        });
-    }*/
+public class UnitConverterWindow extends JFrame 
+{
   private static final long serialVersionUID = 1L;
   private static final String[] UNITS = 
-    {"", "Cups", "Drams", "Fluid Ounces", "Gallons", "Grams", "Milliliters", 
+  {"", "Cups", "Drams", "Fluid Ounces", "Gallons", "Grams", "Milliliters", 
         "Ounces", "Pinches", "Pints", "Pounds", "Quarts", "Tablespoons", "Teaspoons"};
-    
+  
+  //Action Listener for the Calculator button
   private class CalculatorListener implements ActionListener
   {
     JLabel toAmount;
@@ -88,7 +33,6 @@ public class UnitConverterWindow extends JFrame {
     JComboBox<String> ingredient;
     JTextField amount;
     
-    //Initializes the label
     public CalculatorListener(JLabel toAmount, JComboBox<String> from, JComboBox<String> to, JComboBox<String> ingredient, JTextField amount) 
     {
       this.toAmount = toAmount;
@@ -98,7 +42,9 @@ public class UnitConverterWindow extends JFrame {
       this.amount = amount;
     }
     
-    public void actionPerformed(ActionEvent e) {
+    //Displays the calculated unit conversion if the user inputs everything correctly
+    public void actionPerformed(ActionEvent e) 
+    {
       Boolean isNumber = true;
       if(from.getSelectedItem() != "" && to.getSelectedItem() != "" && !(amount.getText().equals(""))) {
         for (int i = 0; i < amount.getText().length(); i++) {
@@ -106,25 +52,28 @@ public class UnitConverterWindow extends JFrame {
             isNumber = false;
           }
         }
-        if (isNumber) {
+        if (isNumber) 
+        {
           ArrayList<String> massUnits = new ArrayList<>();
           massUnits.add("Pounds");
           massUnits.add("Grams");
           massUnits.add("Drams");
           massUnits.add("Ounces");
-          if (massUnits.contains(from.getSelectedItem()) && massUnits.contains(to.getSelectedItem())) {
+          if (massUnits.contains(from.getSelectedItem()) && massUnits.contains(to.getSelectedItem())) 
+          {
             toAmount.setText("To Amount: " + String.format("%.2f" , MassUnitConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
-                (String) to.getSelectedItem())));
+                (String) to.getSelectedItem())) + " " + to.getSelectedItem());
           }
-          else if (!(massUnits.contains(from.getSelectedItem())) && massUnits.contains(to.getSelectedItem())) {
-            toAmount.setText("To Amount: " + String.format("%.2f"));
-          }
-          else if (massUnits.contains(from.getSelectedItem()) && !(massUnits.contains(to.getSelectedItem()))) {
-            toAmount.setText("To Amount: " + String.format("%.2f"));
+          else if (!(massUnits.contains(from.getSelectedItem())) && !(massUnits.contains(to.getSelectedItem()))) 
+          {
+            toAmount.setText("To Amount: " + String.format("%.2f", VolumeUnitConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
+                (String) to.getSelectedItem())) + " " + to.getSelectedItem());
           }
           else {
-            toAmount.setText("To Amount: " + String.format("%.2f", VolumeUnitConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
-               (String) to.getSelectedItem())));
+            if (!(ingredient.getSelectedItem().equals(""))) {
+              toAmount.setText("To Amount: " + String.format("%.2f", MassVolumeConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
+                  (String) to.getSelectedItem(), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem()))) + " " + to.getSelectedItem());
+            }
           }
         } 
         else {
@@ -133,6 +82,7 @@ public class UnitConverterWindow extends JFrame {
       }
     }
   }
+  //ActionListener for the reset button
   private class ResetListener implements ActionListener
   {
     JLabel toAmount;
@@ -140,7 +90,7 @@ public class UnitConverterWindow extends JFrame {
     JComboBox<String> to;
     JComboBox<String> ingredient;
     JTextField amount;
-    
+   
     public ResetListener(JLabel toAmount, JComboBox<String> from, JComboBox<String> to, JComboBox<String> ingredient, JTextField amount) 
     {
       this.toAmount = toAmount;
@@ -150,6 +100,7 @@ public class UnitConverterWindow extends JFrame {
       this.amount = amount;
     }
     
+    //Resets the window
     public void actionPerformed(ActionEvent e)
     {
       toAmount.setText("To Amount: ______________");
@@ -161,18 +112,21 @@ public class UnitConverterWindow extends JFrame {
     }
     
   }
-  
+  //ActionListener for the Ingredient JComboBox since it starts disabled
   private class IngredientListener implements ActionListener 
   {
     JComboBox<String> from;
     JComboBox<String> to;
     JComboBox<String> ingredient;
     
+    //Initializes the attributes needed to change ingredient combo box
     public IngredientListener(JComboBox<String> from, JComboBox<String> to, JComboBox<String> ingredient) {
       this.from = from;
       this.to = to;
       this.ingredient = ingredient;
     }
+    
+    //Determines if the Ingredients drop down menu should be enabled or disabled
     public void actionPerformed(ActionEvent e)
     {
       ArrayList<String> massUnits = new ArrayList<>();
@@ -180,10 +134,10 @@ public class UnitConverterWindow extends JFrame {
       massUnits.add("Grams");
       massUnits.add("Drams");
       massUnits.add("Ounces");
-      if ((massUnits.contains(from.getSelectedItem()) && !(from.getSelectedItem().equals(""))) && !(massUnits.contains(to.getSelectedItem()))) {
+      if ((massUnits.contains(from.getSelectedItem()) && !(from.getSelectedItem().equals(""))) && !(massUnits.contains(to.getSelectedItem())) && !(to.getSelectedItem().equals(""))) {
         ingredient.setEnabled(true);
       }
-      else if (massUnits.contains(to.getSelectedItem()) && !(massUnits.contains(from.getSelectedItem()))) {
+      else if (massUnits.contains(to.getSelectedItem()) && !(to.getSelectedItem().equals("")) && !(massUnits.contains(from.getSelectedItem())) && !(from.getSelectedItem().equals(""))) {
         ingredient.setEnabled(true);
       } 
       else {
@@ -192,37 +146,38 @@ public class UnitConverterWindow extends JFrame {
     }
     
   }
+  //Creates the window
   public UnitConverterWindow() 
   {
+    //Initializes window
     setTitle("KiLowBites Unit Converter");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(750, 250);
+    setResizable(false);
     
     setLayout(new BorderLayout());
     
+    //Creates the "From Units" Label and the units JComboBox
     JPanel fromTo = new JPanel(new BorderLayout());
     JPanel from = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel fromLabel = new JLabel("From Units:");
     from.add(fromLabel);
-    
     JComboBox<String> fromDrop = new JComboBox<>(UNITS);
-    
     from.add(fromDrop);
     
-    
+    //Creates the "To Units" Label and the units JComboBox
     JPanel to = new JPanel();
     JLabel toLabel = new JLabel("To Units:");
     to.add(toLabel);
-    
     JComboBox<String> toDrop = new JComboBox<>(UNITS);
     to.add(toDrop);
-    
     from.add(to);
     
+    //Creates the "Ingredient" label and the ingredients JComboBox
     JPanel ingredient = new JPanel();
     JLabel inLabel = new JLabel("Ingredient:");
     ingredient.add(inLabel);
-
+    //Gets the ingredients from the ingredients file
     List<Ingredient> ingred = Ingredient.getIngredients();
     String[] ingredAr = new String[ingred.size() + 1];
     ingredAr[0] = "";
@@ -232,13 +187,15 @@ public class UnitConverterWindow extends JFrame {
       count++;
     }
     JComboBox<String> inDrop = new JComboBox<>(ingredAr);
+    //Initializes Ingredients drop down as disabled
     inDrop.setEnabled(false);
     ingredient.add(inDrop);
-    
     from.add(ingredient);
     from.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 10));
     fromTo.add(from, BorderLayout.NORTH);
     
+    
+    //Creates the "From Amount" label and the text field
     JPanel fromAndToAmount = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JPanel fromAmount = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel fromAmountLabel = new JLabel("From Amount:");
@@ -249,6 +206,7 @@ public class UnitConverterWindow extends JFrame {
     fromAmount.add(text);
     fromAmount.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 10));
     
+    //Creates the "To Amount" label
     JLabel toAmountLabel = new JLabel("To Amount: ______________");
     fromAndToAmount.add(fromAmount);
     fromAndToAmount.add(toAmountLabel);
@@ -256,22 +214,44 @@ public class UnitConverterWindow extends JFrame {
     fromTo.add(fromAndToAmount, BorderLayout.CENTER);
     add(fromTo, BorderLayout.CENTER);
     
+    //Creates the Calculate button and adds listener
     JPanel temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JButton calculator = new JButton("Calculate");
+    ImageIcon icon = createImageIcon("/img/calculate.png");
+    Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton calculator = new JButton(new ImageIcon(img));
+    calculator.setPreferredSize(new Dimension(50, 50));
+    calculator.setToolTipText("Calculate");
     CalculatorListener listener = new CalculatorListener(toAmountLabel, fromDrop, toDrop, inDrop, text);
     calculator.addActionListener(listener);
     temp.add(calculator);
 
-    JButton reset = new JButton("Reset");
+    //Creates the Reset Button and adds listener
+    ImageIcon icon2 = createImageIcon("/img/reset.png");
+    Image img2 = icon2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton reset = new JButton(new ImageIcon(img2));
+    reset.setPreferredSize(new Dimension(50, 50));
+    reset.setToolTipText("Reset");
     ResetListener rlistener = new ResetListener(toAmountLabel, fromDrop, toDrop, inDrop, text);
     reset.addActionListener(rlistener);
     temp.add(reset);
     
+    //Adds the listener to the From and To JComboBox's based on mass to vol or vol to mass conversions
     IngredientListener iListener = new IngredientListener(fromDrop, toDrop, inDrop);
     fromDrop.addActionListener(iListener);
     toDrop.addActionListener(iListener);
     
+    //Adds everything to the gui
     add(temp, BorderLayout.NORTH);
+  }
+  
+  private ImageIcon createImageIcon(String path) {
+    java.net.URL imgURL = getClass().getResource(path);
+    if (imgURL != null) {
+        return new ImageIcon(imgURL);
+    } else {
+        System.err.println("Couldn't find file: " + path);
+        return null;
+    }
   }
   
   public static void main(String[] args)
