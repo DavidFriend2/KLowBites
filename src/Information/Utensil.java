@@ -24,5 +24,14 @@ public class Utensil implements Serializable
     return this.details;
   }
   
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+  
+  public void setDetails(String details)
+  {
+    this.details = details;
+  }
   
 }
