@@ -24,6 +24,7 @@ public class Step implements Serializable
     
   }
   
+  // Getters to display and access
   public String getAction()
   {
     return this.action;
@@ -47,6 +48,27 @@ public class Step implements Serializable
   public static List<String> getActions()
   {
     return new ArrayList<>(actions);
+  }
+  
+  //Setters for editing
+  public void setAction(String action)
+  {
+    this.action = action;
+  }
+
+  public void setSourceUtensilOrIngredient(String on)
+  {
+    this.on = on;
+  }
+  
+  public void setDestinationUtensil(String destUtensil)
+  {
+    this.destinationUtensil = destUtensil;
+  }
+  
+  public void setDetails(String details)
+  {
+    this.details = details;
   }
   
   static 

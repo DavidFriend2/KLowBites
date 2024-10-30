@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class RecipeIngredient implements Serializable
 {
   private static final long serialVersionUID = 1L;
-  private Ingredient ingredient;
   private String name;
   private String details;
   private double amount;
@@ -17,9 +16,9 @@ public class RecipeIngredient implements Serializable
     this.details = details;
     this.amount = amount;
     this.unit = unit;
-    this.ingredient = Ingredient.getIngredientbyName(name);
   }
   
+  //Getters
   public String getName()
   {
     return this.name;
@@ -42,7 +41,28 @@ public class RecipeIngredient implements Serializable
   
   public Ingredient getIngredient()
   {
-    return this.ingredient;
+    return Ingredient.getIngredientbyName(name);
+  }
+  
+  //Setters
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+  
+  public void setDetails(String details)
+  {
+    this.details = details;
+  }
+
+  public void setAmount(double amount)
+  {
+    this.amount = amount;
+  }
+  
+  public void setUnit(String unit)
+  {
+    this.unit = unit;
   }
   
 }
