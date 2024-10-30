@@ -381,8 +381,8 @@ public class RecipeEditor extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			fullIngredientList.remove(ingredientList.getSelectedIndex());
 			dlm.removeElement(ingredientList.getSelectedValue());
-			fullIngredientList.remove(ingredientList.getSelectedValue());
 		}
 		
 	}
@@ -397,8 +397,8 @@ public class RecipeEditor extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			fullUtensilList.remove(utensilList.getSelectedIndex());
 			dlm2.removeElement(utensilList.getSelectedValue());
-			fullUtensilList.remove(utensilList.getSelectedValue());
 		}
 		
 	}
@@ -413,8 +413,8 @@ public class RecipeEditor extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			fullStepList.remove(stepList.getSelectedIndex());
 			dlm3.removeElement(stepList.getSelectedValue());
-			fullStepList.remove(stepList.getSelectedValue());
 		}
 		
 	}
