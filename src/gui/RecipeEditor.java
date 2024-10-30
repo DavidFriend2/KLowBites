@@ -347,7 +347,7 @@ public class RecipeEditor extends JFrame {
 			fullStepList.add(new Step(stepAction.getSelectedItem().toString(),
 					stepOn.getSelectedItem().toString(), stepUtensil.getSelectedItem().toString(),
 					stepDetails.getText()));
-		}
+		}  
 		
 	}
 	
