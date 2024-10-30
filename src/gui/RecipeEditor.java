@@ -250,8 +250,8 @@ public class RecipeEditor extends JFrame {
 	    JButton saveButton = new JButton(new ImageIcon(saveImg));
 	    saveButton.setPreferredSize(new Dimension(50, 50));
 	    saveButton.setToolTipText("Save");
-//	    SaveListener saveListener = new SaveListener();
-//	    saveButton.addActionListener(saveListener);
+	    SaveListener saveListener = new SaveListener(openListener, nameText, servesText);
+	    saveButton.addActionListener(saveListener);
 	    imagePanel.add(saveButton);
 	    
 	    //initialize save as button ----------------------------------------------
@@ -260,8 +260,8 @@ public class RecipeEditor extends JFrame {
 	    JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
 	    saveAsButton.setPreferredSize(new Dimension(50, 50));
 	    saveAsButton.setToolTipText("Save As");
-//	    SaveAsListener saveAsListener = new SaveAsListener();
-//	    saveAsButton.addActionListener(saveAsListener);
+	    SaveAsListener saveAsListener = new SaveAsListener(nameText, servesText);
+	    saveAsButton.addActionListener(saveAsListener);
 	    imagePanel.add(saveAsButton);
 	    
 	    //initialize close button ----------------------------------------------
@@ -496,64 +496,73 @@ public class RecipeEditor extends JFrame {
 		
 	}
 	
-//	private class SaveListener implements ActionListener {
-//	  
-//	  OpenListener openListener;
-//
-//    public SaveListener(OpenListener openListener) {
-//        this.openListener = openListener;
-//    }
-//    
-//		@Override
-//		public void actionPerformed(ActionEvent e) 
-//		{
-//		  try {
-//		    String fileName = openListener.getCurrentFileName();
-//		    // Need to add name.gettext, serves, etc. ingredients is good tho. 
-//	      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, stepsList);
-//	      
-//		    // If new Recipe
-//	      if (fileName == null)
-//	      {
-//	        fileName = updatedRecipe.getFileName();
-//	      }
-//	      
-//	      updatedRecipe.saveRecipeToFile(fileName);
-//	      
-//		  } catch(IOException ex) {
-//		    ex.printStackTrace();
-//		  }
-//			
-//		}
-//		
-//	}
+	private class SaveListener implements ActionListener {
+	  
+	  OpenListener openListener;
+	  JTextField name;
+    JTextField serves;
+
+    public SaveListener(OpenListener openListener, JTextField name, JTextField serves) {
+        this.openListener = openListener;
+        this.name = name;
+        this.serves = serves;
+    }
+    
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+		  try {
+		    String fileName = openListener.getCurrentFileName();
+	      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
+	      
+		    // If new Recipe
+	      if (fileName == null)
+	      {
+	        fileName = updatedRecipe.getFileName();
+	      }
+	      
+	      // Save recipe to its file
+	      updatedRecipe.saveRecipeToFile(fileName);
+	      
+		  } catch(IOException ex) {
+		    ex.printStackTrace();
+		  }
+			
+		}
+		
+	}
 	
-//	private class SaveAsListener implements ActionListener {
-//	  
-//    
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//		  //Allow user to type in filename
-//		  JFileChooser fileChooser = new JFileChooser();
-//      fileChooser.setDialogTitle("Save Recipe As");
-//      int userSelection = fileChooser.showSaveDialog(null);
-//      
-//      if (userSelection == JFileChooser.APPROVE_OPTION) {
-//          String fileName = fileChooser.getSelectedFile().getAbsolutePath();
-//          
-//          try {
-//              // Create an updated recipe and save it to the chosen file name
-//         // Need to add name.gettext, serves, etc. ingredients is good tho. 
-//              Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, stepsList);
-//              newRecipe.saveRecipeToFile(fileName);
-//          } catch (IOException ex) {
-//              ex.printStackTrace();
-//          }
-//      }
-//			
-//		}  
-//		
-//	}
+	private class SaveAsListener implements ActionListener {
+	  JTextField name;
+    JTextField serves;
+    
+    public SaveAsListener(JTextField nameText, JTextField servesText) {
+      this.name = nameText;
+      this.serves = servesText;
+    }
+    
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		  //Allow user to type in filename
+		  JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setDialogTitle("Save Recipe As");
+      int userSelection = fileChooser.showSaveDialog(null);
+      
+      if (userSelection == JFileChooser.APPROVE_OPTION) {
+          String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+          
+          try {
+              // Create an updated recipe and save it to the chosen file name
+              Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
+              newRecipe.saveRecipeToFile(fileName);
+          } catch (IOException ex) {
+              ex.printStackTrace();
+          }
+      }
+			
+		}  
+		
+	}
 	
 	private class CloseListener implements ActionListener {
 
