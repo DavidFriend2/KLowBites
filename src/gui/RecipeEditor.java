@@ -551,7 +551,7 @@ public class RecipeEditor extends JFrame {
 //          }
 //      }
 //			
-//		}
+//		}  
 //		
 //	}
 	
