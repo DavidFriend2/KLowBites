@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -36,6 +38,7 @@ public class RecipeEditor extends JFrame {
 	private String add = "Add";
 	private String name = "Name: ";
 	public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
+	public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
 	
 	public RecipeEditor() {
 		setTitle("KiLowBites Recipe Editor");
@@ -62,7 +65,7 @@ public class RecipeEditor extends JFrame {
         namePanel.add(nameText);
         namePanel.add(serves);
         namePanel.add(servesText);
-        mainPanel.add(namePanel);
+        
         
 //        //utensils editor ---------------------------------------------
 //        JPanel utensilPanel = new JPanel(new BorderLayout());
@@ -115,10 +118,10 @@ public class RecipeEditor extends JFrame {
         JLabel ingAmount = new JLabel("Amount: ");
         JTextField ingAmountInput = new JTextField(3);
         JLabel ingUnits = new JLabel("Units: ");
-        JComboBox<String> ingUnitCombo = new JComboBox<>();
+        JComboBox<String> ingUnitCombo = new JComboBox<String>();
         JButton ingAdd = new JButton(add);
         AddIngListener ingAddListen = new AddIngListener(ingNameInput,
-        		ingDetailsInput, ingAmountInput, ingUnitCombo);
+        		ingDetailsInput, ingAmountInput);
         ingAdd.addActionListener(ingAddListen);
         ingInputs.add(ingName);
         ingInputs.add(ingNameInput);
@@ -138,13 +141,15 @@ public class RecipeEditor extends JFrame {
         //button
         JPanel ingBR = new JPanel(new BorderLayout());
         JButton ingDelete = new JButton("Delete");
+        deleteIngListener ingDeleteListener= new deleteIngListener(ingList);
+        ingDelete.addActionListener(ingDeleteListener);
         ingBR.add(ingDelete, BorderLayout.SOUTH);
         ingBottom.add(ingBR, BorderLayout.EAST);
         
         ingPanel.add(ingBottom, BorderLayout.SOUTH);
         ingPanel.add(ingInputs, BorderLayout.NORTH);
         
-        mainPanel.add(ingPanel);
+        
         
 //        //steps editor ---------------------------------------------------
 //        JPanel stepPanel = new JPanel(new BorderLayout());
@@ -243,6 +248,8 @@ public class RecipeEditor extends JFrame {
 	    
 	    
         mainPanel.add(imagePanel, BorderLayout.NORTH);
+        mainPanel.add(namePanel);
+        mainPanel.add(ingPanel);
         
         add(mainPanel);
 	}
@@ -273,7 +280,7 @@ public class RecipeEditor extends JFrame {
 		JTextField ingAmount;
 		JComboBox ingUnit;
 		
-		public AddIngListener(JTextField ingName, JTextField ingDetail, JTextField ingAmount, JComboBox ingUnit) {
+		public AddIngListener(JTextField ingName, JTextField ingDetail, JTextField ingAmount) {
 			this.ingName = ingName;
 			this.ingDetail = ingDetail;
 			this.ingAmount = ingAmount;
@@ -283,16 +290,24 @@ public class RecipeEditor extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
 			dlm.addElement(ingName.getText());
+			fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
+					Double.valueOf(ingAmount.getText()), "test"));
 		}
 		
 	}
 	
 	private class deleteIngListener implements ActionListener {
 
+		JList ingredientList;
+		
+		public deleteIngListener(JList ingredientList) {
+			this.ingredientList = ingredientList;
+		}
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			dlm.removeElement(ingredientList.getSelectedValue());
+			fullIngredientList.remove(ingredientList.getSelectedValue());
 		}
 		
 	}
@@ -336,6 +351,7 @@ public class RecipeEditor extends JFrame {
 					serves.setText(String.valueOf(loaded.getServes()));
 					for (RecipeIngredient ri : loaded.getIngredients()) {
 						dlm.addElement(ri.getName());
+						fullIngredientList.add(ri);
 					}
 					ingList.setModel(dlm);
 				} catch (ClassNotFoundException e1) {
