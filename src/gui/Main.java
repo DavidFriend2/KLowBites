@@ -61,8 +61,8 @@ public class Main extends JFrame
     createSearchMenu(menuBar);
     createViewMenu(menuBar);
     createToolsMenu(menuBar);
-    createConfigureMenu(menuBar);
-    createHelpMenu(menuBar);
+//    createConfigureMenu(menuBar);
+//    createHelpMenu(menuBar);
   }
 
   private void createFileMenu(JMenuBar menuBar)
@@ -129,27 +129,29 @@ public class Main extends JFrame
     });
   }
 
-  private void createConfigureMenu(JMenuBar menuBar)
-  {
-    JMenu configureMenu = new JMenu("Configure");
-    menuBar.add(configureMenu);
+//THIS IS FOR A LATER SPRINT
+//  private void createConfigureMenu(JMenuBar menuBar)
+//  {
+//    JMenu configureMenu = new JMenu("Configure");
+//    menuBar.add(configureMenu);
+//
+//    JMenuItem preferences = new JMenuItem("Preferences");
+//    configureMenu.add(preferences);
+//    JMenuItem shortcuts = new JMenuItem("Shortcuts");
+//    configureMenu.add(shortcuts);
+//  }
 
-    JMenuItem preferences = new JMenuItem("Preferences");
-    configureMenu.add(preferences);
-    JMenuItem shortcuts = new JMenuItem("Shortcuts");
-    configureMenu.add(shortcuts);
-  }
-
-  private void createHelpMenu(JMenuBar menuBar)
-  {
-    JMenu helpMenu = new JMenu("Help");
-    menuBar.add(helpMenu);
-
-    JMenuItem about = new JMenuItem("About");
-    helpMenu.add(about);
-    JMenuItem userGuide = new JMenuItem("User Guide");
-    helpMenu.add(userGuide);
-  }
+//  THIS IS FOR A LATER SPRINT
+//  private void createHelpMenu(JMenuBar menuBar)
+//  {
+//    JMenu helpMenu = new JMenu("Help");
+//    menuBar.add(helpMenu);
+//
+//    JMenuItem about = new JMenuItem("About");
+//    helpMenu.add(about);
+//    JMenuItem userGuide = new JMenuItem("User Guide");
+//    helpMenu.add(userGuide);
+//  }
 
   private void createMainPanel() {
     JPanel mainPanel = new JPanel();
