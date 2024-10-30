@@ -1,5 +1,9 @@
 package UnitConversion;
 
+/**
+ * @author David Friend
+ * Mass Unit Converter
+ */
 public class MassUnitConverter {
   private static final String GRAMS = "grams";
   private static final String OUNCES = "ounces";
