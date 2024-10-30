@@ -27,6 +27,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Information.Recipe;
 import Information.RecipeIngredient;
+import Information.Step;
+import Information.Utensil;
 
 public class RecipeEditor extends JFrame {
 
@@ -39,6 +41,10 @@ public class RecipeEditor extends JFrame {
 	private String name = "Name: ";
 	public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
 	public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
+	public DefaultListModel<String> dlm3 = new DefaultListModel<>();
+	public List<Step> fullStepList = new ArrayList<>();
+	public DefaultListModel<String> dlm2 = new DefaultListModel<>();
+	public List<Utensil> fullUtensilList = new ArrayList<>();
 	
 	public RecipeEditor() {
 		setTitle("KiLowBites Recipe Editor");
@@ -67,40 +73,40 @@ public class RecipeEditor extends JFrame {
         namePanel.add(servesText);
         
         
-//        //utensils editor ---------------------------------------------
-//        JPanel utensilPanel = new JPanel(new BorderLayout());
-//        utensilPanel.setPreferredSize(new Dimension(575,200));
-//        TitledBorder utensilBorder = new TitledBorder("Utensils");
-//        utensilPanel.setBorder(utensilBorder);
-//
-//        //Top half of utensil editor -----------
-//        JPanel utensilInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//        JLabel utensilName = new JLabel(name);
-//        JTextField utensilNameText = new JTextField(20);
-//        JLabel details = new JLabel("Details: ");
-//        JTextField detailsText = new JTextField(15);
-//        JButton addUtensil = new JButton(add);
-//        utensilInputs.add(utensilName);
-//        utensilInputs.add(utensilNameText);
-//        utensilInputs.add(details);
-//        utensilInputs.add(detailsText);
-//        utensilInputs.add(addUtensil);
-//        
-//        //Bottom half of utensil editor ----------
-//        JPanel utensilBottom = new JPanel(new BorderLayout());
-//        JTextArea utensilsList = new JTextArea(8, 48);
-//        JScrollPane utensilScroll = new JScrollPane(utensilsList);
-//        utensilBottom.add(utensilScroll, BorderLayout.WEST);
-//        //button
-//        JPanel utensilBR = new JPanel(new BorderLayout());
-//        JButton utensilDelete = new JButton("Delete");
-//        utensilBR.add(utensilDelete, BorderLayout.SOUTH);
-//        utensilBottom.add(utensilBR, BorderLayout.EAST);
-//        //add everything to panel
-//        utensilPanel.add(utensilBottom, BorderLayout.SOUTH);
-//        utensilPanel.add(utensilInputs, BorderLayout.NORTH);
-//        
-//        mainPanel.add(utensilPanel);
+        //utensils editor ---------------------------------------------
+        JPanel utensilPanel = new JPanel(new BorderLayout());
+        utensilPanel.setPreferredSize(new Dimension(575,200));
+        TitledBorder utensilBorder = new TitledBorder("Utensils");
+        utensilPanel.setBorder(utensilBorder);
+
+        //Top half of utensil editor -----------
+        JPanel utensilInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel utensilName = new JLabel(name);
+        JTextField utensilNameText = new JTextField(20);
+        JLabel details = new JLabel("Details: ");
+        JTextField detailsText = new JTextField(15);
+        JButton addUtensil = new JButton(add);
+        utensilInputs.add(utensilName);
+        utensilInputs.add(utensilNameText);
+        utensilInputs.add(details);
+        utensilInputs.add(detailsText);
+        utensilInputs.add(addUtensil);
+        
+        //Bottom half of utensil editor ----------
+        JPanel utensilBottom = new JPanel(new BorderLayout());
+        JList utensilsList = new JList();
+        JScrollPane utensilScroll = new JScrollPane(utensilsList);
+        utensilBottom.add(utensilScroll, BorderLayout.WEST);
+        //button
+        JPanel utensilBR = new JPanel(new BorderLayout());
+        JButton utensilDelete = new JButton("Delete");
+        utensilBR.add(utensilDelete, BorderLayout.SOUTH);
+        utensilBottom.add(utensilBR, BorderLayout.EAST);
+        //add everything to panel
+        utensilPanel.add(utensilBottom, BorderLayout.SOUTH);
+        utensilPanel.add(utensilInputs, BorderLayout.NORTH);
+        
+        
         
         
         //ingredients editor ---------------------------------------------
@@ -151,48 +157,48 @@ public class RecipeEditor extends JFrame {
         
         
         
-//        //steps editor ---------------------------------------------------
-//        JPanel stepPanel = new JPanel(new BorderLayout());
-//        stepPanel.setPreferredSize(new Dimension(575,200));
-//        TitledBorder stepBorder = new TitledBorder("Steps");
-//        stepPanel.setBorder(stepBorder);
-//        
-//        //top half of steps
-//        JPanel stepInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//        JLabel stepAction = new JLabel("Action: ");
-//        JComboBox<String> stepActionCombo = new JComboBox<>();
-//        JLabel stepOn = new JLabel("On: ");
-//        JComboBox<String> stepOnCombo = new JComboBox<>();
-//        JLabel stepUtensil = new JLabel("Utensil: ");
-//        JComboBox<String> stepUtensilCombo = new JComboBox<>();
-//        JLabel stepDetails = new JLabel("Details: ");
-//        JTextField stepDetailsText = new JTextField(5);
-//        JButton stepAdd = new JButton(add);
-//        stepInputs.add(stepAction);
-//        stepInputs.add(stepActionCombo);
-//        stepInputs.add(stepOn);
-//        stepInputs.add(stepOnCombo);
-//        stepInputs.add(stepUtensil);
-//        stepInputs.add(stepUtensilCombo);
-//        stepInputs.add(stepDetails);
-//        stepInputs.add(stepDetailsText);
-//        stepInputs.add(stepAdd);
-//
-//        //bottom half of ingredients-----------
-//        JPanel stepBottom = new JPanel(new BorderLayout());
-//        JTextArea stepList = new JTextArea(8, 48);
-//        JScrollPane stepScroll = new JScrollPane(stepList);
-//        stepBottom.add(stepScroll, BorderLayout.WEST);
-//        //button
-//        JPanel stepBR = new JPanel(new BorderLayout());
-//        JButton stepDelete = new JButton("Delete");
-//        stepBR.add(stepDelete, BorderLayout.SOUTH);
-//        stepBottom.add(stepBR, BorderLayout.EAST);
-//
-//        stepPanel.add(stepInputs, BorderLayout.NORTH);
-//        stepPanel.add(stepBottom, BorderLayout.SOUTH);
-//        
-//        mainPanel.add(stepPanel);
+        //steps editor ---------------------------------------------------
+        JPanel stepPanel = new JPanel(new BorderLayout());
+        stepPanel.setPreferredSize(new Dimension(575,200));
+        TitledBorder stepBorder = new TitledBorder("Steps");
+        stepPanel.setBorder(stepBorder);
+        
+        //top half of steps
+        JPanel stepInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel stepAction = new JLabel("Action: ");
+        JComboBox<String> stepActionCombo = new JComboBox<>();
+        JLabel stepOn = new JLabel("On: ");
+        JComboBox<String> stepOnCombo = new JComboBox<>();
+        JLabel stepUtensil = new JLabel("Utensil: ");
+        JComboBox<String> stepUtensilCombo = new JComboBox<>();
+        JLabel stepDetails = new JLabel("Details: ");
+        JTextField stepDetailsText = new JTextField(5);
+        JButton stepAdd = new JButton(add);
+        stepInputs.add(stepAction);
+        stepInputs.add(stepActionCombo);
+        stepInputs.add(stepOn);
+        stepInputs.add(stepOnCombo);
+        stepInputs.add(stepUtensil);
+        stepInputs.add(stepUtensilCombo);
+        stepInputs.add(stepDetails);
+        stepInputs.add(stepDetailsText);
+        stepInputs.add(stepAdd);
+
+        //bottom half of ingredients-----------
+        JPanel stepBottom = new JPanel(new BorderLayout());
+        JList stepList = new JList();
+        JScrollPane stepScroll = new JScrollPane(stepList);
+        stepBottom.add(stepScroll, BorderLayout.WEST);
+        //button
+        JPanel stepBR = new JPanel(new BorderLayout());
+        JButton stepDelete = new JButton("Delete");
+        stepBR.add(stepDelete, BorderLayout.SOUTH);
+        stepBottom.add(stepBR, BorderLayout.EAST);
+
+        stepPanel.add(stepInputs, BorderLayout.NORTH);
+        stepPanel.add(stepBottom, BorderLayout.SOUTH);
+        
+        
         
         
       //initialize new button ----------------------------------------------
@@ -250,6 +256,8 @@ public class RecipeEditor extends JFrame {
         mainPanel.add(imagePanel, BorderLayout.NORTH);
         mainPanel.add(namePanel);
         mainPanel.add(ingPanel);
+        mainPanel.add(stepPanel);
+        mainPanel.add(utensilPanel);
         
         add(mainPanel);
 	}
@@ -352,6 +360,14 @@ public class RecipeEditor extends JFrame {
 					for (RecipeIngredient ri : loaded.getIngredients()) {
 						dlm.addElement(ri.getName());
 						fullIngredientList.add(ri);
+					}
+					for (Utensil ut : loaded.getUtenils()) {
+						dlm2.addElement(ut.getName());
+						fullUtensilList.add(ut);
+					}
+					for (Step st : loaded.getSteps()) {
+						dlm2.addElement(st.getAction());
+						fullStepList.add(st);
 					}
 					ingList.setModel(dlm);
 				} catch (ClassNotFoundException e1) {
