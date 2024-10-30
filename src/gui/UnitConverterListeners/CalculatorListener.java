@@ -1,6 +1,7 @@
-package gui.UnitConverter;
+package gui.UnitConverterListeners;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -61,8 +62,8 @@ public class CalculatorListener implements ActionListener
         }
         else {
           if (!(ingredient.getSelectedItem().equals(""))) {
-            toAmount.setText("To Amount: " + String.format("%.2f", MassVolumeConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
-                (String) to.getSelectedItem(), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem()))) + " " + to.getSelectedItem());
+            toAmount.setText("To Amount: " + String.format("%.2f", MassVolumeConverter.convert(Double.parseDouble(amount.getText()), ((String) from.getSelectedItem()).toLowerCase(), 
+                ((String) to.getSelectedItem()).toLowerCase(), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem()))) + " " + to.getSelectedItem());
           }
         }
       } 
