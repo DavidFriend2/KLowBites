@@ -321,6 +321,7 @@ public class RecipeEditor extends JFrame {
 		JTextField ingAmountInput;
 		JComboBox ingUnitCombo;
 		JList ingList;
+		private String currentFileName;
 		
 		public OpenListener(JTextField name, JTextField serves, JTextField ingNameInput, 
 				JTextField ingDetailsInput, JTextField ingAmountInput, JComboBox ingUnitCombo, JList ingList) {
@@ -345,6 +346,7 @@ public class RecipeEditor extends JFrame {
 	            System.out.println("You chose to open this file: " +
 	                    chooser.getSelectedFile().getName());
 //	            File file = new File(chooser.getSelectedFile(), chooser.getSelectedFile().getName());
+	            currentFileName = chooser.getSelectedFile().getAbsolutePath();
 	            try {
 					Recipe loaded = Recipe.loadRecipeFromFile(chooser.getSelectedFile().getAbsolutePath());
 					name.setText(loaded.getName());
@@ -366,27 +368,70 @@ public class RecipeEditor extends JFrame {
 			
 		}
 		
-	}
-	
-	private class SaveListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+		public String getCurrentFileName() {
+      return currentFileName;
 		}
 		
 	}
 	
-	private class SaveAsListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
+//	private class SaveListener implements ActionListener {
+//	  
+//	  OpenListener openListener;
+//
+//    public SaveListener(OpenListener openListener) {
+//        this.openListener = openListener;
+//    }
+//    
+//		@Override
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//		  try {
+//		    String fileName = openListener.getCurrentFileName();
+//		    // Need to add name.gettext, serves, etc. ingredients is good tho. 
+//	      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, stepsList);
+//	      
+//		    // If new Recipe
+//	      if (fileName == null)
+//	      {
+//	        fileName = updatedRecipe.getFileName();
+//	      }
+//	      
+//	      updatedRecipe.saveRecipeToFile(fileName);
+//	      
+//		  } catch(IOException ex) {
+//		    ex.printStackTrace();
+//		  }
+//			
+//		}
+//		
+//	}
+	
+//	private class SaveAsListener implements ActionListener {
+//	  
+//    
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//		  //Allow user to type in filename
+//		  JFileChooser fileChooser = new JFileChooser();
+//      fileChooser.setDialogTitle("Save Recipe As");
+//      int userSelection = fileChooser.showSaveDialog(null);
+//      
+//      if (userSelection == JFileChooser.APPROVE_OPTION) {
+//          String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+//          
+//          try {
+//              // Create an updated recipe and save it to the chosen file name
+//         // Need to add name.gettext, serves, etc. ingredients is good tho. 
+//              Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, stepsList);
+//              newRecipe.saveRecipeToFile(fileName);
+//          } catch (IOException ex) {
+//              ex.printStackTrace();
+//          }
+//      }
+//			
+//		}
+//		
+//	}
 	
 	private class CloseListener implements ActionListener {
 

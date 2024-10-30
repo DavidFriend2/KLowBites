@@ -88,9 +88,9 @@ public class Recipe implements Serializable
    return "recipes/" +  this.name.replaceAll(" ", "_") + ".rcp";
  }
  
- public void saveRecipeToFile() throws IOException
+ public void saveRecipeToFile(String file) throws IOException
  {
-   try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(getFileName())))
+   try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
    {
      output.writeObject(this);
    }
