@@ -7,14 +7,13 @@ public class MassVolumeConverter
   private static final String[] weights = {"grams", "drams", "ounces", "pounds"};
 
 
-  public static double convert(double value, String from, String to, String ingredient) {
-    Ingredient currIngredient = Ingredient.getIngredientbyName(ingredient);
+  public static double convert(double value, String from, String to, Ingredient ingredient) {
     for (int i = 0; i < weights.length; i++) {
       if (weights[i] == from) {
-        return massToVolume(value, from, to, currIngredient);
+        return massToVolume(value, from, to, ingredient);
       }
     }
-    return volumeToMass(value, from, to, currIngredient);
+    return volumeToMass(value, from, to, ingredient);
   }
 
   public static double massToVolume(double value, String from, String to, Ingredient ingredient) {
