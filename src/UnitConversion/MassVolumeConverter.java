@@ -29,4 +29,10 @@ public class MassVolumeConverter
     double result = MassUnitConverter.convert(helper, "grams", to);
     return result;
   }
+  
+  public static String[] getUnits() {
+    String[] temp = {"Cups", "Drams", "Fluid Ounces", "Gallons", "Grams", "Milliliters", 
+        "Ounces", "Pinches", "Pints", "Pounds", "Quarts", "Tablespoons", "Teaspoons"};
+    return temp;
+  }
 }
