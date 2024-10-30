@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import UnitConversion.MassUnitConverter;
 
+/**
+ * @author David Friend
+ * Tests the Mass Unit Converter
+ */
 class MassUnitConverterTest
 {
 
