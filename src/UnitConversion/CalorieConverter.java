@@ -1,30 +1,23 @@
 package UnitConversion;
 
-import java.util.ArrayList;
-
 import Information.Ingredient;
 
-/**
- * @author David Friend
- * Calorie Converter
- */
 public class CalorieConverter
 {
-  //Converts an amount of an ingredient to its calories
-  public static double convert(Ingredient ingredient, double amount, String units) {
-    return toGrams(ingredient, amount, units) * ingredient.getCaloriesPer100g() / 100;
+  private static final String[] weights = {"drams", "grams", "ounces", "pounds"};
+  
+  public static double convert(Ingredient ingredient, double amount, String unit) {
+    double result = 0.0;
+    for (String weight : weights) {
+      if (weight == unit) {
+        double helper = MassUnitConverter.convert(amount, unit, "grams");
+        result = (ingredient.getCaloriesPer100g() / 100) * helper;
+        return result;
+      }
+    }
+    double helper = MassVolumeConverter.convert(amount, unit, "grams", ingredient);
+    result = (ingredient.getCaloriesPer100g() / 100) * helper;
+    return result;
   }
   
-  //Converts the amount to grams so calories are easy to get
-  private static double toGrams(Ingredient ingredient, double amount, String units) {
-    ArrayList<String> massUnits = new ArrayList<>();
-    massUnits.add("ounces");
-    massUnits.add("drams");
-    massUnits.add("grams");
-    massUnits.add("pounds");
-    if (massUnits.contains(units)) {
-      return MassUnitConverter.convert(amount, units, "grams");
-    }
-    return MassVolumeConverter.convert(amount, units, "grams", ingredient);
-  }
 }
