@@ -58,7 +58,8 @@ public class CalorieCalculatorWindow extends JFrame {
         inputPanel.add(new JLabel("Amount:"));
         inputPanel.add(new JTextField(5));
         inputPanel.add(new JLabel("Units:"));
-        inputPanel.add(new JComboBox<>(new String[]{"g", "ml", "oz"}));
+        inputPanel.add(new JComboBox<>(new String[]{"pinches", "teaspoons", "tablespoons", "fluid ounces", "cups",
+            "pints", "quarts", "gallons", "milliliters", "drams", "grams", "ounces", "pounds"}));
     }
 
     private void addCaloriesComponents() {
