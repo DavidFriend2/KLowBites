@@ -7,6 +7,7 @@ import java.awt.*;
  * Creates the Calorie Calculator Window for KILowBites
  * 
  * @author Jayden S
+ * TODO needs functionality
  */
 public class CalorieCalculatorWindow extends JFrame {
     private static final long serialVersionUID = 1293847255;
