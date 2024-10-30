@@ -1,16 +1,11 @@
-package gui.UnitConverter;
+package gui;
 
 import javax.swing.*;
 
-import Information.Ingredient;
-import UnitConversion.MassUnitConverter;
-import UnitConversion.MassVolumeConverter;
-import UnitConversion.VolumeUnitConverter;
 
+import Information.Ingredient;
+import gui.UnitConverterListeners.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,35 +19,77 @@ public class UnitConverterWindow extends JFrame
   {"", "Cups", "Drams", "Fluid Ounces", "Gallons", "Grams", "Milliliters", 
         "Ounces", "Pinches", "Pints", "Pounds", "Quarts", "Tablespoons", "Teaspoons"};
   
-  //Creates the window
+  private JPanel fromTo;
+  private JPanel from;
+  private JPanel to;
+  private JPanel ingredient;
+  private JPanel fromAndToAmount;
+  private JPanel fromAmount;
+  private JPanel temp;
+  private JComboBox<String>fromDrop;
+  private JComboBox<String> toDrop;
+  private JComboBox<String> inDrop;
+  private JTextField text;
+  private JLabel toAmountLabel;
+  
   public UnitConverterWindow() 
   {
-    //Initializes window
+    initializeWindow();
+    createPanels();
+    addComponents();
+    createActionDependentComponents();
+    finish();
+  }
+  private void initializeWindow() {
     setTitle("KiLowBites Unit Converter");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(750, 250);
     setResizable(false);
-    
     setLayout(new BorderLayout());
-    
-    //Creates the "From Units" Label and the units JComboBox
-    JPanel fromTo = new JPanel(new BorderLayout());
-    JPanel from = new JPanel(new FlowLayout(FlowLayout.LEFT));
+  }
+  
+  private void createPanels() 
+  {
+    fromTo = new JPanel(new BorderLayout());
+    from = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    to = new JPanel();
+    ingredient = new JPanel();
+    fromAndToAmount = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    fromAmount = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
+  }
+  
+  private void addComponents() {
+    addFromToComponents();
+    addIngredientComponents();
+    addFromAmountComponents();
+  }
+  
+  private void createActionDependentComponents() {
+    createToAmountLabel();
+    createCalculateButton();
+    createResetButton();
+  }
+  
+  private void finish() {
+    addListeners();
+    add(temp, BorderLayout.NORTH);
+  }
+  
+  private void addFromToComponents() {
     JLabel fromLabel = new JLabel("From Units:");
     from.add(fromLabel);
-    JComboBox<String> fromDrop = new JComboBox<>(UNITS);
+    fromDrop = new JComboBox<>(UNITS);
     from.add(fromDrop);
     
-    //Creates the "To Units" Label and the units JComboBox
-    JPanel to = new JPanel();
     JLabel toLabel = new JLabel("To Units:");
     to.add(toLabel);
-    JComboBox<String> toDrop = new JComboBox<>(UNITS);
+    toDrop = new JComboBox<>(UNITS);
     to.add(toDrop);
     from.add(to);
-    
-    //Creates the "Ingredient" label and the ingredients JComboBox
-    JPanel ingredient = new JPanel();
+  }
+  
+  private void addIngredientComponents() {
     JLabel inLabel = new JLabel("Ingredient:");
     ingredient.add(inLabel);
     //Gets the ingredients from the ingredients file
@@ -64,36 +101,35 @@ public class UnitConverterWindow extends JFrame
       ingredAr[count] = ingre.getName();
       count++;
     }
-    JComboBox<String> inDrop = new JComboBox<>(ingredAr);
+    inDrop = new JComboBox<>(ingredAr);
     //Initializes Ingredients drop down as disabled
     inDrop.setEnabled(false);
     ingredient.add(inDrop);
     from.add(ingredient);
     from.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 10));
     fromTo.add(from, BorderLayout.NORTH);
-    
-    
-    //Creates the "From Amount" label and the text field
-    JPanel fromAndToAmount = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel fromAmount = new JPanel(new FlowLayout(FlowLayout.LEFT));
+  }
+  
+  private void addFromAmountComponents() {
     JLabel fromAmountLabel = new JLabel("From Amount:");
-    JTextField text = new JTextField();
+    text = new JTextField();
     text.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     text.setPreferredSize(new Dimension(110, 20));
     fromAmount.add(fromAmountLabel);
     fromAmount.add(text);
     fromAmount.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 10));
-    
-    //Creates the "To Amount" label
-    JLabel toAmountLabel = new JLabel("To Amount: ______________");
+  }
+  
+  private void createToAmountLabel() {
+    toAmountLabel = new JLabel("To Amount: ______________");
     fromAndToAmount.add(fromAmount);
     fromAndToAmount.add(toAmountLabel);
     
     fromTo.add(fromAndToAmount, BorderLayout.CENTER);
     add(fromTo, BorderLayout.CENTER);
-    
-    //Creates the Calculate button and adds listener
-    JPanel temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
+  }
+  
+  private void createCalculateButton() {
     ImageIcon icon = createImageIcon("/img/calculate.png");
     Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
     JButton calculator = new JButton(new ImageIcon(img));
@@ -102,8 +138,9 @@ public class UnitConverterWindow extends JFrame
     CalculatorListener listener = new CalculatorListener(toAmountLabel, fromDrop, toDrop, inDrop, text);
     calculator.addActionListener(listener);
     temp.add(calculator);
-
-    //Creates the Reset Button and adds listener
+  }
+  
+  private void createResetButton() {
     ImageIcon icon2 = createImageIcon("/img/reset.png");
     Image img2 = icon2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
     JButton reset = new JButton(new ImageIcon(img2));
@@ -112,14 +149,12 @@ public class UnitConverterWindow extends JFrame
     ResetListener rlistener = new ResetListener(toAmountLabel, fromDrop, toDrop, inDrop, text);
     reset.addActionListener(rlistener);
     temp.add(reset);
-    
-    //Adds the listener to the From and To JComboBox's based on mass to vol or vol to mass conversions
+  }
+  
+  private void addListeners() {
     IngredientListener iListener = new IngredientListener(fromDrop, toDrop, inDrop);
     fromDrop.addActionListener(iListener);
     toDrop.addActionListener(iListener);
-    
-    //Adds everything to the gui
-    add(temp, BorderLayout.NORTH);
   }
   
   private ImageIcon createImageIcon(String path) {

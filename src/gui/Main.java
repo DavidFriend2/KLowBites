@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.*;
-import gui.UnitConverter.UnitConverterWindow;
 import java.awt.*;
 
 /**
