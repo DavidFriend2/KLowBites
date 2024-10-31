@@ -130,6 +130,7 @@ public class Main extends JFrame
 
     JMenuItem caloriesCalculatorItem = new JMenuItem("Calories Calculator");
     toolsMenu.add(caloriesCalculatorItem);
+    
     JMenuItem unitsConverterItem = new JMenuItem("Units Converter");
     toolsMenu.add(unitsConverterItem);
 
@@ -137,6 +138,12 @@ public class Main extends JFrame
       UnitConverterWindow converterWindow = new UnitConverterWindow();
       converterWindow.setVisible(true);
     });
+    
+    caloriesCalculatorItem.addItemListener(e -> {
+      CalorieCalculatorWindow calorieWindow = new CalorieCalculatorWindow();
+      calorieWindow.setVisible(true);
+    });
+    
   }
 
 //THIS IS FOR A LATER SPRINT
