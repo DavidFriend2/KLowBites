@@ -53,6 +53,12 @@ public class RecipeEditor extends JFrame {
 		setSize(600,775);
 		setResizable(false);
 		setLocationRelativeTo(null);
+<<<<<<< HEAD
+=======
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+
+>>>>>>> branch 'main' of https://github.com/bernstdh/f24team3c
 		
 		// Create main content panel
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -187,6 +193,7 @@ public class RecipeEditor extends JFrame {
         }
         JLabel stepUtensil = new JLabel("Utensil: ");
         JComboBox<String> stepUtensilCombo = new JComboBox<String>();
+        stepUtensilCombo.addItem("nothing");
         JLabel stepDetails = new JLabel("Details: ");
         JTextField stepDetailsText = new JTextField(5);
         JButton stepAdd = new JButton(add);
@@ -385,6 +392,7 @@ public class RecipeEditor extends JFrame {
 			}
 			fullUtensilList.add(new Utensil(utensilName.getText(),
 					details.getText()));
+			
 		}
 		
 	}
@@ -494,9 +502,6 @@ public class RecipeEditor extends JFrame {
 							dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " " + ri.getName());
 						}
 					}
-					
-					
-					
 					
 					for (Utensil ut : loaded.getUtenils()) {
 						if (ut.getDetails() != null) {
