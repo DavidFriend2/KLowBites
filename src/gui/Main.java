@@ -139,11 +139,10 @@ public class Main extends JFrame
       converterWindow.setVisible(true);
     });
     
-    caloriesCalculatorItem.addItemListener(e -> {
+    caloriesCalculatorItem.addActionListener(e -> {
       CalorieCalculatorWindow calorieWindow = new CalorieCalculatorWindow();
       calorieWindow.setVisible(true);
     });
-    
   }
 
 //THIS IS FOR A LATER SPRINT
