@@ -49,7 +49,7 @@ public class ProcessViewer extends JFrame
 	    
 	    mainPanel.add(printButton, BorderLayout.NORTH);
 	
-	 // Utensils panel
+	    // Utensils panel
 	    JScrollPane utensilsPanel = createUtensilsPanel("None");
 	    mainPanel.add(utensilsPanel, BorderLayout.CENTER);
 	
