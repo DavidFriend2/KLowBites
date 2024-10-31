@@ -3,6 +3,11 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
+import Information.Ingredient;
+import UnitConversion.CalorieConverter;
+
+import java.util.List;
+
 /**
  * Creates the Calorie Calculator Window for KILowBites
  * 
@@ -76,14 +81,22 @@ public class CalorieCalculatorWindow extends JFrame {
 
     private void addInputComponents() {
         inputPanel.add(new JLabel("Ingredient:"));
-        ingredientComboBox = new JComboBox<>(new String[]{"Ingredient 1", "Ingredient 2", "Ingredient 3"});
+        List<Ingredient> ingredientsList = Ingredient.getIngredients();
+        String[] ingredientChoices = new String[ingredientsList.size() + 1];
+        ingredientChoices[0] = "";
+        int count = 1;
+        for (Ingredient currIngredient : ingredientsList) {
+          ingredientChoices[count] = currIngredient.getName();
+          count++;
+        }
+        ingredientComboBox = new JComboBox<>(ingredientChoices);
         inputPanel.add(ingredientComboBox);
         inputPanel.add(new JLabel("Amount:"));
         amountField = new JTextField(5);
         inputPanel.add(amountField);
         inputPanel.add(new JLabel("Units:"));
-        unitsComboBox = new JComboBox<>(new String[]{"pinches", "teaspoons", "tablespoons", "fluid ounces", "cups",
-            "pints", "quarts", "gallons", "milliliters", "drams", "grams", "ounces", "pounds"});
+        unitsComboBox = new JComboBox<>(new String[]{"", "Pinches", "Teaspoons", "Tablespoons", "Fluid ounces", "Cups",
+            "Pints", "Quarts", "Gallons", "Milliliters", "Drams", "Grams", "Ounces", "Pounds"});
         inputPanel.add(unitsComboBox);
     }
 
@@ -126,11 +139,10 @@ public class CalorieCalculatorWindow extends JFrame {
         
         try {
             double amount = Double.parseDouble(amountStr);
+            Ingredient currIngredient = Ingredient.getIngredientbyName(ingredient);
+            String result = String.format("%.2f", CalorieConverter.convert(currIngredient, amount, unit));
+            caloriesField.setText(result);
             
-            // TODO call the calculation class here
-            
-            // Placeholder:
-            caloriesField.setText("Calculation not implemented");
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Please enter a valid number for amount.", "Input Error", JOptionPane.ERROR_MESSAGE);
         }
