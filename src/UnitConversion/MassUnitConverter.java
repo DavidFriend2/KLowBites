@@ -22,7 +22,7 @@ public class MassUnitConverter {
       return value;
     }
     if (from.equals(GRAMS)) {
-      return value / 28.35;
+      return value / 28.3495231;
     }
     if (from.equals(DRAMS)) {
       return value / 16;

@@ -33,7 +33,7 @@ class CalorieConverterTest
     assertEquals("9.36", String.format("%.2f", CalorieConverter.convert(apple, 12, "drams")));
     
     //Cups to calories
-    assertEquals("699.53", String.format("%.2f", CalorieConverter.convert(apple, 12, "cups")));
+    assertEquals("699.54", String.format("%.2f", CalorieConverter.convert(apple, 12, "cups")));
     
     //Fluid Ounces to calories
     assertEquals("87.44", String.format("%.2f", CalorieConverter.convert(apple, 12, "fluid ounces")));
@@ -45,16 +45,16 @@ class CalorieConverterTest
     assertEquals("43.72", String.format("%.2f", CalorieConverter.convert(apple, 12, "tablespoons")));
     
     //Gallons to calories
-    assertEquals("11192.52", String.format("%.2f", CalorieConverter.convert(apple, 12, "gallons")));
+    assertEquals("11192.71", String.format("%.2f", CalorieConverter.convert(apple, 12, "gallons")));
     
     //Pinches to calories
     assertEquals("0.91", String.format("%.2f", CalorieConverter.convert(apple, 12, "pinches")));
     
     //Pints to calories
-    assertEquals("1399.06", String.format("%.2f", CalorieConverter.convert(apple, 12, "pints")));
+    assertEquals("1399.09", String.format("%.2f", CalorieConverter.convert(apple, 12, "pints")));
     
     //Quarts to calories
-    assertEquals("2798.13", String.format("%.2f", CalorieConverter.convert(apple, 12, "quarts")));
+    assertEquals("2798.18", String.format("%.2f", CalorieConverter.convert(apple, 12, "quarts")));
     
     //Mililiters to calories
     assertEquals("2.96", String.format("%.2f", CalorieConverter.convert(apple, 12, "milliliters")));

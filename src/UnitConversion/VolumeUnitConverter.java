@@ -19,67 +19,59 @@ public class VolumeUnitConverter
   }
   
   public static double toFluidOunce(double value, String from) {
-    double result = 0.0;
     if (from.equals(P)) {
-      result = ((value / 16) / 3) / 2;
+      return ((value / 16.0) / 3.0) / 2.0;
     }
     if (from.equals(TSP)) {
-      result = (value / 3) / 2;
+      return (value / 3.0) / 2.0;
     }
     if (from.equals(TBS)) {
-      result = value / 2;
+      return value / 2.0;
     }
     if (from.equals(CUP)) {
-      result = value * 8;
+      return value * 8.0;
     }
     if (from.equals(PT)) {
-      result = value * 16;
+      return value * 16.0;
     }
     if (from.equals(QT)) {
-      result = value * 32;
+      return value * 32.0;
     }
     if (from.equals(GAL)) {
-      result = value * 128;
+      return value * 128.0;
     }
     if (from.equals(ML)) {
-      result = value / 29.57353;
+      return value / 29.57353;
     }
-    if (from.equals(FLOZ)) {
-      result = value;
-    }
-    return result;
+    return value;
   }
   
   
   public static final double fromFluidOunce(double value, String to) {
-    double result = 0.0;
     if (to.equals(P)) {
-      result = ((value * 16) * 3) * 2;
+      return ((value * 16.0) * 3.0) * 2.0;
     }
     if (to.equals(TSP)) {
-      result = (value * 3) * 2;
+      return (value * 3.0) * 2.0;
     }
     if (to.equals(TBS)) {
-      result = value * 2;
+      return value * 2.0;
     }
     if (to.equals(CUP)) {
-      result = value / 8;
+      return value / 8.0;
     }
     if (to.equals(PT)) {
-      result = value / 16;
+      return value / 16.0;
     }
     if (to.equals(QT)) {
-      result = value / 32;
+      return value / 32.0;
     }
     if (to.equals(GAL)) {
-      result = value / 128;
+      return value / 128.0;
     }
     if (to.equals(ML)) {
-      result = value * 29.57353;
+      return value * 29.57353;
     }
-    if (to.equals(FLOZ)) {
-      result = value;
-    }
-    return result;
+    return value;
   }
 }

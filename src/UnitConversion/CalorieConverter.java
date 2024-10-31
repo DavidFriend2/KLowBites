@@ -7,17 +7,18 @@ public class CalorieConverter
   private static final String[] weights = {"drams", "grams", "ounces", "pounds"};
   
   public static double convert(Ingredient ingredient, double amount, String unit) {
-    double result = 0.0;
-    for (String weight : weights) {
-      if (weight == unit) {
-        double helper = MassUnitConverter.convert(amount, unit, "grams");
-        result = (ingredient.getCaloriesPer100g() / 100) * helper;
-        return result;
+    for (int i = 0; i < weights.length; i++)  {
+      if (weights[i] == unit) {
+        System.out.println("woohoo");
+        System.out.println(MassUnitConverter.convert(amount, unit, "grams"));
+        System.out.println(ingredient.getCaloriesPer100g());
+        System.out.println(ingredient.getCaloriesPer100g() / 100.0);
+        System.out.println();
+        return MassUnitConverter.convert(amount, unit, "grams") * (ingredient.getCaloriesPer100g() / 100.0);
       }
     }
     double helper = MassVolumeConverter.convert(amount, unit, "grams", ingredient);
-    result = (ingredient.getCaloriesPer100g() / 100) * helper;
+    double result = (ingredient.getCaloriesPer100g() / 100.0) * helper;
     return result;
   }
-  
 }
