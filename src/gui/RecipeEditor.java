@@ -53,12 +53,6 @@ public class RecipeEditor extends JFrame {
 		setSize(600,775);
 		setResizable(false);
 		setLocationRelativeTo(null);
-<<<<<<< HEAD
-=======
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-
->>>>>>> branch 'main' of https://github.com/bernstdh/f24team3c
 		
 		// Create main content panel
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));

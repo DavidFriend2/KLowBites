@@ -58,7 +58,7 @@ public class Main extends JFrame
 
     createFileMenu(menuBar);
     createEditMenu(menuBar);
-    createSearchMenu(menuBar);
+//    createSearchMenu(menuBar);
     createViewMenu(menuBar);
     createToolsMenu(menuBar);
 //    createConfigureMenu(menuBar);
@@ -82,35 +82,45 @@ public class Main extends JFrame
 
     JMenuItem recipeEditor = new JMenuItem("Recipe");
     editMenu.add(recipeEditor);
-    JMenuItem mealEditor = new JMenuItem("Meal");
-    editMenu.add(mealEditor);
-
-    mealEditor.addActionListener(e -> {
-      MealEditor conv = new MealEditor();
-      conv.setVisible(true);
+    recipeEditor.addActionListener(e -> {
+      RecipeEditor recipeViewer = new RecipeEditor();
+      recipeViewer.setVisible(true);
     });
+//    JMenuItem mealEditor = new JMenuItem("Meal");
+//    editMenu.add(mealEditor);
+
+//    mealEditor.addActionListener(e -> {
+//      MealEditor conv = new MealEditor();
+//      conv.setVisible(true);
+//    });
+    
+    
   }
 
-  private void createSearchMenu(JMenuBar menuBar)
-  {
-    JMenu searchMenu = new JMenu("Search");
-    menuBar.add(searchMenu);
-
-    JMenuItem searchRecipes = new JMenuItem("Recipes");
-    searchMenu.add(searchRecipes);
-    JMenuItem searchMeals = new JMenuItem("Meals");
-    searchMenu.add(searchMeals);
-  }
+//  private void createSearchMenu(JMenuBar menuBar)
+//  {
+//    JMenu searchMenu = new JMenu("Search");
+//    menuBar.add(searchMenu);
+//
+//    JMenuItem searchRecipes = new JMenuItem("Recipes");
+//    searchMenu.add(searchRecipes);
+//    JMenuItem searchMeals = new JMenuItem("Meals");
+//    searchMenu.add(searchMeals);
+//  }
 
   private void createViewMenu(JMenuBar menuBar)
   {
     JMenu viewMenu = new JMenu("View");
     menuBar.add(viewMenu);
 
-    JMenuItem viewShoppingList = new JMenuItem("Shopping List");
-    viewMenu.add(viewShoppingList);
+//    JMenuItem viewShoppingList = new JMenuItem("Shopping List");
+//    viewMenu.add(viewShoppingList);
     JMenuItem viewProcess = new JMenuItem("Process");
     viewMenu.add(viewProcess);
+    viewProcess.addActionListener(e -> {
+      ProcessViewer processViewer = new ProcessViewer();
+      processViewer.setVisible(true);
+    });
   }
 
   private void createToolsMenu(JMenuBar menuBar)
