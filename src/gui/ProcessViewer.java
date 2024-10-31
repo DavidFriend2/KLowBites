@@ -32,6 +32,34 @@ public class ProcessViewer extends JFrame
 	private static final long serialVersionUID = 1L;
 	private Recipe recipe;
 	
+	public ProcessViewer() 
+	{
+	    setTitle("Recipe Viewer");
+	    setSize(500, 500);
+	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	    setLayout(new BorderLayout());
+	    
+	    // Main panel
+	    JPanel mainPanel = new JPanel(new BorderLayout());
+	    JPanel printButton = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+	    
+	    // Add print button
+	    buttonCreation button = new buttonCreation();
+	    button.addImageButton(printButton, "/img/print.png", "Print");
+	    
+	    mainPanel.add(printButton, BorderLayout.NORTH);
+	
+	 // Utensils panel
+	    JScrollPane utensilsPanel = createUtensilsPanel("None");
+	    mainPanel.add(utensilsPanel, BorderLayout.CENTER);
+	
+	    // Steps panel
+	    JScrollPane stepsPanel = createStepsPanel("None");
+	    mainPanel.add(stepsPanel, BorderLayout.SOUTH);
+	
+	    add(mainPanel);
+	}
+	
 	public ProcessViewer(Recipe recipe) 
 	{
 	    this.recipe = recipe;
@@ -49,19 +77,24 @@ public class ProcessViewer extends JFrame
 	    buttonCreation button = new buttonCreation();
 	    button.addImageButton(printButton, "/img/print.png", "Print");
 	    
-	    printButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	PrinterJob job = PrinterJob.getPrinterJob();
-        		if (job.printDialog()) {
-                    try {
-                        // Print the document
-                        job.print();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
+	    printButton.addMouseListener(new MouseAdapter() 
+	    {
+	        @Override
+	        public void mouseClicked(MouseEvent e) 
+	        {
+	        	PrinterJob job = PrinterJob.getPrinterJob();
+	    		if (job.printDialog()) 
+	    		{
+	    			try 
+	    			{
+						job.print();
+					} 
+	    			catch (PrinterException e1) 
+	    			{
+						e1.printStackTrace();
+					}
+	            }
+	        }
         });
 	    
 	    mainPanel.add(printButton, BorderLayout.NORTH);
@@ -77,8 +110,33 @@ public class ProcessViewer extends JFrame
 	    add(mainPanel);
 	}
 	
+	private JScrollPane createUtensilsPanel(String string)
+	{
+		if (string.equals("None")) {
+			JScrollPane utensilsPanel = new JScrollPane();
+			utensilsPanel.setBorder(BorderFactory.createTitledBorder("Utensils"));
+			return utensilsPanel;
+		} else {
+			return null;
+		}
+	}
+	
+	private JScrollPane createStepsPanel(String string)
+	{
+		if (string.equals("None")) {
+			JScrollPane stepsPanel = new JScrollPane();
+			stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
+			return stepsPanel;
+		} else {
+			return null;
+		}
+	}
+	
 	private JScrollPane createUtensilsPanel() 
 	{
+		
+		JScrollPane utensilsPanel = new JScrollPane();
+		
 		DefaultListModel<String> DLM = new DefaultListModel<>();
 	    JList<String> utensilsList = new JList<>(DLM);
 	
@@ -89,9 +147,8 @@ public class ProcessViewer extends JFrame
             String details = utensil.getDetails() != null ? utensil.getDetails() : "No description";
             DLM.addElement(name + ": " + details);
         }
-
-	
-	    JScrollPane utensilsPanel = new JScrollPane(utensilsList);
+	    
+	    utensilsPanel = new JScrollPane(utensilsList);
 	    
 	    // Create border with title
 	    utensilsPanel.setBorder(BorderFactory.createTitledBorder("Utensils"));
@@ -101,10 +158,14 @@ public class ProcessViewer extends JFrame
 	
 	private JScrollPane createStepsPanel() 
 	{
-	    JTextArea stepsText = new JTextArea();
-	
-	 // Initialize a StringBuilder to concatenate all steps into a single string
-	    StringBuilder stepsBuilder = new StringBuilder();
+		DefaultListModel<String> DLM = new DefaultListModel<>();
+	    JList<String> stepsList = new JList<>(DLM);
+	    
+	    JScrollPane stepsPanel = new JScrollPane(stepsList);
+	    stepsPanel = new JScrollPane(stepsList);
+	    stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
+	    
+	    // Initialize step number
 	    int stepCount = 1;
 
 	    // Iterate through each step in the recipe and format it
@@ -116,15 +177,12 @@ public class ProcessViewer extends JFrame
 	            step.getDestinationUtensil() != null ? step.getDestinationUtensil() : "No destination",
 	            step.getDetails() != null ? " - " + step.getDetails() : ""
 	        );
-	        stepsBuilder.append(actionText);
+	        DLM.addElement(actionText);
 	    }
 
 	    // Set the formatted steps in the JTextArea
-	    stepsText.setText(stepsBuilder.toString());
 	    
-	    // Holds the steps 
-	    JScrollPane stepsPanel = new JScrollPane(stepsText);
-	    stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
+	    // Holds the steps
 	    return stepsPanel;
 	}
 	
@@ -132,7 +190,7 @@ public class ProcessViewer extends JFrame
 	{
 	    SwingUtilities.invokeLater(() -> {
 	        Recipe bananasFoster = Recipe.getRecipes().get(1);
-	        new ProcessViewer(bananasFoster).setVisible(true);
+	        new ProcessViewer().setVisible(true);
 	    });
 	}
 }

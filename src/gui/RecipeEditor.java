@@ -53,7 +53,6 @@ public class RecipeEditor extends JFrame {
 		setSize(600,775);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Create main content panel
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
