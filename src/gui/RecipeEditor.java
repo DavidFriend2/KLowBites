@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -298,7 +297,8 @@ public class RecipeEditor extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			RecipeEditor re = new RecipeEditor();
+		   re.setVisible(true);
 		}
 		
 	}
@@ -464,9 +464,16 @@ public class RecipeEditor extends JFrame {
 					name.setText(loaded.getName());
 					serves.setText(String.valueOf(loaded.getServes()));
 					for (RecipeIngredient ri : loaded.getIngredients()) {
-						dlm.addElement(ri.getName());
 						fullIngredientList.add(ri);
 					}
+					//sort fullingredientslist somehow
+					for (RecipeIngredient ri : fullIngredientList) {
+						dlm.addElement(ri.getName());
+					}
+					
+					
+					
+					
 					for (Utensil ut : loaded.getUtenils()) {
 						dlm2.addElement(ut.getName());
 						fullUtensilList.add(ut);
