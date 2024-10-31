@@ -95,7 +95,7 @@ public class RecipeEditor extends JFrame {
         utensilInputs.add(utensilNameText);
         utensilInputs.add(details);
         utensilInputs.add(detailsText);
-        utensilInputs.add(addUtensil);
+        
         
         //Bottom half of utensil editor ----------
         JPanel utensilBottom = new JPanel(new BorderLayout());
@@ -108,6 +108,7 @@ public class RecipeEditor extends JFrame {
         deleteUtensilListener utensilDeleteListener = new deleteUtensilListener(utensilsList);
         utensilDelete.addActionListener(utensilDeleteListener);
         utensilBR.add(utensilDelete, BorderLayout.SOUTH);
+        utensilBR.add(addUtensil, BorderLayout.NORTH);
         utensilBottom.add(utensilBR, BorderLayout.EAST);
         //add everything to panel
         utensilPanel.add(utensilBottom, BorderLayout.SOUTH);
@@ -137,7 +138,7 @@ public class RecipeEditor extends JFrame {
         }
         JButton ingAdd = new JButton(add);
         AddIngListener ingAddListen = new AddIngListener(ingNameInput,
-        		ingDetailsInput, ingAmountInput);
+        		ingDetailsInput, ingAmountInput, ingUnitCombo);
         ingAdd.addActionListener(ingAddListen);
         ingInputs.add(ingName);
         ingInputs.add(ingNameInput);
@@ -147,7 +148,6 @@ public class RecipeEditor extends JFrame {
         ingInputs.add(ingAmountInput);
         ingInputs.add(ingUnits);
         ingInputs.add(ingUnitCombo);
-        ingInputs.add(ingAdd);
 
         //bottom half of ingredients-----------
         JPanel ingBottom = new JPanel(new BorderLayout());
@@ -160,6 +160,7 @@ public class RecipeEditor extends JFrame {
         deleteIngListener ingDeleteListener= new deleteIngListener(ingList);
         ingDelete.addActionListener(ingDeleteListener);
         ingBR.add(ingDelete, BorderLayout.SOUTH);
+        ingBR.add(ingAdd, BorderLayout.NORTH);
         ingBottom.add(ingBR, BorderLayout.EAST);
         
         ingPanel.add(ingBottom, BorderLayout.SOUTH);
@@ -186,7 +187,7 @@ public class RecipeEditor extends JFrame {
         	stepOnCombo.addItem(food.getName());
         }
         JLabel stepUtensil = new JLabel("Utensil: ");
-        JComboBox<String> stepUtensilCombo = new JComboBox<>();
+        JComboBox<String> stepUtensilCombo = new JComboBox<String>();
         JLabel stepDetails = new JLabel("Details: ");
         JTextField stepDetailsText = new JTextField(5);
         JButton stepAdd = new JButton(add);
@@ -201,7 +202,7 @@ public class RecipeEditor extends JFrame {
         stepInputs.add(stepUtensilCombo);
         stepInputs.add(stepDetails);
         stepInputs.add(stepDetailsText);
-        stepInputs.add(stepAdd);
+        
 
         //bottom half of step-----------
         JPanel stepBottom = new JPanel(new BorderLayout());
@@ -214,6 +215,7 @@ public class RecipeEditor extends JFrame {
         deleteStepListener stepDeleteListener = new deleteStepListener(stepList);
         stepDelete.addActionListener(stepDeleteListener);
         stepBR.add(stepDelete, BorderLayout.SOUTH);
+        stepBR.add(stepAdd, BorderLayout.NORTH);
         stepBottom.add(stepBR, BorderLayout.EAST);
 
         stepPanel.add(stepInputs, BorderLayout.NORTH);
@@ -239,7 +241,8 @@ public class RecipeEditor extends JFrame {
 	    openButton.setPreferredSize(new Dimension(50, 50));
 	    openButton.setToolTipText("Open");
 	    OpenListener openListener = new OpenListener(nameText, servesText, ingNameInput,
-	    		ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList, utensilsList);
+	    		ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
+	    		utensilsList, stepUtensilCombo);
 	    openButton.addActionListener(openListener);
 	    imagePanel.add(openButton);
 	    
@@ -276,9 +279,9 @@ public class RecipeEditor extends JFrame {
 	    
         mainPanel.add(imagePanel, BorderLayout.NORTH);
         mainPanel.add(namePanel);
+        mainPanel.add(utensilPanel);
         mainPanel.add(ingPanel);
         mainPanel.add(stepPanel);
-        mainPanel.add(utensilPanel);
         
         add(mainPanel);
 	}
@@ -310,7 +313,8 @@ public class RecipeEditor extends JFrame {
 		JTextField ingAmount;
 		JComboBox ingUnit;
 		
-		public AddIngListener(JTextField ingName, JTextField ingDetail, JTextField ingAmount) {
+		public AddIngListener(JTextField ingName, JTextField ingDetail,
+				JTextField ingAmount, JComboBox ingUnit) {
 			this.ingName = ingName;
 			this.ingDetail = ingDetail;
 			this.ingAmount = ingAmount;
@@ -319,9 +323,14 @@ public class RecipeEditor extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
-			dlm.addElement(ingName.getText());
+			if (ingDetail.getText() != null) {
+				dlm.addElement(ingAmount.getText() + " " + ingUnit.getSelectedItem()
+				+ " (" + ingDetail.getText() + ") " + ingName.getText());
+			} else {
+				dlm.addElement(ingAmount.getText() + " " + ingUnit.getSelectedItem() + " " + ingName.getText());
+			}
 			fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
-					Double.valueOf(ingAmount.getText()), "test"));
+					Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
 		}
 		
 	}
@@ -343,7 +352,13 @@ public class RecipeEditor extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
-			dlm3.addElement(stepAction.getSelectedItem().toString());
+			if (stepDetails.getText() == null) {
+				dlm3.addElement(stepAction.getSelectedItem().toString() + " " + stepOn.getSelectedItem().toString() + " "
+						+ stepUtensil.getSelectedItem().toString());
+			} else {
+				dlm3.addElement(stepAction.getSelectedItem().toString() + " " + stepOn.getSelectedItem().toString() + " "
+						+ stepUtensil.getSelectedItem().toString() + " " + stepDetails.getText());
+			}
 			fullStepList.add(new Step(stepAction.getSelectedItem().toString(),
 					stepOn.getSelectedItem().toString(), stepUtensil.getSelectedItem().toString(),
 					stepDetails.getText()));
@@ -364,7 +379,11 @@ public class RecipeEditor extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
-			dlm2.addElement(utensilName.getText());
+			if (details.getText() != null) {
+				dlm2.addElement(utensilName.getText()+ " (" + details.getText() + ")");
+			} else {
+				dlm2.addElement(utensilName.getText());
+			}
 			fullUtensilList.add(new Utensil(utensilName.getText(),
 					details.getText()));
 		}
@@ -430,11 +449,12 @@ public class RecipeEditor extends JFrame {
 		JList ingList;
 		JList stepList;
 		JList utensilList;
+		JComboBox stepUtensilCombo;
 		private String currentFileName;
 		
 		public OpenListener(JTextField name, JTextField serves, JTextField ingNameInput, 
 				JTextField ingDetailsInput, JTextField ingAmountInput, JComboBox ingUnitCombo, JList ingList,
-				JList stepList, JList utensilList) {
+				JList stepList, JList utensilList, JComboBox stepUtensilCombo) {
 			this.name = name;
 			this.serves = serves;
 			this.ingAmountInput = ingAmountInput;
@@ -444,6 +464,7 @@ public class RecipeEditor extends JFrame {
 			this.ingList = ingList;
 			this.stepList = stepList;
 			this.utensilList = utensilList;
+			this.stepUtensilCombo = stepUtensilCombo;
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -468,18 +489,35 @@ public class RecipeEditor extends JFrame {
 					}
 					//sort fullingredientslist somehow
 					for (RecipeIngredient ri : fullIngredientList) {
-						dlm.addElement(ri.getName());
+						if (ri.getDetails() != null) {
+							dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " (" + ri.getDetails() + ") " + ri.getName());
+						} else {
+							dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " " + ri.getName());
+						}
 					}
 					
 					
 					
 					
 					for (Utensil ut : loaded.getUtenils()) {
-						dlm2.addElement(ut.getName());
-						fullUtensilList.add(ut);
+						if (ut.getDetails() != null) {
+							dlm2.addElement(ut.getName()+ " (" + ut.getDetails() + ")");
+							fullUtensilList.add(ut);
+						} else {
+							dlm2.addElement(ut.getName());
+							fullUtensilList.add(ut);
+						}
+						stepUtensilCombo.addItem(ut.getName());
 					}
 					for (Step st : loaded.getSteps()) {
-						dlm3.addElement(st.getAction());
+						if (st.getDetails() == null) {
+							dlm3.addElement(st.getAction() + " " + st.getSourceUtensilOrIngredient() + " "
+									+ st.getDestinationUtensil());
+						} else {
+							dlm3.addElement(st.getAction() + " " + st.getSourceUtensilOrIngredient() + " "
+									+ st.getDestinationUtensil() + " " + st.getDetails());
+						}
+						
 						fullStepList.add(st);
 					}
 					ingList.setModel(dlm);
