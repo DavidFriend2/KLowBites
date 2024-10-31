@@ -8,7 +8,7 @@ public class CalorieConverter
   
   public static double convert(Ingredient ingredient, double amount, String unit) {
     for (int i = 0; i < weights.length; i++)  {
-      if (weights[i] == unit.toLowerCase()) {
+      if (weights[i].equals(unit.toLowerCase())) {
         return MassUnitConverter.convert(amount, unit, "grams") * (ingredient.getCaloriesPer100g() / 100.0);
       }
     }
