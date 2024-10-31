@@ -6,10 +6,15 @@ public class MassVolumeConverter
 {
   private static final String[] weights = {"grams", "drams", "ounces", "pounds"};
 
-
+  public static void main(String[] args) {
+    Ingredient apple = Ingredient.getIngredientbyName("Apple");
+    double dave = convert(120000, "Drams", "Cups", apple);
+    System.out.println(dave);
+  }
+  
   public static double convert(double value, String from, String to, Ingredient ingredient) {
     for (int i = 0; i < weights.length; i++) {
-      if (weights[i] == from) {
+      if (weights[i].equals(from.toLowerCase())) {
         return massToVolume(value, from, to, ingredient);
       }
     }

@@ -42,7 +42,7 @@ public class UnitConverterWindow extends JFrame
   }
   private void initializeWindow() {
     setTitle("KiLowBites Unit Converter");
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setSize(750, 250);
     setResizable(false);
     setLayout(new BorderLayout());

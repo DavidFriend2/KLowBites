@@ -37,10 +37,21 @@ public class CalculatorListener implements ActionListener
   public void actionPerformed(ActionEvent e) 
   {
     Boolean isNumber = true;
-    if(from.getSelectedItem() != "" && to.getSelectedItem() != "" && !(amount.getText().equals(""))) {
+    int count = 0;
+    if(!(from.getSelectedItem().equals("")) && !(to.getSelectedItem().equals("")) && !(amount.getText().equals(""))) {
       for (int i = 0; i < amount.getText().length(); i++) {
         if (!Character.isDigit(amount.getText().charAt(i))) {
-          isNumber = false;
+          if (!(amount.getText().charAt(i) == '.')) {
+            isNumber = false;
+          } 
+          else if (count != 0)
+          {
+            isNumber = false;
+          } 
+          else 
+          {
+            count++;
+          }
         }
       }
       if (isNumber) 
@@ -62,8 +73,8 @@ public class CalculatorListener implements ActionListener
         }
         else {
           if (!(ingredient.getSelectedItem().equals(""))) {
-            toAmount.setText("To Amount: " + String.format("%.2f", MassVolumeConverter.convert(Double.parseDouble(amount.getText()), ((String) from.getSelectedItem()).toLowerCase(), 
-                ((String) to.getSelectedItem()).toLowerCase(), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem()))) + " " + to.getSelectedItem());
+            toAmount.setText("To Amount: " + String.format("%.2f", MassVolumeConverter.convert(Double.parseDouble(amount.getText()), ((String) from.getSelectedItem()), 
+                ((String) to.getSelectedItem()), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem()))) + " " + to.getSelectedItem());
           }
         }
       } 
