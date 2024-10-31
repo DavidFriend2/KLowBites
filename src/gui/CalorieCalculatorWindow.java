@@ -7,7 +7,6 @@ import java.awt.*;
  * Creates the Calorie Calculator Window for KILowBites
  * 
  * @author Jayden S
- * TODO needs functionality
  */
 public class CalorieCalculatorWindow extends JFrame {
     private static final long serialVersionUID = 1293847255;
@@ -19,12 +18,19 @@ public class CalorieCalculatorWindow extends JFrame {
     private JPanel iconPanel;
     private JPanel inputPanel;
     private JPanel caloriesPanel;
+    private JButton calculateButton;
+    private JButton resetButton;
+    private JComboBox<String> ingredientComboBox;
+    private JTextField amountField;
+    private JComboBox<String> unitsComboBox;
+    private JTextField caloriesField;
 
     public CalorieCalculatorWindow() {
         initializeWindow();
         createPanels();
         addComponentsToPanels();
         assembleMainPanel();
+        setupActionListeners();
     }
 
     private void initializeWindow() {
@@ -48,23 +54,42 @@ public class CalorieCalculatorWindow extends JFrame {
     }
 
     private void addIconsToPanel() {
-        addIconToPanel(iconPanel, ICON1_PATH, 30, 30);
-        addIconToPanel(iconPanel, ICON2_PATH, 30, 30);
+        calculateButton = createIconButton(ICON1_PATH, 30, 30, "Calculate");
+        resetButton = createIconButton(ICON2_PATH, 30, 30, "Reset");
+        iconPanel.add(calculateButton);
+        iconPanel.add(resetButton);
+    }
+
+    private JButton createIconButton(String imagePath, int width, int height, String toolTipText) {
+        ImageIcon icon = createImageIcon(imagePath);
+        JButton button = new JButton();
+        if (icon != null) {
+            Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            button.setIcon(new ImageIcon(img));
+        } else {
+            button.setText(toolTipText);
+        }
+        button.setToolTipText(toolTipText);
+        button.setPreferredSize(new Dimension(width, height));
+        return button;
     }
 
     private void addInputComponents() {
         inputPanel.add(new JLabel("Ingredient:"));
-        inputPanel.add(new JComboBox<>(new String[]{"Ingredient 1", "Ingredient 2", "Ingredient 3"}));
+        ingredientComboBox = new JComboBox<>(new String[]{"Ingredient 1", "Ingredient 2", "Ingredient 3"});
+        inputPanel.add(ingredientComboBox);
         inputPanel.add(new JLabel("Amount:"));
-        inputPanel.add(new JTextField(5));
+        amountField = new JTextField(5);
+        inputPanel.add(amountField);
         inputPanel.add(new JLabel("Units:"));
-        inputPanel.add(new JComboBox<>(new String[]{"pinches", "teaspoons", "tablespoons", "fluid ounces", "cups",
-            "pints", "quarts", "gallons", "milliliters", "drams", "grams", "ounces", "pounds"}));
+        unitsComboBox = new JComboBox<>(new String[]{"pinches", "teaspoons", "tablespoons", "fluid ounces", "cups",
+            "pints", "quarts", "gallons", "milliliters", "drams", "grams", "ounces", "pounds"});
+        inputPanel.add(unitsComboBox);
     }
 
     private void addCaloriesComponents() {
         caloriesPanel.add(new JLabel("Calories:"));
-        JTextField caloriesField = new JTextField(10);
+        caloriesField = new JTextField(10);
         caloriesField.setEditable(false);
         caloriesPanel.add(caloriesField);
     }
@@ -79,17 +104,6 @@ public class CalorieCalculatorWindow extends JFrame {
         add(mainPanel);
     }
 
-    private void addIconToPanel(JPanel panel, String imagePath, int width, int height) {
-        ImageIcon icon = createImageIcon(imagePath);
-        if (icon != null) {
-            Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            JLabel label = new JLabel(new ImageIcon(img));
-            panel.add(label);
-        } else {
-            System.err.println("Couldn't find file: " + imagePath);
-        }
-    }
-
     private ImageIcon createImageIcon(String path) {
         java.net.URL imgURL = getClass().getResource(path);
         if (imgURL != null) {
@@ -98,6 +112,35 @@ public class CalorieCalculatorWindow extends JFrame {
             System.err.println("Couldn't find file: " + path);
             return null;
         }
+    }
+
+    private void setupActionListeners() {
+        calculateButton.addActionListener(e -> calculateCalories());
+        resetButton.addActionListener(e -> resetFields());
+    }
+
+    private void calculateCalories() {
+        String ingredient = (String) ingredientComboBox.getSelectedItem();
+        String amountStr = amountField.getText();
+        String unit = (String) unitsComboBox.getSelectedItem();
+        
+        try {
+            double amount = Double.parseDouble(amountStr);
+            
+            // TODO call the calculation class here
+            
+            // Placeholder:
+            caloriesField.setText("Calculation not implemented");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number for amount.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void resetFields() {
+        ingredientComboBox.setSelectedIndex(0);
+        amountField.setText("");
+        unitsComboBox.setSelectedIndex(0);
+        caloriesField.setText("");
     }
 
     public static void main(String[] args) {
