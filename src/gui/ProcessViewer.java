@@ -41,20 +41,20 @@ public class ProcessViewer extends JFrame
 	    
 	    // Main panel
 	    JPanel mainPanel = new JPanel(new BorderLayout());
-	    JPanel printButton = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+	    // JPanel printButton = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
 	    
 	    // Add print button
-	    buttonCreation button = new buttonCreation();
-	    button.addImageButton(printButton, "/img/print.png", "Print");
+	    // buttonCreation button = new buttonCreation();
+	    // button.addImageButton(printButton, "/img/print.png", "Print");
 	    
-	    mainPanel.add(printButton, BorderLayout.NORTH);
+	    // mainPanel.add(printButton, BorderLayout.NORTH);
 	
 	    // Utensils panel
-	    JScrollPane utensilsPanel = createUtensilsPanel("None");
+	    JScrollPane utensilsPanel = createEmptyPanel("Utensils");
 	    mainPanel.add(utensilsPanel, BorderLayout.CENTER);
 	
 	    // Steps panel
-	    JScrollPane stepsPanel = createStepsPanel("None");
+	    JScrollPane stepsPanel = createEmptyPanel("Steps");
 	    mainPanel.add(stepsPanel, BorderLayout.SOUTH);
 	
 	    add(mainPanel);
@@ -71,15 +71,15 @@ public class ProcessViewer extends JFrame
 	    
 	    // Main panel
 	    JPanel mainPanel = new JPanel(new BorderLayout());
-	    JPanel printButton = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+	    // JPanel printButton = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
 	    
 	    // Add print button
-	    buttonCreation button = new buttonCreation();
-	    button.addImageButton(printButton, "/img/print.png", "Print");
+	    // buttonCreation button = new buttonCreation();
+	    // button.addImageButton(printButton, "/img/print.png", "Print");
 	    
-	    printButton.addMouseListener(new MouseAdapter() 
+	    /* printButton.addMouseListener(new MouseAdapter() 
 	    {
-	        @Override
+	    	@Override
 	        public void mouseClicked(MouseEvent e) 
 	        {
 	        	PrinterJob job = PrinterJob.getPrinterJob();
@@ -97,7 +97,7 @@ public class ProcessViewer extends JFrame
 	        }
         });
 	    
-	    mainPanel.add(printButton, BorderLayout.NORTH);
+	    mainPanel.add(printButton, BorderLayout.NORTH); */
 	
 	    // Utensils panel
 	    JScrollPane utensilsPanel = createUtensilsPanel();
@@ -110,27 +110,11 @@ public class ProcessViewer extends JFrame
 	    add(mainPanel);
 	}
 	
-	private JScrollPane createUtensilsPanel(String string)
-	{
-		if (string.equals("None")) {
-			JScrollPane utensilsPanel = new JScrollPane();
-			utensilsPanel.setBorder(BorderFactory.createTitledBorder("Utensils"));
-			return utensilsPanel;
-		} else {
-			return null;
-		}
-	}
-	
-	private JScrollPane createStepsPanel(String string)
-	{
-		if (string.equals("None")) {
-			JScrollPane stepsPanel = new JScrollPane();
-			stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
-			return stepsPanel;
-		} else {
-			return null;
-		}
-	}
+	private JScrollPane createEmptyPanel(String title) {
+        JScrollPane emptyPanel = new JScrollPane();
+        emptyPanel.setBorder(BorderFactory.createTitledBorder(title));
+        return emptyPanel;
+    }
 	
 	private JScrollPane createUtensilsPanel() 
 	{
@@ -169,7 +153,8 @@ public class ProcessViewer extends JFrame
 	    int stepCount = 1;
 
 	    // Iterate through each step in the recipe and format it
-	    for (Step step : recipe.getSteps()) {
+	    for (Step step : recipe.getSteps()) 
+	    {
 	        String actionText = String.format("Step %d: %s %s in %s%s\n",
 	            stepCount++, 
 	            step.getAction(),
@@ -186,11 +171,29 @@ public class ProcessViewer extends JFrame
 	    return stepsPanel;
 	}
 	
+	/*private void printContent() 
+	 * {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setJobName("Print Recipe");
+
+        if (job.printDialog()) 
+        {
+            try 
+            {
+                job.print();
+            } 
+            catch (PrinterException e) 
+            {
+                e.printStackTrace();
+            }
+        }
+    }*/
+	
 	public static void main(String[] args) 
 	{
 	    SwingUtilities.invokeLater(() -> {
 	        Recipe bananasFoster = Recipe.getRecipes().get(1);
-	        new ProcessViewer().setVisible(true);
+	        new ProcessViewer(bananasFoster).setVisible(true);
 	    });
 	}
 }
