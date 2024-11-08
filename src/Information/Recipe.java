@@ -66,6 +66,12 @@ public class Recipe implements Serializable
    recipes.add(recipe);
  }
  
+ @Override
+ public String toString()
+ {
+   return this.name;
+ }
+ 
  @SuppressWarnings("unchecked")
  public static void loadRecipes(String file) throws IOException, ClassNotFoundException
  {
