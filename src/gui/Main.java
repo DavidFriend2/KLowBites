@@ -120,7 +120,7 @@ public class Main extends JFrame
     JMenuItem viewProcess = new JMenuItem("Process");
     viewMenu.add(viewProcess);
     viewProcess.addActionListener(e -> {
-      ProcessViewer processViewer = new ProcessViewer();
+      RecipeProcessViewer processViewer = new RecipeProcessViewer();
       processViewer.setVisible(true);
     });
   }

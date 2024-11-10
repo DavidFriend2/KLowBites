@@ -1,38 +1,35 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import Information.Recipe;
+import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
+import java.awt.print.*;
+import java.util.List;
 
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 /**
  * Creates the window to display utensils and steps in a recipe or meal.
  * 
  * @author Josh Browning.
  */
-public class ProcessViewer extends JFrame
+public class RecipeProcessViewer extends JFrame implements Printable
 {
 
 	private static final long serialVersionUID = 1L;
 	private Recipe recipe;
 	
-	public ProcessViewer() 
+	public RecipeProcessViewer() 
 	{
 	    setTitle("Recipe Viewer");
 	    setSize(500, 500);
@@ -51,16 +48,18 @@ public class ProcessViewer extends JFrame
 	
 	    // Utensils panel
 	    JScrollPane utensilsPanel = createEmptyPanel("Utensils");
+	    utensilsPanel.setSize(200, 200);
 	    mainPanel.add(utensilsPanel, BorderLayout.CENTER);
 	
 	    // Steps panel
 	    JScrollPane stepsPanel = createEmptyPanel("Steps");
+	    stepsPanel.setSize(200, 200);
 	    mainPanel.add(stepsPanel, BorderLayout.SOUTH);
 	
 	    add(mainPanel);
 	}
 	
-	public ProcessViewer(Recipe recipe) 
+	public RecipeProcessViewer(Recipe recipe) 
 	{
 	    this.recipe = recipe;
 	
@@ -76,35 +75,15 @@ public class ProcessViewer extends JFrame
 	    // Add print button
 	    // buttonCreation button = new buttonCreation();
 	    // button.addImageButton(printButton, "/img/print.png", "Print");
-	    
-	    /* printButton.addMouseListener(new MouseAdapter() 
-	    {
-	    	@Override
-	        public void mouseClicked(MouseEvent e) 
-	        {
-	        	PrinterJob job = PrinterJob.getPrinterJob();
-	    		if (job.printDialog()) 
-	    		{
-	    			try 
-	    			{
-						job.print();
-					} 
-	    			catch (PrinterException e1) 
-	    			{
-						e1.printStackTrace();
-					}
-	            }
-	        }
-        });
-	    
-	    mainPanel.add(printButton, BorderLayout.NORTH); */
 	
 	    // Utensils panel
 	    JScrollPane utensilsPanel = createUtensilsPanel();
+	    utensilsPanel.setSize(100, 100);
 	    mainPanel.add(utensilsPanel, BorderLayout.CENTER);
 	
 	    // Steps panel
 	    JScrollPane stepsPanel = createStepsPanel();
+	    stepsPanel.setSize(200, 200);
 	    mainPanel.add(stepsPanel, BorderLayout.SOUTH);
 	
 	    add(mainPanel);
@@ -149,17 +128,41 @@ public class ProcessViewer extends JFrame
 	    stepsPanel = new JScrollPane(stepsList);
 	    stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
 	    
-	    // Initialize step number
 	    int stepCount = 1;
 
 	    // Iterate through each step in the recipe and format it
 	    for (Step step : recipe.getSteps()) 
 	    {
-	        String actionText = String.format("Step %d: %s %s in %s%s\n",
-	            stepCount++, 
+	    	String source = step.getSourceUtensilOrIngredient();
+	    	String destination = "in " + step.getDestinationUtensil();
+	    	Double amount;
+	    	String unit;
+	    	
+	    	if (source.equals(step.getDestinationUtensil())) 
+	    	{
+	    		destination = "";
+	    	}
+	    	
+	    	int ingredientCount = 0;
+	    	
+	    	if (source.equalsIgnoreCase(recipe.getIngredients().get(ingredientCount).getName())) 
+	    	{
+	    		amount = recipe.getIngredients().get(0).getAmount();
+	            unit = recipe.getIngredients().get(0).getUnit();
+	    	} 
+	    	else
+	    	{
+	    		amount = recipe.getIngredients().get(1).getAmount();
+	            unit = recipe.getIngredients().get(1).getUnit();
+	    	}
+	    	
+	    	String actionText = String.format("Step %d: %s %s %s %s %s%s\n",
+	            stepCount++,
 	            step.getAction(),
-	            step.getSourceUtensilOrIngredient(),
-	            step.getDestinationUtensil() != null ? step.getDestinationUtensil() : "No destination",
+	            amount,
+	            unit,
+	    	    source,
+	            destination,
 	            step.getDetails() != null ? " - " + step.getDetails() : ""
 	        );
 	        DLM.addElement(actionText);
@@ -171,29 +174,31 @@ public class ProcessViewer extends JFrame
 	    return stepsPanel;
 	}
 	
-	/*private void printContent() 
-	 * {
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setJobName("Print Recipe");
-
-        if (job.printDialog()) 
-        {
-            try 
-            {
-                job.print();
-            } 
-            catch (PrinterException e) 
-            {
-                e.printStackTrace();
-            }
-        }
-    }*/
+	public int print(Printable p, JFrame j) throws PrinterException {
+		PrinterJob job = PrinterJob.getPrinterJob();
+		try
+		{
+			job.setPrintable(p);
+			boolean shouldPrint = job.printDialog();
+			if (shouldPrint)
+				job.print();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(j, "Unable to print!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		return 0;
+	}
+	
+	@Override
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	public static void main(String[] args) 
 	{
 	    SwingUtilities.invokeLater(() -> {
 	        Recipe bananasFoster = Recipe.getRecipes().get(1);
-	        new ProcessViewer(bananasFoster).setVisible(true);
+	        new RecipeProcessViewer(bananasFoster).setVisible(true);
 	    });
 	}
 }

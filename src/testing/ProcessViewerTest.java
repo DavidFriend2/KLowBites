@@ -14,7 +14,7 @@ import Information.Recipe;
 import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
-import gui.ProcessViewer;
+import gui.RecipeProcessViewer;
 
 /**
  * @author joshuabrowning.
@@ -22,7 +22,7 @@ import gui.ProcessViewer;
 class ProcessViewerTest {
 	
 	private Recipe testRecipe;
-    private ProcessViewer processViewer;
+    private RecipeProcessViewer processViewer;
 
     @BeforeEach
     public void setUp() {
@@ -35,7 +35,7 @@ class ProcessViewerTest {
         RecipeIngredient recipeIngredient2 = new RecipeIngredient("Brown sugar", null, .33, "cup");
         
         testRecipe = new Recipe("Bananas Foster", 3, Arrays.asList(recipeIngredient1, recipeIngredient2), Arrays.asList(utensil1, utensil2), Arrays.asList(step1, step2));
-        processViewer = new ProcessViewer(testRecipe);
+        processViewer = new RecipeProcessViewer(testRecipe);
     }
 
 }
