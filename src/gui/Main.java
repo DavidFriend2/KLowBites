@@ -31,6 +31,8 @@ public class Main extends JFrame {
     private JLabel logoLabel;
     private static UnitConverterWindow converterWindow;
     private static CalorieCalculatorWindow calorieWindow;
+    private static RecipeEditor recipeEditor;
+    private static ProcessViewer processViewer;
 
     // Constructor with locale parameter
     public Main(Locale locale) {
@@ -56,6 +58,7 @@ public class Main extends JFrame {
             e.printStackTrace();
         }
     }
+   
 
     // Set up the basic properties of our main window
     private void initializeWindow() {
@@ -153,15 +156,61 @@ public class Main extends JFrame {
 
         // Open the calorie calculator window when clicked
         caloriesCalculatorItem.addActionListener(e -> {
-            if (calorieWindow == null || !calorieWindow.isDisplayable()) {
-                calorieWindow = new CalorieCalculatorWindow();
-                calorieWindow.setVisible(true);
-            } else {
-                calorieWindow.toFront();
-                calorieWindow.requestFocus();
-            }
-        });
+          if (calorieWindow == null || !calorieWindow.isDisplayable()) {
+              calorieWindow = new CalorieCalculatorWindow(getCurrentLocale());
+              calorieWindow.setVisible(true);
+          } else {
+              calorieWindow.toFront();
+              calorieWindow.requestFocus();
+          }
+      });
+        
+        
+        JMenu languageMenu = new JMenu(strings.getString("menu_language"));
+        toolsMenu.add(languageMenu);
+        JMenuItem englishItem = new JMenuItem("English");
+        JMenuItem spanishItem = new JMenuItem("Español");
+        JMenuItem italianItem = new JMenuItem("Italiano");
+        languageMenu.add(englishItem);
+        languageMenu.add(spanishItem);
+        languageMenu.add(italianItem);
+
+        englishItem.addActionListener(e -> changeLanguage(Locale.ENGLISH));
+        spanishItem.addActionListener(e -> changeLanguage(new Locale("es", "ES")));
+        italianItem.addActionListener(e -> changeLanguage(Locale.ITALIAN));
     }
+    
+    private void changeLanguage(Locale newLocale) {
+      loadStrings(newLocale);
+      updateComponentTexts();
+      updateOpenWindows();
+      SwingUtilities.updateComponentTreeUI(this);
+  }
+    
+    
+    private void updateComponentTexts() {
+      setTitle(strings.getString("main_window_title"));
+      // Update all other component texts here
+      // You'll need to recreate or update text for all menus, labels, etc.
+      createMenuBar(); // Recreate the entire menu bar with new language
+      // Update other components as needed
+  }
+
+  private void updateOpenWindows() {
+//      if (converterWindow != null && converterWindow.isDisplayable()) {
+//          converterWindow.updateLanguage(currentLocale);
+//      }
+      if (calorieWindow != null && calorieWindow.isDisplayable()) {
+          calorieWindow.updateLanguage(currentLocale);
+      }
+//      if (recipeEditor != null && recipeEditor.isDisplayable()) {
+//          recipeEditor.updateLanguage(currentLocale);
+//      }
+//      if (processViewer != null && processViewer.isDisplayable()) {
+//          processViewer.updateLanguage(currentLocale);
+//      }
+  }
+
 
     // Create the main panel and add our logo to it
     private void createMainPanel() {
@@ -186,14 +235,20 @@ public class Main extends JFrame {
             return null;
         }
     }
+    
+    
+    
+    public static Locale getCurrentLocale() {
+      return currentLocale;
+  }
 
     public static void main(String[] args) {
         System.out.println("Classpath: " + System.getProperty("java.class.path"));
         
         // Set the desired locale here
-        // Locale desiredLocale = Locale.ITALIAN; // For Italian
-        // Locale desiredLocale = new Locale("es", "ES"); // For Spanish
-         Locale desiredLocale = Locale.ENGLISH; // For English
+//         Locale desiredLocale = Locale.ITALIAN; // For Italian
+         Locale desiredLocale = new Locale("es", "ES"); // For Spanish
+//         Locale desiredLocale = Locale.ENGLISH; // For English
 
         SwingUtilities.invokeLater(() -> {
             Main window = new Main(desiredLocale);
