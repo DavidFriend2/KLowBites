@@ -65,6 +65,11 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     return null;
   }
   
+  public String toString()
+  {
+    return this.name;
+  }
+  
   
   public static void addIngredient(Ingredient ingredient)
   {
