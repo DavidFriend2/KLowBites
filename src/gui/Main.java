@@ -2,209 +2,210 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
-/**
- * Creates the Basic Main Window for KILowBites
- * 
- * @author Jayden S
- * 
- * TODO Setup shortcuts TODO Add functionality to each menu header TODO DO NOT ADD THINGS
- * HAT ARE NOT GOING TO BE DONE IN THIS SPRINT, READ DOC FOR MORE DETAILS.
- */
-public class Main extends JFrame
-{
-  private static final long serialVersionUID = 1293847254;
+public class Main extends JFrame {
+    private static final long serialVersionUID = 1293847254;
 
-  // Path to our logo image
-  private static final String LOGO_PATH = "/img/logo.png";
+    // Load the resource bundle for internationalization
+    private static ResourceBundle strings;
+    private static Locale currentLocale;
 
-  // Some UI components we'll need later
-  private ImageIcon logoIcon;
-  private JLabel logoLabel;
-  private static UnitConverterWindow converterWindow;
-  private static CalorieCalculatorWindow calorieWindow;
+    // Path to our logo image
+    private String logoPath;
 
-  // Constructor no arg
-  public Main()
-  {
-    initializeWindow();
-    initializeLogo();
-    createMenuBar();
-    createMainPanel();
-  }
+    // Some UI components we'll need later
+    private ImageIcon logoIcon;
+    private JLabel logoLabel;
 
-  // Set up the basic properties of our main window
-  private void initializeWindow()
-  {
-    setTitle("KiLowBites Main Window");
-    setSize(600, 400);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLocationRelativeTo(null); // Center the window on the screen
-  }
+    // Other windows
+    private static UnitConverterWindow converterWindow;
+    private static CalorieCalculatorWindow calorieWindow;
+//    private static RecipeEditor recipeEditor;
+//    private static ProcessViewer processViewer;
 
-  // Load up our logo
-  private void initializeLogo()
-  {
-    logoIcon = createImageIcon(LOGO_PATH);
-    if (logoIcon != null)
-    {
-      logoLabel = new JLabel(logoIcon);
+    // Constructor with locale parameter
+    public Main(Locale locale) {
+        loadStrings(locale);
+        System.out.println("ResourceBundle loaded: " + (strings != null));
+
+        if (strings != null) {
+            initializeWindow();
+            initializeLogo(); // Call to initialize the logo
+            createMenuBar();
+            createMainPanel(); // Call to create the main panel
+        } else {
+            System.err.println("Cannot initialize window due to missing ResourceBundle");
+        }
     }
-    else
-    {
-      logoLabel = new JLabel("Logo not found");
-    }
-  }
 
-  // Create the menu bar at the top of our window
-  private void createMenuBar()
-  {
-    JMenuBar menuBar = new JMenuBar();
-    setJMenuBar(menuBar);
-
-    createFileMenu(menuBar);
-    createEditMenu(menuBar);
-    // createSearchMenu(menuBar);
-    createViewMenu(menuBar);
-    createToolsMenu(menuBar);
-    // createConfigureMenu(menuBar);
-    // createHelpMenu(menuBar);
-  }
-
-  // Add the "File" menu to our menu bar
-  private void createFileMenu(JMenuBar menuBar)
-  {
-    JMenu fileMenu = new JMenu("File");
-    menuBar.add(fileMenu);
-
-    // For now, we just have an exit option
-    JMenuItem exitItem = new JMenuItem("Exit");
-    exitItem.addActionListener(e -> System.exit(0));
-    fileMenu.add(exitItem);
-  }
-
-  // Add the "Edit" menu to our menu bar
-  private void createEditMenu(JMenuBar menuBar)
-  {
-    JMenu editMenu = new JMenu("Edit");
-    menuBar.add(editMenu);
-
-    // Add a recipe editor option
-    JMenuItem recipeEditor = new JMenuItem("Recipe");
-    editMenu.add(recipeEditor);
-    recipeEditor.addActionListener(e -> {
-      RecipeEditor recipeViewer = new RecipeEditor();
-      recipeViewer.setVisible(true);
-    });
-
-    // Meal editor commented out for now
-    // JMenuItem mealEditor = new JMenuItem("Meal");
-    // editMenu.add(mealEditor);
-    // mealEditor.addActionListener(e -> {
-    // MealEditor conv = new MealEditor();
-    // conv.setVisible(true);
-    // });
-  }
-
-  // Add the "View" menu to our menu bar
-  private void createViewMenu(JMenuBar menuBar)
-  {
-    JMenu viewMenu = new JMenu("View");
-    menuBar.add(viewMenu);
-
-    // Shopping list view commented out for now
-    // JMenuItem viewShoppingList = new JMenuItem("Shopping List");
-    // viewMenu.add(viewShoppingList);
-
-    // Add a process viewer option
-    JMenuItem viewProcess = new JMenuItem("Process");
-    viewMenu.add(viewProcess);
-    viewProcess.addActionListener(e -> {
-      RecipeProcessViewer processViewer = new RecipeProcessViewer();
-      processViewer.setVisible(true);
-    });
-  }
-
-  // Add the "Tools" menu to our menu bar
-  private void createToolsMenu(JMenuBar menuBar)
-  {
-    JMenu toolsMenu = new JMenu("Tools");
-    menuBar.add(toolsMenu);
-
-    // Add calorie calculator and unit converter options
-    JMenuItem caloriesCalculatorItem = new JMenuItem("Calories Calculator");
-    toolsMenu.add(caloriesCalculatorItem);
-
-    JMenuItem unitsConverterItem = new JMenuItem("Units Converter");
-    toolsMenu.add(unitsConverterItem);
-
-    // Open the unit converter window when clicked
-    unitsConverterItem.addActionListener(e -> {
-      if (converterWindow == null || !converterWindow.isDisplayable())
-      {
-        converterWindow = new UnitConverterWindow();
-        converterWindow.setVisible(true);
+    // Method to load configuration properties
+    private void loadConfig() {
+      try {
+          Properties config = new Properties();
+          // Adjusted path to include the resources package
+          InputStream input = getClass().getResourceAsStream("/resources/config.properties");
+          if (input != null) {
+              config.load(input);
+              logoPath = config.getProperty("logo_path", "/img/logo.png"); // Default logo if not specified
+          } else {
+              System.err.println("Could not find config.properties");
+          }
+      } catch (Exception e) {
+          e.printStackTrace();
       }
-      else
-      {
-        converterWindow.toFront();
-        converterWindow.requestFocus();
-      }
-    });
-
-    // Open the calorie calculator window when clicked
-    caloriesCalculatorItem.addActionListener(e -> {
-      if (calorieWindow == null || !calorieWindow.isDisplayable())
-      {
-        calorieWindow = new CalorieCalculatorWindow();
-        calorieWindow.setVisible(true);
-      }
-      else
-      {
-        calorieWindow.toFront();
-        calorieWindow.requestFocus();
-      }
-    });
   }
 
-  // Create the main panel and add our logo to it
-  private void createMainPanel()
-  {
-    JPanel mainPanel = new JPanel();
-    mainPanel.setBackground(Color.WHITE);
-    mainPanel.setLayout(new BorderLayout());
-
-    if (logoLabel != null)
-    {
-      mainPanel.add(logoLabel, BorderLayout.CENTER);
+    // Load up our strings for internationalization
+    private static void loadStrings(Locale locale) {
+        currentLocale = locale;
+        try {
+            strings = ResourceBundle.getBundle("resources.Strings", currentLocale);
+            System.out.println("Loaded language: " + currentLocale.getLanguage());
+        } catch (MissingResourceException e) {
+            System.err.println("Could not find resources.Strings for locale " + locale + ": " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    add(mainPanel);
+    // Set up the basic properties of our main window
+    private void initializeWindow() {
+        setTitle(strings.getString("main_window_title"));
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the window on the screen
+    }
+
+    // Load up our logo
+    private void initializeLogo() {
+        loadConfig(); // Load the configuration to get the logo path
+        logoIcon = createImageIcon(logoPath); // path to create the ImageIcon
+
+        if (logoIcon != null) {
+            logoLabel = new JLabel(logoIcon); 
+            add(logoLabel, BorderLayout.NORTH); 
+        } else {
+            logoLabel = new JLabel(strings.getString("error_logo_not_found"));
+            add(logoLabel, BorderLayout.NORTH);
+        }
+    }
+    
+    private ImageIcon createImageIcon(String path) {
+      java.net.URL imgURL = getClass().getResource(path);
+      if (imgURL != null) {
+          return new ImageIcon(imgURL);
+      } else {
+          System.err.println("Couldn't find file: " + path);
+          return null;
+      }
   }
 
-  // Helper method to load an image icon
-  private ImageIcon createImageIcon(String path)
-  {
-    java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null)
-    {
-      return new ImageIcon(imgURL);
+    // Create the menu bar at the top of our window
+    private void createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        createFileMenu(menuBar);
+        createEditMenu(menuBar);
+        createViewMenu(menuBar);
+        createToolsMenu(menuBar);
     }
-    else
-    {
-      System.err.println("Couldn't find file: " + path);
-      return null;
-    }
-  }
 
-  public static void main(String[] args)
-  {
-    SwingUtilities.invokeLater(() -> {
-      Main window = new Main();
-      window.setVisible(true);
-    });
-  }
+    // Add the "File" menu to our menu bar
+    private void createFileMenu(JMenuBar menuBar) {
+        JMenu fileMenu = new JMenu(strings.getString("menu_file"));
+        menuBar.add(fileMenu);
+
+        JMenuItem exitItem = new JMenuItem(strings.getString("menu_item_exit"));
+        exitItem.addActionListener(e -> System.exit(0));
+        fileMenu.add(exitItem);
+    }
+
+    // Add the "Edit" menu to our menu bar
+    private void createEditMenu(JMenuBar menuBar) {
+        JMenu editMenu = new JMenu(strings.getString("menu_edit"));
+        menuBar.add(editMenu);
+
+        JMenuItem recipeEditorItem = new JMenuItem(strings.getString("menu_item_recipe"));
+        editMenu.add(recipeEditorItem);
+        
+        recipeEditorItem.addActionListener(e -> {
+            RecipeEditor recipeViewer = new RecipeEditor();
+            recipeViewer.setVisible(true);
+        });
+    }
+
+    // Add the "View" menu to our menu bar
+    private void createViewMenu(JMenuBar menuBar) {
+        JMenu viewMenu = new JMenu(strings.getString("menu_view"));
+        menuBar.add(viewMenu);
+
+        JMenuItem viewProcessItem = new JMenuItem(strings.getString("menu_item_process"));
+        viewMenu.add(viewProcessItem);
+
+        viewProcessItem.addActionListener(e -> {
+            RecipeProcessViewer processViewer = new RecipeProcessViewer();
+            processViewer.setVisible(true);
+        });
+    }
+
+    // Add the "Tools" menu to our menu bar
+    private void createToolsMenu(JMenuBar menuBar) {
+        JMenu toolsMenu = new JMenu(strings.getString("menu_tools"));
+        menuBar.add(toolsMenu);
+
+        JMenuItem caloriesCalculatorItem = new JMenuItem(strings.getString("menu_item_calories_calculator"));
+        toolsMenu.add(caloriesCalculatorItem);
+
+        JMenuItem unitsConverterItem = new JMenuItem(strings.getString("menu_item_units_converter"));
+        toolsMenu.add(unitsConverterItem);
+
+        unitsConverterItem.addActionListener(e -> {
+            if (converterWindow == null || !converterWindow.isDisplayable()) {
+                converterWindow = new UnitConverterWindow(currentLocale);
+                converterWindow.setVisible(true);
+            } else {
+                converterWindow.toFront();
+                converterWindow.requestFocus();
+            }
+        });
+
+        caloriesCalculatorItem.addActionListener(e -> {
+            if (calorieWindow == null || !calorieWindow.isDisplayable()) {
+                calorieWindow = new CalorieCalculatorWindow(currentLocale);
+                calorieWindow.setVisible(true);
+            } else {
+                calorieWindow.toFront();
+                calorieWindow.requestFocus();
+            }
+        });
+    }
+
+ // Create the main panel and add our logo to it
+    private void createMainPanel() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setLayout(new BorderLayout());
+
+        if (logoLabel != null) {
+            mainPanel.add(logoLabel, BorderLayout.CENTER); 
+        }
+
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Locale desiredLocale = Locale.ITALIAN; // CHANGE THIS FOR LANGUAGE (: EXAMPLE: Locale.ITALIAN
+            Main window = new Main(desiredLocale);
+            if (strings != null) {
+                window.setVisible(true);
+            } else {
+                System.err.println("Cannot display window due to missing ResourceBundle");
+            }
+        });
+    }
 }

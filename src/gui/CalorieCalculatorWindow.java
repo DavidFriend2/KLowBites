@@ -95,7 +95,7 @@ public class CalorieCalculatorWindow extends JFrame {
 
     private void initializeWindow() {
         setTitle(strings.getString("calorie_calculator_title"));
-        setSize(500, 300);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
