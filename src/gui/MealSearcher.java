@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 
 import Information.*;
 
-public class RecipeSearcher extends JFrame
+public class MealSearcher extends JFrame
 {
 
   private static final long serialVersionUID = 1L;
@@ -33,12 +33,14 @@ public class RecipeSearcher extends JFrame
   private DefaultListModel<Ingredient> ingredientDml;
   private JTextField ingredientField;
 
-  private List<Recipe> selectedRecipes = new ArrayList<>();
-  private JComboBox<Recipe> recipeDropdown;
+  private List<Meal> selectedMeals = new ArrayList<>();
+  private JComboBox<Meal> mealDropdown;
 
-  public RecipeSearcher()
+  // private JTextArea status;
+
+  public MealSearcher()
   {
-    setTitle("KiLowBites Recipe Seacher");
+    setTitle("KiLowBites Meal Seacher");
     setSize(600, 700);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -49,19 +51,24 @@ public class RecipeSearcher extends JFrame
     JPanel chooserPanel = new JPanel();
     JLabel chooserLabel = new JLabel("Choose Directory to Search Through");
     JButton chooseDirectoryButton = new JButton("Choose");
-    chooseDirectoryButton.addActionListener(new OpenRecipesListener());
+    chooseDirectoryButton.addActionListener(new OpenMealsListener());
     chooserPanel.add(chooserLabel);
     chooserPanel.add(chooseDirectoryButton);
+
+    // // Status text box
+    // status = new JTextArea(10, 30);
+    // status.setEditable(false);
 
     // Top panel
     JPanel topPanel = new JPanel(new BorderLayout());
     topPanel.add(chooserPanel, BorderLayout.WEST);
+    // topPanel.add(new JScrollPane(status), BorderLayout.CENTER);
 
     // Ingredients panel
     JPanel ingredientPanel = new JPanel();
     ingredientPanel.setLayout(new BoxLayout(ingredientPanel, BoxLayout.Y_AXIS));
     // label
-    JLabel ingredientLabel = new JLabel("Add ingredient(s) to look for in recipes");
+    JLabel ingredientLabel = new JLabel("Add ingredient(s) to look for in meals");
     ingredientLabel.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(ingredientLabel);
     // text field
@@ -84,17 +91,17 @@ public class RecipeSearcher extends JFrame
     deleteIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(deleteIngredientButton);
     // search button
-    JButton searchButton = new JButton("Search Recipes");
-    searchButton.addActionListener(new SearchRecipesListener());
+    JButton searchButton = new JButton("Search Meals");
+    searchButton.addActionListener(new SearchMealsListener());
     searchButton.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(searchButton);
 
     // Recipe Display List
-    recipeDropdown = new JComboBox<>();
+    mealDropdown = new JComboBox<>();
 
     mainPanel.add(topPanel, BorderLayout.NORTH);
     mainPanel.add(ingredientPanel, BorderLayout.CENTER);
-    mainPanel.add(recipeDropdown, BorderLayout.SOUTH);
+    mainPanel.add(mealDropdown, BorderLayout.SOUTH);
     this.add(mainPanel);
 
   }
@@ -105,7 +112,7 @@ public class RecipeSearcher extends JFrame
    * Opens all recipe files and loads them into the lists
    * 
    */
-  private class OpenRecipesListener implements ActionListener
+  private class OpenMealsListener implements ActionListener
   {
 
     @Override
@@ -121,33 +128,39 @@ public class RecipeSearcher extends JFrame
       if (userSelection == JFileChooser.APPROVE_OPTION)
       {
         File directory = directoryChooser.getSelectedFile();
-        loadAllRecipes(directory);
+        loadAllMeals(directory);
       }
 
     }
 
   }
 
-  private void loadAllRecipes(File directory)
+  private void loadAllMeals(File directory)
   {
-    File[] files = directory.listFiles((dir, name) -> name.endsWith(".rcp"));
+    File[] files = directory.listFiles((dir, name) -> name.endsWith(".mel"));
+    // status.setText("");
 
     if (files.length > 0)
     {
-      selectedRecipes.clear();
+      selectedMeals.clear();
 
       for (File file : files)
       {
         try
         {
-          Recipe recipe = Recipe.loadRecipeFromFile(file.getAbsolutePath());
-          selectedRecipes.add(recipe);
+          Meal meal = Meal.loadMealFromFile(file.getAbsolutePath());
+          selectedMeals.add(meal);
+          // status.append("Loaded recipe: " + recipe.getName() + "\n");
+
         }
         catch (Exception e)
         {
           e.printStackTrace();
         }
       }
+      // status.append( "Loaded " + selectedRecipes.size() + " recipes from directory: " +
+      // directory.getName());
+
     }
     else
     {
@@ -170,6 +183,7 @@ public class RecipeSearcher extends JFrame
         Ingredient ingredient = Ingredient.getIngredientbyName(ingredientName);
         containedIngredients.add(ingredient);
         ingredientDml.addElement(ingredient);
+        // status.append("\nAdded ingredient: " + ingredientName);
         ingredientField.setText("");
       }
     }
@@ -188,85 +202,97 @@ public class RecipeSearcher extends JFrame
         Ingredient ingredientToRemove = ingredientDml.get(selectedIngredient);
         containedIngredients.remove(ingredientToRemove);
         ingredientDml.remove(selectedIngredient);
+        // status.append("\nRemoved " + ingredientToRemove + containedIngredients.size());
       }
 
     }
 
   }
 
-  private class SearchRecipesListener implements ActionListener
+  private class SearchMealsListener implements ActionListener
   {
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      List<Recipe> searchedRecipes = new ArrayList<>();
+      List<Meal> searchedMeals = new ArrayList<>();
 
       // search every recipe
-      for (Recipe recipe : selectedRecipes)
+      for (Meal meal : selectedMeals)
       {
-        List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
-        boolean containsIngredients = true;
-
-        // Check if each given ingredient is in a recipe
-        for (Ingredient ingredient : containedIngredients)
+        boolean mealContainsAllIngredients = true;
+        // every recipe in each meal
+        for (Recipe recipe : meal.getRecipes())
         {
-          boolean ingredientFound = false;
+          boolean containsIngredients = true;
 
-          // loop thru every ingredient in recipe to see if the give ingredient matches one
-          for (RecipeIngredient ri : recipeIngredients)
+          // Check if each given ingredient is in a recipe
+          for (Ingredient ingredient : containedIngredients)
           {
-            if (ri.getName().equals(ingredient.getName()))
-            {
-              ingredientFound = true;
-              break;
+            boolean ingredientFound = false;
 
+            // loop thru every ingredient in recipe to see if the give ingredient matches one
+            for (RecipeIngredient ri : recipe.getIngredients())
+            {
+              if (ri.getName().equals(ingredient.getName()))
+              {
+                ingredientFound = true;
+                break;
+
+              }
+
+            }
+
+            // If one ingredient isnt found recipe wont be given, break out
+            if (!ingredientFound)
+            {
+              containsIngredients = false;
+              break;
             }
 
           }
 
-          // If one ingredient isnt found recipe wont be given, break out
-          if (!ingredientFound)
+          if (!containsIngredients)
           {
-            containsIngredients = false;
+            mealContainsAllIngredients = false;
             break;
           }
-
         }
 
-        if (containsIngredients)
+        if (mealContainsAllIngredients)
         {
-          searchedRecipes.add(recipe);
+          searchedMeals.add(meal);
         }
 
       }
 
-      recipeDropdown.removeActionListener(recipeDropdownListener);
-      recipeDropdown.removeAllItems();
+      // status.append("\nFound " + searchedRecipes.size() + " recipes");
+      mealDropdown.removeActionListener(mealDropdownListener);
+      mealDropdown.removeAllItems();
 
-      for (Recipe recipe : searchedRecipes)
+      for (Meal meal : searchedMeals)
       {
-        recipeDropdown.addItem(recipe);
+        mealDropdown.addItem(meal);
       }
-      recipeDropdown.addActionListener(recipeDropdownListener);
-      recipeDropdown.setSelectedIndex(-1);
+      mealDropdown.addActionListener(mealDropdownListener);
+      mealDropdown.setSelectedIndex(-1);
 
     }
 
   }
 
-  private ActionListener recipeDropdownListener = e -> {
-    Recipe selectedRecipe = (Recipe) recipeDropdown.getSelectedItem();
-    if (selectedRecipe != null)
+  private ActionListener mealDropdownListener = e -> {
+    Meal selectedMeal = (Meal) mealDropdown.getSelectedItem();
+    if (selectedMeal != null)
     {
-      new RecipeProcessViewer(selectedRecipe).setVisible(true);
+      // new ProcessViewer(selectedMeal).setVisible(true);
     }
   };
 
   public static void main(String[] args)
   {
     SwingUtilities.invokeLater(() -> {
-      new RecipeSearcher().setVisible(true);
+      new MealSearcher().setVisible(true);
     });
   }
 

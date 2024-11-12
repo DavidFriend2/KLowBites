@@ -36,7 +36,7 @@ public class Meal implements Serializable
   
   public String getFileName()
   {
-    return "recipes/" +  this.name.replaceAll(" ", "_") + ".rcp";
+    return "meals/" +  this.name.replaceAll(" ", "_") + ".mel";
   }
   
   public void saveMealToFile(String file) throws IOException
