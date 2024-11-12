@@ -11,17 +11,17 @@ public class Step implements Serializable
   private String on;
   private String destinationUtensil;
   private String details;
+  private double timeEstimate;
   
   private static final List<String> actions = new ArrayList<>(); 
   
-  public Step(String action, String on, String destinationUtensil, String details)
+  public Step(String action, String on, String destinationUtensil, String details, double timeEstimate)
   {
     this.action = action;
     this.on = on;
     this.destinationUtensil = destinationUtensil;
     this.details = details;
-    
-    
+    this.timeEstimate = timeEstimate;
   }
   
   // Getters to display and access
@@ -43,6 +43,11 @@ public class Step implements Serializable
   public String getDetails()
   {
     return this.details;
+  }
+  
+  public double getTime() 
+  {
+    return this.timeEstimate;
   }
   
   public static List<String> getActions()

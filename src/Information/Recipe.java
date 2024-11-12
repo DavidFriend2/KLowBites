@@ -133,18 +133,18 @@ public class Recipe implements Serializable
    utensils.add(new Utensil("Plate", null));
    
    List<Step> steps = new ArrayList<>();
-   steps.add(new Step("Put", "butter","skillet", null));
-   steps.add(new Step("Melt", "skillet","skillet", null));
-   steps.add(new Step("Put", "brown sugar","skillet", null));
-   steps.add(new Step("Put", "bananas","skillet", null));
-   steps.add(new Step("Simmer", "skillet","skillet", "for 2 minutes"));
-   steps.add(new Step("Put", "cinnamon","skillet", null));
-   steps.add(new Step("Put", "creme de cacao","skillet", null));
-   steps.add(new Step("Put", "skillet","plate", null));
-   steps.add(new Step("Heat", "rum","saucepan", "until it almost simmers"));
-   steps.add(new Step("Ignite", "rum","saucepan", null));
-   steps.add(new Step("Put", "saucepan","plate", null));
-   steps.add(new Step("Put", "ice cream","plate", null));
+   steps.add(new Step("Put", "butter","skillet", null, 2));
+   steps.add(new Step("Melt", "skillet","skillet", null, 2));
+   steps.add(new Step("Put", "brown sugar","skillet", null, 1));
+   steps.add(new Step("Put", "bananas","skillet", null, 1));
+   steps.add(new Step("Simmer", "skillet","skillet", "for 2 minutes", 2));
+   steps.add(new Step("Put", "cinnamon","skillet", null, 1));
+   steps.add(new Step("Put", "creme de cacao","skillet", null, 1));
+   steps.add(new Step("Put", "skillet","plate", null, 1));
+   steps.add(new Step("Heat", "rum","saucepan", "until it almost simmers", 4));
+   steps.add(new Step("Ignite", "rum","saucepan", null, 4));
+   steps.add(new Step("Put", "saucepan","plate", null, 1));
+   steps.add(new Step("Put", "ice cream","plate", null, 1));
    
    Recipe bananasFoster = new Recipe(name, serves, ingredients, utensils, steps);
    recipes.add(bananasFoster);
@@ -172,21 +172,21 @@ public class Recipe implements Serializable
    utensils2.add(new Utensil("strainer", null));
    
    List<Step> steps2 = new ArrayList<>();
-   steps2.add(new Step("Boil", "macaroni","pot", "for 10 minutes"));
-   steps2.add(new Step("Drain", "pot","strainer", null));
-   steps2.add(new Step("Put", "butter","saucepan", null));
-   steps2.add(new Step("Put", "onion","saucepan", null));
-   steps2.add(new Step("Saute", "saucepan","saucepan", "until tender but not brown"));
-   steps2.add(new Step("Put", "flour","saucepan", null));
-   steps2.add(new Step("Put", "pepper","saucepan", null));
-   steps2.add(new Step("Put", "milk","saucepan", null));
-   steps2.add(new Step("Simmer", "saucepan","saucepan", "until slightly thickened"));
-   steps2.add(new Step("Put", "cheese","saucepan", null));
-   steps2.add(new Step("Cook", "saucepan","saucepan", "until melted"));
-   steps2.add(new Step("Put", "strainer","casserole", null));
-   steps2.add(new Step("Put", "saucepan","casserole", null));
-   steps2.add(new Step("Bake", "casserole","casserole", "at 350 degrees for 25 minutes"));
-   steps2.add(new Step("Put", "tomato","casserole", null));
+   steps2.add(new Step("Boil", "macaroni","pot", "for 10 minutes", 10));
+   steps2.add(new Step("Drain", "pot","strainer", null, 1));
+   steps2.add(new Step("Put", "butter","saucepan", null, 1));
+   steps2.add(new Step("Put", "onion","saucepan", null, 1));
+   steps2.add(new Step("Saute", "saucepan","saucepan", "until tender but not brown", 1));
+   steps2.add(new Step("Put", "flour","saucepan", null, 1));
+   steps2.add(new Step("Put", "pepper","saucepan", null, 1));
+   steps2.add(new Step("Put", "milk","saucepan", null, 1));
+   steps2.add(new Step("Simmer", "saucepan","saucepan", "until slightly thickened", 1));
+   steps2.add(new Step("Put", "cheese","saucepan", null, 1));
+   steps2.add(new Step("Cook", "saucepan","saucepan", "until melted", 1));
+   steps2.add(new Step("Put", "strainer","casserole", null, 1));
+   steps2.add(new Step("Put", "saucepan","casserole", null, 1));
+   steps2.add(new Step("Bake", "casserole","casserole", "at 350 degrees for 25 minutes", 1));
+   steps2.add(new Step("Put", "tomato","casserole", null, 1));
    
    Recipe macaroniCheese = new Recipe(name2, serves2, ingredients2, utensils2, steps2);
    recipes.add(macaroniCheese);
@@ -211,16 +211,16 @@ public class Recipe implements Serializable
    utensils3.add(new Utensil("Baking pan", "15x10x1 greased"));
    
    List<Step> steps3 = new ArrayList<>();
-   steps3.add(new Step("Put", "egg","bowl", null));
-   steps3.add(new Step("Put", "milk","bowl", null));
-   steps3.add(new Step("Put", "crackers","dish", null));
-   steps3.add(new Step("Put", "thyme","dish", null));
-   steps3.add(new Step("Put", "paprika","dish", null));
-   steps3.add(new Step("Put", "pepper","dish", null));
-   steps3.add(new Step("Dip", "chicken","bowl", null));
-   steps3.add(new Step("Dip", "chicken","dish", null));
-   steps3.add(new Step("Put", "chicken","baking pan", null));
-   steps3.add(new Step("Bake", "chicken","baking pan", "375 degrees for 55 minutes"));
+   steps3.add(new Step("Put", "egg","bowl", null, 1));
+   steps3.add(new Step("Put", "milk","bowl", null, 1));
+   steps3.add(new Step("Put", "crackers","dish", null, 1));
+   steps3.add(new Step("Put", "thyme","dish", null, 1));
+   steps3.add(new Step("Put", "paprika","dish", null, 1));
+   steps3.add(new Step("Put", "pepper","dish", null, 1));
+   steps3.add(new Step("Dip", "chicken","bowl", null, 1));
+   steps3.add(new Step("Dip", "chicken","dish", null, 1));
+   steps3.add(new Step("Put", "chicken","baking pan", null, 1));
+   steps3.add(new Step("Bake", "chicken","baking pan", "375 degrees for 55 minutes", 1));
    
    Recipe ovenFriedChicken = new Recipe(name3, serves3, ingredients3, utensils3, steps3);
    recipes.add(ovenFriedChicken);
