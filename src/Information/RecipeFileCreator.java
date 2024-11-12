@@ -1,26 +1,25 @@
 package Information;
 
-//import java.io.IOException;
-//import java.util.List;
+import java.io.IOException;
+import java.util.List;
 
 public class RecipeFileCreator
 {
 
   public static void main(String[] args)
   {
+    
+    
 //    // Retrieve the recipes list from the Recipe class
-//    List<Recipe> recipes = Recipe.getRecipes();
 //
 //    // Meal testMeal = new Meal("Good Eats", recipes);
-//    Recipe recipe = recipes.get(2);
+//    //Recipe recipe = recipes.get(2);
 //    try
 //    {
-//      recipe.saveRecipeToFile(recipe.getFileName());
-//      System.out.println("Saved recipe: " + recipe.getName() + " to " + recipe.getFileName());
+//      Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
 //    }
 //    catch (IOException e)
 //    {
-//      System.out.println("Failed to save recipe: " + recipe.getName());
 //      e.printStackTrace();
 //    }
 //
@@ -39,6 +38,21 @@ public class RecipeFileCreator
 //    // }
 //    // }
 //    // }
+    
+    try
+    {
+      List<Ingredient> ingredients = Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr");
+      
+      for(Ingredient i: ingredients)
+      {
+        System.out.println("\n" + i.getName());
+      }
+    }
+    catch (ClassNotFoundException | IOException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
   }
 }
