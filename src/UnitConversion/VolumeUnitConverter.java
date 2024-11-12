@@ -1,77 +1,67 @@
 package UnitConversion;
 
-public class VolumeUnitConverter
-{
-  private static final String P = "pinches";
-  private static final String TSP = "teaspoons";
-  private static final String TBS = "tablespoons";
-  private static final String FLOZ = "fluid ounces";
-  private static final String CUP = "cups";
-  private static final String PT = "pints";
-  private static final String QT = "quarts";
-  private static final String GAL = "gallons";
-  private static final String ML = "milliliters";
+/**
+ * This class provides methods for converting between different volume units.
+ * It uses fluid ounces as an intermediate unit for all conversions.
+ */
+public class VolumeUnitConverter {
+
+    /**
+     * Converts a value from one volume unit to another.
+     *
+     * @param value The numeric value to convert
+     * @param from The unit to convert from
+     * @param to The unit to convert to
+     * @return The converted value
+     */
+    public static double convert(double value, MassVolumeConverter.Unit from, MassVolumeConverter.Unit to) {
+        double fluidOunces = toFluidOunce(value, from);
+        return fromFluidOunce(fluidOunces, to);
+    }
   
+    /**
+     * Converts a value from a given unit to fluid ounces.
+     *
+     * @param value The numeric value to convert
+     * @param from The unit to convert from
+     * @return The value in fluid ounces
+     * @throws IllegalArgumentException if the unit is not supported
+     */
+    public static double toFluidOunce(double value, MassVolumeConverter.Unit from) {
+        switch (from) {
+            case PINCHES: return ((value / 16.0) / 3.0) / 2.0;
+            case TEASPOONS: return (value / 3.0) / 2.0;
+            case TABLESPOONS: return value / 2.0;
+            case CUPS: return value * 8.0;
+            case PINTS: return value * 16.0;
+            case QUARTS: return value * 32.0;
+            case GALLONS: return value * 128.0;
+            case MILLILITERS: return value / 29.57353;
+            case FLUID_OUNCES: return value;
+            default: throw new IllegalArgumentException("Unsupported unit: " + from);
+        }
+    }
   
-  public static double convert(double value, String from, String to) {
-    double result = toFluidOunce(value, from.toLowerCase());
-    return fromFluidOunce(result, to.toLowerCase());
-  }
-  
-  public static double toFluidOunce(double value, String from) {
-    if (from.equals(P)) {
-      return ((value / 16.0) / 3.0) / 2.0;
+    /**
+     * Converts a value from fluid ounces to a given unit.
+     *
+     * @param value The numeric value in fluid ounces
+     * @param to The unit to convert to
+     * @return The converted value
+     * @throws IllegalArgumentException if the unit is not supported
+     */
+    public static double fromFluidOunce(double value, MassVolumeConverter.Unit to) {
+        switch (to) {
+            case PINCHES: return ((value * 16.0) * 3.0) * 2.0;
+            case TEASPOONS: return (value * 3.0) * 2.0;
+            case TABLESPOONS: return value * 2.0;
+            case CUPS: return value / 8.0;
+            case PINTS: return value / 16.0;
+            case QUARTS: return value / 32.0;
+            case GALLONS: return value / 128.0;
+            case MILLILITERS: return value * 29.57353;
+            case FLUID_OUNCES: return value;
+            default: throw new IllegalArgumentException("Unsupported unit: " + to);
+        }
     }
-    if (from.equals(TSP)) {
-      return (value / 3.0) / 2.0;
-    }
-    if (from.equals(TBS)) {
-      return value / 2.0;
-    }
-    if (from.equals(CUP)) {
-      return value * 8.0;
-    }
-    if (from.equals(PT)) {
-      return value * 16.0;
-    }
-    if (from.equals(QT)) {
-      return value * 32.0;
-    }
-    if (from.equals(GAL)) {
-      return value * 128.0;
-    }
-    if (from.equals(ML)) {
-      return value / 29.57353;
-    }
-    return value;
-  }
-  
-  
-  public static final double fromFluidOunce(double value, String to) {
-    if (to.equals(P)) {
-      return ((value * 16.0) * 3.0) * 2.0;
-    }
-    if (to.equals(TSP)) {
-      return (value * 3.0) * 2.0;
-    }
-    if (to.equals(TBS)) {
-      return value * 2.0;
-    }
-    if (to.equals(CUP)) {
-      return value / 8.0;
-    }
-    if (to.equals(PT)) {
-      return value / 16.0;
-    }
-    if (to.equals(QT)) {
-      return value / 32.0;
-    }
-    if (to.equals(GAL)) {
-      return value / 128.0;
-    }
-    if (to.equals(ML)) {
-      return value * 29.57353;
-    }
-    return value;
-  }
 }

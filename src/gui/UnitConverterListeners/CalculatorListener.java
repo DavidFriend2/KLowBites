@@ -4,7 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -17,7 +18,6 @@ import UnitConversion.MassUnitConverter;
 import UnitConversion.MassVolumeConverter;
 import UnitConversion.VolumeUnitConverter;
 
-// Action Listener for the Calculator button
 public class CalculatorListener implements ActionListener {
   
   private JLabel toAmount;
@@ -38,7 +38,6 @@ public class CalculatorListener implements ActionListener {
       this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
 
-  // Displays the calculated unit conversion if the user inputs everything correctly
   public void actionPerformed(ActionEvent e) {
       if (!(from.getSelectedItem().equals("")) && !(to.getSelectedItem().equals("")) && !(amount.getText().isEmpty())) {
           try {
@@ -46,31 +45,27 @@ public class CalculatorListener implements ActionListener {
               Number parsedAmount = numberFormat.parse(amount.getText());
               double amountValue = parsedAmount.doubleValue();
 
-              // Check for negative values
               if (amountValue < 0) {
                   toAmount.setText(strings.getString("to_amount_label") + ": " + strings.getString("not_a_positive_number"));
-                  return; // Exit if negative
+                  return;
               }
 
-              ArrayList<String> massUnits = new ArrayList<>();
-              massUnits.add(strings.getString("unit_pounds"));
-              massUnits.add(strings.getString("unit_grams"));
-              massUnits.add(strings.getString("unit_drams"));
-              massUnits.add(strings.getString("unit_ounces"));
+              MassVolumeConverter.Unit fromUnit = stringToUnit((String) from.getSelectedItem());
+              MassVolumeConverter.Unit toUnit = stringToUnit((String) to.getSelectedItem());
 
               String result;
 
-              if (massUnits.contains(from.getSelectedItem()) && massUnits.contains(to.getSelectedItem())) {
-                  result = numberFormat.format(MassUnitConverter.convert(amountValue, (String) from.getSelectedItem(), (String) to.getSelectedItem()));
-              } else if (!(massUnits.contains(from.getSelectedItem())) && !(massUnits.contains(to.getSelectedItem()))) {
-                  result = numberFormat.format(VolumeUnitConverter.convert(amountValue, (String) from.getSelectedItem(), (String) to.getSelectedItem()));
+              if (isMassUnit(fromUnit) && isMassUnit(toUnit)) {
+                  result = numberFormat.format(MassUnitConverter.convert(amountValue, fromUnit, toUnit));
+              } else if (!isMassUnit(fromUnit) && !isMassUnit(toUnit)) {
+                  result = numberFormat.format(VolumeUnitConverter.convert(amountValue, fromUnit, toUnit));
               } else {
                   if (!(ingredient.getSelectedItem().equals(""))) {
-                      result = numberFormat.format(MassVolumeConverter.convert(amountValue, (String) from.getSelectedItem(), 
-                          (String) to.getSelectedItem(), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem())));
+                      Ingredient selectedIngredient = Ingredient.getIngredientbyName((String) ingredient.getSelectedItem());
+                      result = numberFormat.format(MassVolumeConverter.convert(amountValue, fromUnit, toUnit, selectedIngredient));
                   } else {
                       toAmount.setText(strings.getString("to_amount_label") + ": " + strings.getString("ingredient_required"));
-                      return; // Exit if no ingredient is selected
+                      return;
                   }
               }
 
@@ -79,6 +74,33 @@ public class CalculatorListener implements ActionListener {
               toAmount.setText(strings.getString("to_amount_label") + ": " + strings.getString("not_a_number"));
           }
       }
+  }
+
+  private MassVolumeConverter.Unit stringToUnit(String unitStr) {
+      if (unitStr.equals(strings.getString("unit_pinches"))) return MassVolumeConverter.Unit.PINCHES;
+      if (unitStr.equals(strings.getString("unit_teaspoons"))) return MassVolumeConverter.Unit.TEASPOONS;
+      if (unitStr.equals(strings.getString("unit_tablespoons"))) return MassVolumeConverter.Unit.TABLESPOONS;
+      if (unitStr.equals(strings.getString("unit_fluid_ounces"))) return MassVolumeConverter.Unit.FLUID_OUNCES;
+      if (unitStr.equals(strings.getString("unit_cups"))) return MassVolumeConverter.Unit.CUPS;
+      if (unitStr.equals(strings.getString("unit_pints"))) return MassVolumeConverter.Unit.PINTS;
+      if (unitStr.equals(strings.getString("unit_quarts"))) return MassVolumeConverter.Unit.QUARTS;
+      if (unitStr.equals(strings.getString("unit_gallons"))) return MassVolumeConverter.Unit.GALLONS;
+      if (unitStr.equals(strings.getString("unit_milliliters"))) return MassVolumeConverter.Unit.MILLILITERS;
+      if (unitStr.equals(strings.getString("unit_drams"))) return MassVolumeConverter.Unit.DRAMS;
+      if (unitStr.equals(strings.getString("unit_grams"))) return MassVolumeConverter.Unit.GRAMS;
+      if (unitStr.equals(strings.getString("unit_ounces"))) return MassVolumeConverter.Unit.OUNCES;
+      if (unitStr.equals(strings.getString("unit_pounds"))) return MassVolumeConverter.Unit.POUNDS;
+      throw new IllegalArgumentException("Unknown unit: " + unitStr);
+  }
+
+  private boolean isMassUnit(MassVolumeConverter.Unit unit) {
+      List<MassVolumeConverter.Unit> massUnits = Arrays.asList(
+          MassVolumeConverter.Unit.POUNDS,
+          MassVolumeConverter.Unit.GRAMS,
+          MassVolumeConverter.Unit.DRAMS,
+          MassVolumeConverter.Unit.OUNCES
+      );
+      return massUnits.contains(unit);
   }
 
   public void updateLocale(Locale newLocale) {

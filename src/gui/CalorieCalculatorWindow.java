@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import Information.Ingredient;
 import UnitConversion.CalorieConverter;
+import UnitConversion.MassVolumeConverter;
 
 /**
  * Creates the Calorie Calculator Window for KILowBites
@@ -135,45 +136,47 @@ public class CalorieCalculatorWindow extends JFrame {
     }
 
     private void addInputComponents() {
-        inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
-        
-        List<Ingredient> ingredientsList = Ingredient.getIngredients();
-        String[] ingredientChoices = new String[ingredientsList.size() + 1];
-        ingredientChoices[0] = "";
-        
-        int count = 1;
-        for (Ingredient currIngredient : ingredientsList) {
-            ingredientChoices[count] = currIngredient.getName();
-            count++;
-        }
-        
-        ingredientComboBox = new JComboBox<>(ingredientChoices);
-        inputPanel.add(ingredientComboBox);
+      inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
 
-        inputPanel.add(new JLabel(strings.getString("calorie_calculator_amount_label")));
-        
-        amountField = new JTextField(5);
-        inputPanel.add(amountField);
+      List<Ingredient> ingredientsList = Ingredient.getIngredients();
+      String[] ingredientChoices = new String[ingredientsList.size() + 1];
+      ingredientChoices[0] = ""; // Default empty item
 
-        inputPanel.add(new JLabel(strings.getString("calorie_calculator_units_label")));
-        
-        unitsComboBox = new JComboBox<>(new String[]{"", 
-            strings.getString("unit_pinches"),
-            strings.getString("unit_teaspoons"),
-            strings.getString("unit_tablespoons"),
-            strings.getString("unit_fluid_ounces"),
-            strings.getString("unit_cups"),
-            strings.getString("unit_pints"),
-            strings.getString("unit_quarts"),
-            strings.getString("unit_gallons"),
-            strings.getString("unit_milliliters"),
-            strings.getString("unit_drams"),
-            strings.getString("unit_grams"),
-            strings.getString("unit_ounces"),
-            strings.getString("unit_pounds")});
-        
-        inputPanel.add(unitsComboBox);
-    }
+      int count = 1;
+      for (Ingredient currIngredient : ingredientsList) {
+          ingredientChoices[count] = currIngredient.getName(); // Use English name directly
+          count++;
+      }
+
+      ingredientComboBox = new JComboBox<>(ingredientChoices);
+      inputPanel.add(ingredientComboBox);
+
+      inputPanel.add(new JLabel(strings.getString("calorie_calculator_amount_label")));
+      
+      amountField = new JTextField(5);
+      inputPanel.add(amountField);
+
+      inputPanel.add(new JLabel(strings.getString("calorie_calculator_units_label")));
+      
+      unitsComboBox = new JComboBox<>(new String[]{
+          "", 
+          strings.getString("unit_pinches"),
+          strings.getString("unit_teaspoons"),
+          strings.getString("unit_tablespoons"),
+          strings.getString("unit_fluid_ounces"),
+          strings.getString("unit_cups"),
+          strings.getString("unit_pints"),
+          strings.getString("unit_quarts"),
+          strings.getString("unit_gallons"),
+          strings.getString("unit_milliliters"),
+          strings.getString("unit_drams"),
+          strings.getString("unit_grams"),
+          strings.getString("unit_ounces"),
+          strings.getString("unit_pounds")
+      });
+      
+      inputPanel.add(unitsComboBox);
+  }
 
     private void addCaloriesComponents() {
         caloriesPanel.add(new JLabel(strings.getString("calorie_calculator_calories_label")));
@@ -214,29 +217,47 @@ public class CalorieCalculatorWindow extends JFrame {
     }
 
     private void calculateCalories() {
-        String ingredient = (String) ingredientComboBox.getSelectedItem();
-        
-        String amountStr = amountField.getText();
-        
-        String unit = (String) unitsComboBox.getSelectedItem();
+      String ingredient = (String) ingredientComboBox.getSelectedItem();
+      String amountStr = amountField.getText();
+      String localizedUnit = (String) unitsComboBox.getSelectedItem();
 
-        try {
-            double amount = Double.parseDouble(amountStr);
+      try {
+          double amount = Double.parseDouble(amountStr);
+          Ingredient currIngredient = Ingredient.getIngredientbyName(ingredient); // Directly use the selected ingredient
+          
+          if (currIngredient == null) {
+              JOptionPane.showMessageDialog(this, strings.getString("ingredient_not_found"), strings.getString("error_title"), JOptionPane.ERROR_MESSAGE);
+              return;
+          }
 
-            Ingredient currIngredient = Ingredient.getIngredientbyName(ingredient);
+          // Convert localized unit to MassVolumeConverter.Unit enum
+          MassVolumeConverter.Unit unit = stringToUnit(localizedUnit);
+          
+          // Calculate calories using the CalorieConverter
+          String result = String.format("%.2f", CalorieConverter.convert(currIngredient, amount, unit));
+          caloriesField.setText(result);
+      } catch (NumberFormatException ex) {
+          JOptionPane.showMessageDialog(this, strings.getString("calorie_calculator_error_invalid_number"), strings.getString("calorie_calculator_error_title"), JOptionPane.ERROR_MESSAGE);
+      }
+  }
 
-            String result = String.format("%.2f", CalorieConverter.convert(currIngredient, amount, unit));
-            
-            caloriesField.setText(result);
+  private MassVolumeConverter.Unit stringToUnit(String localizedUnit) {
+      if (localizedUnit.equals(strings.getString("unit_pinches"))) return MassVolumeConverter.Unit.PINCHES;
+      if (localizedUnit.equals(strings.getString("unit_teaspoons"))) return MassVolumeConverter.Unit.TEASPOONS;
+      if (localizedUnit.equals(strings.getString("unit_tablespoons"))) return MassVolumeConverter.Unit.TABLESPOONS;
+      if (localizedUnit.equals(strings.getString("unit_fluid_ounces"))) return MassVolumeConverter.Unit.FLUID_OUNCES;
+      if (localizedUnit.equals(strings.getString("unit_cups"))) return MassVolumeConverter.Unit.CUPS;
+      if (localizedUnit.equals(strings.getString("unit_pints"))) return MassVolumeConverter.Unit.PINTS;
+      if (localizedUnit.equals(strings.getString("unit_quarts"))) return MassVolumeConverter.Unit.QUARTS;
+      if (localizedUnit.equals(strings.getString("unit_gallons"))) return MassVolumeConverter.Unit.GALLONS;
+      if (localizedUnit.equals(strings.getString("unit_milliliters"))) return MassVolumeConverter.Unit.MILLILITERS;
+      if (localizedUnit.equals(strings.getString("unit_drams"))) return MassVolumeConverter.Unit.DRAMS;
+      if (localizedUnit.equals(strings.getString("unit_grams"))) return MassVolumeConverter.Unit.GRAMS;
+      if (localizedUnit.equals(strings.getString("unit_ounces"))) return MassVolumeConverter.Unit.OUNCES;
+      if (localizedUnit.equals(strings.getString("unit_pounds"))) return MassVolumeConverter.Unit.POUNDS;
 
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                strings.getString("calorie_calculator_error_invalid_number"), 
-                strings.getString("calorie_calculator_error_title"), 
-                JOptionPane.ERROR_MESSAGE);
-         }
-     }
-
+      throw new IllegalArgumentException("Unknown unit: " + localizedUnit);
+  }
      private void resetFields() {
          ingredientComboBox.setSelectedIndex(0);
          amountField.setText("");
@@ -246,7 +267,7 @@ public class CalorieCalculatorWindow extends JFrame {
 
      public static void main(String[] args) {
          SwingUtilities.invokeLater(() -> {
-             Locale locale = Locale.ITALIAN; // Set this to Italian at startup
+             Locale locale = Locale.getDefault(); // change language
              CalorieCalculatorWindow window = new CalorieCalculatorWindow(locale); // Pass locale to constructor
              window.setVisible(true);
          });

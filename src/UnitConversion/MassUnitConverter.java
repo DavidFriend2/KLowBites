@@ -1,48 +1,68 @@
 package UnitConversion;
 
+import Information.Ingredient;
+
 /**
- * @author David Friend
- * Mass Unit Converter
+ * This class provides methods for converting between different mass units.
  */
 public class MassUnitConverter {
-  private static final String GRAMS = "grams";
-  private static final String OUNCES = "ounces";
-  private static final String POUNDS = "pounds";
-  private static final String DRAMS = "drams";
-  
-  //Converts a value from a unit to another
-  public static double convert(double value, String from, String to) {
-    double result = toOunces(value, from.toLowerCase());
-    return fromOunces(result, to.toLowerCase());
-  }
-  
-  //Turns the value into ounces
-  private static double toOunces(double value, String from) {
-    if (from.equals(OUNCES)) {
-      return value;
-    }
-    if (from.equals(GRAMS)) {
-      return value / 28.3495231;
-    }
-    if (from.equals(DRAMS)) {
-      return value / 16;
-    }
-    return value * 16;
 
-  }
+    /**
+     * Converts a value from one mass unit to another.
+     *
+     * @param value The numeric value to convert
+     * @param from The unit to convert from
+     * @param to The unit to convert to
+     * @return The converted value in the target unit
+     */
+    public static double convert(double value, MassVolumeConverter.Unit from, MassVolumeConverter.Unit to) {
+        double ounces = toOunces(value, from);
+        return fromOunces(ounces, to);
+    }
   
-  //Turns the ounces into the unit wanted
-  private static double fromOunces(double value, String to) {
-    if (to.equals(OUNCES)) {
-      return value;
+    /**
+     * Converts a value from a specified mass unit to ounces.
+     *
+     * @param value The numeric value to convert
+     * @param from The unit to convert from
+     * @return The equivalent value in ounces
+     * @throws IllegalArgumentException if the unit is not supported
+     */
+    private static double toOunces(double value, MassVolumeConverter.Unit from) {
+        switch (from) {
+            case OUNCES:
+                return value;
+            case GRAMS:
+                return value / 28.3495231; // Convert grams to ounces
+            case DRAMS:
+                return value / 16; // Convert drams to ounces
+            case POUNDS:
+                return value * 16; // Convert pounds to ounces
+            default:
+                throw new IllegalArgumentException("Unsupported mass unit: " + from);
+        }
     }
-    if (to.equals(GRAMS)) {
-      return value * 28.3495231;
+  
+    /**
+     * Converts a value from ounces to a specified mass unit.
+     *
+     * @param value The numeric value in ounces
+     * @param to The unit to convert to
+     * @return The equivalent value in the target unit
+     * @throws IllegalArgumentException if the unit is not supported
+     */
+    private static double fromOunces(double value, MassVolumeConverter.Unit to) {
+        switch (to) {
+            case OUNCES:
+                return value;
+            case GRAMS:
+                return value * 28.3495231; // Convert ounces to grams
+            case DRAMS:
+                return value * 16; // Convert ounces to drams
+            case POUNDS:
+                return value / 16; // Convert ounces to pounds
+            default:
+                throw new IllegalArgumentException("Unsupported mass unit: " + to);
+        }
     }
-    if (to.equals(DRAMS)) {
-      return value * 16;
-    }
-    return value / 16;
-  }
-
 }
