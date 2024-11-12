@@ -39,7 +39,8 @@ public class RecipeSearcher extends JFrame
   public RecipeSearcher()
   {
     setTitle("KiLowBites Recipe Seacher");
-    setSize(600, 700);
+    setSize(350, 500);
+    setResizable(false);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // Main Panel

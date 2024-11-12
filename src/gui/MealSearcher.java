@@ -41,7 +41,8 @@ public class MealSearcher extends JFrame
   public MealSearcher()
   {
     setTitle("KiLowBites Meal Seacher");
-    setSize(600, 700);
+    setSize(350, 500);
+    setResizable(false);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // Main Panel

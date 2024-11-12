@@ -44,6 +44,11 @@ public class RecipeIngredient implements Serializable
     return Ingredient.getIngredientbyName(name);
   }
   
+  public String toString()
+  {
+    return amount + " " + this.unit + " " + this.name.toLowerCase();
+  }
+  
   //Setters
   public void setName(String name)
   {
