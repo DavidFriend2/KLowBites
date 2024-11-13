@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -17,6 +19,7 @@ public class Main extends JFrame {
 
     // Path to our logo image
     private String logoPath;
+    private String htmlPath = "src/gui/index.html";
 
     // Some UI components we'll need later
     private ImageIcon logoIcon;
@@ -112,6 +115,7 @@ public class Main extends JFrame {
       createViewMenu(menuBar);
       createToolsMenu(menuBar);
       createSearchMenu(menuBar);
+      createHelpMenu(menuBar);
   }
 
     // Add the "File" menu to our menu bar
@@ -216,6 +220,29 @@ public class Main extends JFrame {
 
         add(mainPanel, BorderLayout.CENTER);
     }
+    
+    private void createHelpMenu(JMenuBar menuBar) {
+    	JMenu helpMenu = new JMenu("Help");
+        menuBar.add(helpMenu);
+
+        JMenuItem about = new JMenuItem("About");
+        helpMenu.add(about);
+
+        JMenuItem userGuide = new JMenuItem("User Guide");
+        helpMenu.add(userGuide);
+        
+        userGuide.addActionListener(e -> {
+        	try {
+        		File htmlFile = new File(htmlPath);
+        		Desktop d = Desktop.getDesktop();
+        		d.browse(htmlFile.toURI());
+        	} catch (IOException l) {
+        		// TODO Auto-generated catch block
+        		l.printStackTrace();
+        	}
+          });
+        
+      }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
