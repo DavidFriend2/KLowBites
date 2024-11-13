@@ -2,10 +2,6 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -24,14 +20,12 @@ public class Main extends JFrame
 
   // Path to our logo image
   private static final String LOGO_PATH = "/img/logo.png";
-  private static final String HTML_PATH = "src/gui/index.html"; // this works but i dont know why
 
   // Some UI components we'll need later
   private ImageIcon logoIcon;
   private JLabel logoLabel;
   private static UnitConverterWindow converterWindow;
   private static CalorieCalculatorWindow calorieWindow;
-  
 
   // Constructor no arg
   public Main()
@@ -77,7 +71,7 @@ public class Main extends JFrame
     createViewMenu(menuBar);
     createToolsMenu(menuBar);
     // createConfigureMenu(menuBar);
-     createHelpMenu(menuBar);
+    // createHelpMenu(menuBar);
   }
 
   // Add the "File" menu to our menu bar
@@ -165,8 +159,8 @@ public class Main extends JFrame
     caloriesCalculatorItem.addActionListener(e -> {
       if (calorieWindow == null || !calorieWindow.isDisplayable())
       {
-//        calorieWindow = new CalorieCalculatorWindow();
-//        calorieWindow.setVisible(true);
+        calorieWindow = new CalorieCalculatorWindow();
+        calorieWindow.setVisible(true);
       }
       else
       {
@@ -176,29 +170,6 @@ public class Main extends JFrame
     });
   }
 
-  private void createHelpMenu(JMenuBar menuBar) {
-	JMenu helpMenu = new JMenu("Help");
-    menuBar.add(helpMenu);
-
-    JMenuItem about = new JMenuItem("About");
-    helpMenu.add(about);
-
-    JMenuItem userGuide = new JMenuItem("User Guide");
-    helpMenu.add(userGuide);
-    
-    userGuide.addActionListener(e -> {
-    	try {
-    		File htmlFile = new File(HTML_PATH);
-    		Desktop d = Desktop.getDesktop();
-    		d.browse(htmlFile.toURI());
-    	} catch (IOException l) {
-    		// TODO Auto-generated catch block
-    		l.printStackTrace();
-    	}
-      });
-    
-  }
-  
   // Create the main panel and add our logo to it
   private void createMainPanel()
   {

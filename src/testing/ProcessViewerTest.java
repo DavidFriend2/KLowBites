@@ -29,8 +29,8 @@ class ProcessViewerTest {
         // Set up a sample Recipe with utensils and steps
         Utensil utensil1 = new Utensil("Pan", "Non-stick 10-inch");
         Utensil utensil2 = new Utensil("Spatula", "Heat-resistant");
-        Step step1 = new Step("Melt", "butter", "pan", "Low heat");
-        Step step2 = new Step("Add", "bananas", "pan", "Cook until golden");
+        Step step1 = new Step("Melt", "butter", "pan", "Low heat", 2);
+        Step step2 = new Step("Add", "bananas", "pan", "Cook until golden", 8);
         RecipeIngredient recipeIngredient1 = new RecipeIngredient("Butter", null, .33, "cup");
         RecipeIngredient recipeIngredient2 = new RecipeIngredient("Brown sugar", null, .33, "cup");
         

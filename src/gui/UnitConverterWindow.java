@@ -1,23 +1,18 @@
 package gui;
 
 import javax.swing.*;
-
+import java.awt.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import Information.Ingredient;
 import gui.UnitConverterListeners.*;
-import java.awt.*;
-import java.util.List;
 
-/**
- * @author David Friend
- * Creates the UnitConverterWindow
- */
 public class UnitConverterWindow extends JFrame 
 {
   private static final long serialVersionUID = 1L;
-  private static final String[] UNITS = 
-  {"", "Cups", "Drams", "Fluid Ounces", "Gallons", "Grams", "Milliliters", 
-        "Ounces", "Pinches", "Pints", "Pounds", "Quarts", "Tablespoons", "Teaspoons"};
   
   private JPanel fromTo;
   private JPanel from;
@@ -26,22 +21,37 @@ public class UnitConverterWindow extends JFrame
   private JPanel fromAndToAmount;
   private JPanel fromAmount;
   private JPanel temp;
-  private JComboBox<String>fromDrop;
+  private JComboBox<String> fromDrop;
   private JComboBox<String> toDrop;
   private JComboBox<String> inDrop;
   private JTextField text;
   private JLabel toAmountLabel;
   
-  public UnitConverterWindow() 
+  private ResourceBundle strings;
+  private Locale currentLocale;
+  
+  public UnitConverterWindow(Locale locale) 
   {
+    this.currentLocale = locale;
+    loadStrings(locale);
     initializeWindow();
     createPanels();
     addComponents();
     createActionDependentComponents();
     finish();
   }
+  
+  private void loadStrings(Locale locale) {
+    try {
+      strings = ResourceBundle.getBundle("resources.Strings", locale);
+    } catch (MissingResourceException e) {
+      System.err.println("Could not find resources.Strings for locale " + locale + ": " + e.getMessage());
+      e.printStackTrace();
+    }
+  }
+  
   private void initializeWindow() {
-    setTitle("KiLowBites Unit Converter");
+    setTitle(strings.getString("unit_converter_title"));
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setSize(750, 250);
     setResizable(false);
@@ -77,22 +87,40 @@ public class UnitConverterWindow extends JFrame
   }
   
   private void addFromToComponents() {
-    JLabel fromLabel = new JLabel("From Units:");
+    JLabel fromLabel = new JLabel(strings.getString("from_units_label"));
     from.add(fromLabel);
-    fromDrop = new JComboBox<>(UNITS);
+    fromDrop = new JComboBox<>(getLocalizedUnits());
     from.add(fromDrop);
     
-    JLabel toLabel = new JLabel("To Units:");
+    JLabel toLabel = new JLabel(strings.getString("to_units_label"));
     to.add(toLabel);
-    toDrop = new JComboBox<>(UNITS);
+    toDrop = new JComboBox<>(getLocalizedUnits());
     to.add(toDrop);
     from.add(to);
   }
   
+  private String[] getLocalizedUnits() {
+    return new String[] {
+      "", 
+      strings.getString("unit_cups"),
+      strings.getString("unit_drams"),
+      strings.getString("unit_fluid_ounces"),
+      strings.getString("unit_gallons"),
+      strings.getString("unit_grams"),
+      strings.getString("unit_milliliters"),
+      strings.getString("unit_ounces"),
+      strings.getString("unit_pinches"),
+      strings.getString("unit_pints"),
+      strings.getString("unit_pounds"),
+      strings.getString("unit_quarts"),
+      strings.getString("unit_tablespoons"),
+      strings.getString("unit_teaspoons")
+    };
+  }
+  
   private void addIngredientComponents() {
-    JLabel inLabel = new JLabel("Ingredient:");
+    JLabel inLabel = new JLabel(strings.getString("ingredient_label"));
     ingredient.add(inLabel);
-    //Gets the ingredients from the ingredients file
     List<Ingredient> ingred = Ingredient.getIngredients();
     String[] ingredAr = new String[ingred.size() + 1];
     ingredAr[0] = "";
@@ -102,7 +130,6 @@ public class UnitConverterWindow extends JFrame
       count++;
     }
     inDrop = new JComboBox<>(ingredAr);
-    //Initializes Ingredients drop down as disabled
     inDrop.setEnabled(false);
     ingredient.add(inDrop);
     from.add(ingredient);
@@ -111,7 +138,7 @@ public class UnitConverterWindow extends JFrame
   }
   
   private void addFromAmountComponents() {
-    JLabel fromAmountLabel = new JLabel("From Amount:");
+    JLabel fromAmountLabel = new JLabel(strings.getString("from_amount_label"));
     text = new JTextField();
     text.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     text.setPreferredSize(new Dimension(110, 20));
@@ -121,7 +148,7 @@ public class UnitConverterWindow extends JFrame
   }
   
   private void createToAmountLabel() {
-    toAmountLabel = new JLabel("To Amount: ______________");
+    toAmountLabel = new JLabel(strings.getString("to_amount_label") + " ______________");
     fromAndToAmount.add(fromAmount);
     fromAndToAmount.add(toAmountLabel);
     
@@ -129,33 +156,34 @@ public class UnitConverterWindow extends JFrame
     add(fromTo, BorderLayout.CENTER);
   }
   
-  private void createCalculateButton() {
-    ImageIcon icon = createImageIcon("/img/calculate.png");
-    Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    JButton calculator = new JButton(new ImageIcon(img));
-    calculator.setPreferredSize(new Dimension(50, 50));
-    calculator.setToolTipText("Calculate");
-    CalculatorListener listener = new CalculatorListener(toAmountLabel, fromDrop, toDrop, inDrop, text);
-    calculator.addActionListener(listener);
-    temp.add(calculator);
-  }
-  
-  private void createResetButton() {
-    ImageIcon icon2 = createImageIcon("/img/reset.png");
-    Image img2 = icon2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    JButton reset = new JButton(new ImageIcon(img2));
-    reset.setPreferredSize(new Dimension(50, 50));
-    reset.setToolTipText("Reset");
-    ResetListener rlistener = new ResetListener(toAmountLabel, fromDrop, toDrop, inDrop, text);
-    reset.addActionListener(rlistener);
-    temp.add(reset);
-  }
-  
   private void addListeners() {
     IngredientListener iListener = new IngredientListener(fromDrop, toDrop, inDrop);
     fromDrop.addActionListener(iListener);
     toDrop.addActionListener(iListener);
-  }
+}
+
+private void createCalculateButton() {
+    ImageIcon icon = createImageIcon("/img/calculate.png");
+    Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton calculator = new JButton(new ImageIcon(img));
+    calculator.setPreferredSize(new Dimension(50, 50));
+    calculator.setToolTipText(strings.getString("calculate_tooltip"));
+    CalculatorListener listener = new CalculatorListener(toAmountLabel, fromDrop, toDrop, inDrop, text, currentLocale);
+    calculator.addActionListener(listener);
+    temp.add(calculator);
+}
+
+private void createResetButton() {
+  ImageIcon icon2 = createImageIcon("/img/reset.png");
+  Image img2 = icon2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+  JButton reset = new JButton(new ImageIcon(img2));
+  reset.setPreferredSize(new Dimension(50, 50));
+  reset.setToolTipText(strings.getString("reset_tooltip"));
+  ResetListener rlistener = new ResetListener(toAmountLabel, fromDrop, toDrop, inDrop, text, currentLocale);
+  reset.addActionListener(rlistener);
+  temp.add(reset);
+}
+  
   
   private ImageIcon createImageIcon(String path) {
     java.net.URL imgURL = getClass().getResource(path);
@@ -167,10 +195,53 @@ public class UnitConverterWindow extends JFrame
     }
   }
   
+  public void updateLanguage(Locale newLocale) {
+    loadStrings(newLocale);
+    updateComponentTexts();
+    // Update listeners with new locale
+    ((CalculatorListener)((JButton)temp.getComponent(0)).getActionListeners()[0]).updateLocale(newLocale);
+    ((ResetListener)((JButton)temp.getComponent(1)).getActionListeners()[0]).updateLocale(newLocale);
+    SwingUtilities.updateComponentTreeUI(this);
+}
+
+  private void updateComponentTexts() {
+    setTitle(strings.getString("unit_converter_title"));
+    // Update all labels
+    ((JLabel)from.getComponent(0)).setText(strings.getString("from_units_label"));
+    ((JLabel)to.getComponent(0)).setText(strings.getString("to_units_label"));
+    ((JLabel)ingredient.getComponent(0)).setText(strings.getString("ingredient_label"));
+    ((JLabel)fromAmount.getComponent(0)).setText(strings.getString("from_amount_label"));
+    toAmountLabel.setText(strings.getString("to_amount_label") + " ______________");
+    
+    // Update comboboxes
+    updateComboBox(fromDrop, getLocalizedUnits());
+    updateComboBox(toDrop, getLocalizedUnits());
+    
+    // Update button tooltips
+    ((JButton)temp.getComponent(0)).setToolTipText(strings.getString("calculate_tooltip"));
+    ((JButton)temp.getComponent(1)).setToolTipText(strings.getString("reset_tooltip"));
+    
+    // Refresh the layout
+    revalidate();
+    repaint();
+  }
+  
+  
+
+  private void updateComboBox(JComboBox<String> comboBox, String[] newItems) {
+    String selectedItem = (String) comboBox.getSelectedItem();
+    comboBox.removeAllItems();
+    for (String item : newItems) {
+      comboBox.addItem(item);
+    }
+    comboBox.setSelectedItem(selectedItem);
+  }
+  
   public static void main(String[] args)
   {
     SwingUtilities.invokeLater(() -> {
-      UnitConverterWindow window = new UnitConverterWindow();
+      Locale locale = Locale.getDefault(); // Or any other Locale
+      UnitConverterWindow window = new UnitConverterWindow(locale);
       window.setVisible(true);
     });
   }

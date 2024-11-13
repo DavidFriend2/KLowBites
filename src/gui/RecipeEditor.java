@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,13 +23,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import Information.Ingredient;
 import Information.Recipe;
 import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
 import UnitConversion.MassVolumeConverter;
+import gui.EditorListeners.*;
 
 public class RecipeEditor extends JFrame {
 
@@ -50,9 +49,10 @@ public class RecipeEditor extends JFrame {
 	
 	public RecipeEditor() {
 		setTitle("KiLowBites Recipe Editor");
-		setSize(600,775);
+		setSize(825,775);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Create main content panel
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -77,7 +77,7 @@ public class RecipeEditor extends JFrame {
         
         //utensils editor ---------------------------------------------
         JPanel utensilPanel = new JPanel(new BorderLayout());
-        utensilPanel.setPreferredSize(new Dimension(575,200));
+        utensilPanel.setPreferredSize(new Dimension(800,200));
         TitledBorder utensilBorder = new TitledBorder("Utensils");
         utensilPanel.setBorder(utensilBorder);
 
@@ -99,9 +99,9 @@ public class RecipeEditor extends JFrame {
         
         //Bottom half of utensil editor ----------
         JPanel utensilBottom = new JPanel(new BorderLayout());
-        JList utensilsList = new JList();
+        JList utensilsList = new JList(dlm2);
         JScrollPane utensilScroll = new JScrollPane(utensilsList);
-        utensilBottom.add(utensilScroll, BorderLayout.WEST);
+        utensilBottom.add(utensilScroll);
         //button
         JPanel utensilBR = new JPanel(new BorderLayout());
         JButton utensilDelete = new JButton("Delete");
@@ -119,7 +119,7 @@ public class RecipeEditor extends JFrame {
         
         //ingredients editor ---------------------------------------------
         JPanel ingPanel = new JPanel(new BorderLayout());
-        ingPanel.setPreferredSize(new Dimension(575,200));
+        ingPanel.setPreferredSize(new Dimension(800,200));
         TitledBorder ingBorder = new TitledBorder("Ingredients");
         ingPanel.setBorder(ingBorder);
 
@@ -133,6 +133,7 @@ public class RecipeEditor extends JFrame {
         JTextField ingAmountInput = new JTextField(3);
         JLabel ingUnits = new JLabel("Units: ");
         JComboBox<String> ingUnitCombo = new JComboBox<String>();
+        ingUnitCombo.addItem("");
         for (String unit : MassVolumeConverter.getUnits()) {
         	ingUnitCombo.addItem(unit);
         }
@@ -170,7 +171,7 @@ public class RecipeEditor extends JFrame {
         
         //steps editor ---------------------------------------------------
         JPanel stepPanel = new JPanel(new BorderLayout());
-        stepPanel.setPreferredSize(new Dimension(575,200));
+        stepPanel.setPreferredSize(new Dimension(800,200));
         TitledBorder stepBorder = new TitledBorder("Steps");
         stepPanel.setBorder(stepBorder);
         
@@ -178,39 +179,55 @@ public class RecipeEditor extends JFrame {
         JPanel stepInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel stepAction = new JLabel("Action: ");
         JComboBox<String> stepActionCombo = new JComboBox<String>();
+        stepActionCombo.addItem("");
         for (String s : Step.getActions()) {
         	stepActionCombo.addItem(s);
         }
         JLabel stepOn = new JLabel("On: ");
         JComboBox<String> stepOnCombo = new JComboBox<>();
+<<<<<<< HEAD
         stepOnCombo.addItem("none");
 //        for (Ingredient food : Ingredient.getIngredients()) {
 //        	stepOnCombo.addItem(food.getName());
 //        }
+=======
+        stepOnCombo.addItem("");
+        for (Ingredient food : Ingredient.getIngredients()) {
+        	stepOnCombo.addItem(food.getName());
+        }
+>>>>>>> branch 'main' of https://github.com/bernstdh/f24team3c
         JLabel stepUtensil = new JLabel("Utensil: ");
         JComboBox<String> stepUtensilCombo = new JComboBox<String>();
-        stepUtensilCombo.addItem("nothing");
+        stepUtensilCombo.addItem("");
         JLabel stepDetails = new JLabel("Details: ");
+        JLabel time = new JLabel("Time: ");
+        JTextField timeInput = new JTextField(3);
         JTextField stepDetailsText = new JTextField(5);
         JButton stepAdd = new JButton(add);
         AddStepListener stepAddListen = new AddStepListener(stepActionCombo,
-        		stepOnCombo, stepUtensilCombo, stepDetailsText);
+        		stepOnCombo, stepUtensilCombo, stepDetailsText, timeInput);
         stepAdd.addActionListener(stepAddListen);
         stepInputs.add(stepAction);
         stepInputs.add(stepActionCombo);
         stepInputs.add(stepOn);
         stepInputs.add(stepOnCombo);
+        //stepInputs.add(time);
+        //stepInputs.add(timeInput);
         stepInputs.add(stepUtensil);
         stepInputs.add(stepUtensilCombo);
         stepInputs.add(stepDetails);
         stepInputs.add(stepDetailsText);
+        stepInputs.add(time);
+        stepInputs.add(timeInput);
+        //stepInputs.add(time);
+        //stepInputs.add(timeInput);
         
 
         //bottom half of step-----------
         JPanel stepBottom = new JPanel(new BorderLayout());
         JList<String> stepList = new JList(dlm3);
         JScrollPane stepScroll = new JScrollPane(stepList);
-        stepBottom.add(stepScroll, BorderLayout.WEST);
+        stepBottom.add(stepScroll);
         //button
         JPanel stepBR = new JPanel(new BorderLayout());
         JButton stepDelete = new JButton("Delete");
@@ -244,7 +261,7 @@ public class RecipeEditor extends JFrame {
 	    openButton.setToolTipText("Open");
 	    OpenListener openListener = new OpenListener(nameText, servesText, ingNameInput,
 	    		ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
-	    		utensilsList, stepUtensilCombo);
+	    		utensilsList, stepUtensilCombo, fullIngredientList, fullStepList, fullUtensilList, dlm, dlm2, dlm3);
 	    openButton.addActionListener(openListener);
 	    imagePanel.add(openButton);
 	    
@@ -254,7 +271,7 @@ public class RecipeEditor extends JFrame {
 	    JButton saveButton = new JButton(new ImageIcon(saveImg));
 	    saveButton.setPreferredSize(new Dimension(50, 50));
 	    saveButton.setToolTipText("Save");
-	    SaveListener saveListener = new SaveListener(openListener, nameText, servesText);
+	    SaveListener saveListener = new SaveListener(openListener, nameText, servesText, fullIngredientList, fullStepList, fullUtensilList);
 	    saveButton.addActionListener(saveListener);
 	    imagePanel.add(saveButton);
 	    
@@ -264,7 +281,7 @@ public class RecipeEditor extends JFrame {
 	    JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
 	    saveAsButton.setPreferredSize(new Dimension(50, 50));
 	    saveAsButton.setToolTipText("Save As");
-	    SaveAsListener saveAsListener = new SaveAsListener(nameText, servesText);
+	    SaveAsListener saveAsListener = new SaveAsListener(nameText, servesText, fullIngredientList, fullUtensilList, fullStepList);
 	    saveAsButton.addActionListener(saveAsListener);
 	    imagePanel.add(saveAsButton);
 	    
@@ -325,7 +342,7 @@ public class RecipeEditor extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
-			if (ingDetail.getText() != null) {
+			if (!ingDetail.getText().equals("")) {
 				dlm.addElement(ingAmount.getText() + " " + ingUnit.getSelectedItem()
 				+ " (" + ingDetail.getText() + ") " + ingName.getText());
 			} else {
@@ -343,27 +360,29 @@ public class RecipeEditor extends JFrame {
 		JComboBox stepOn;
 		JComboBox stepUtensil;
 		JTextField stepDetails;
+		JTextField time;
 		
 		public AddStepListener(JComboBox stepAction, JComboBox stepOn, JComboBox stepUtensil,
-				JTextField stepDetails) {
+				JTextField stepDetails, JTextField time) {
 			this.stepAction = stepAction;
 			this.stepOn = stepOn;
 			this.stepUtensil = stepUtensil;
 			this.stepDetails = stepDetails;
+			this.time = time;
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
-			if (stepDetails.getText() == null) {
-				dlm3.addElement(stepAction.getSelectedItem().toString() + " " + stepOn.getSelectedItem().toString() + " "
-						+ stepUtensil.getSelectedItem().toString());
+			if (stepDetails.getText().equals("")) {
+				dlm3.addElement(stepAction.getSelectedItem().toString() + " the " + stepOn.getSelectedItem().toString() + " using a "
+						+ stepUtensil.getSelectedItem().toString() + ". Estimated Time" + time.getText() + " minutes");
 			} else {
-				dlm3.addElement(stepAction.getSelectedItem().toString() + " " + stepOn.getSelectedItem().toString() + " "
-						+ stepUtensil.getSelectedItem().toString() + " " + stepDetails.getText());
+				dlm3.addElement(stepAction.getSelectedItem().toString() + " the " + stepOn.getSelectedItem().toString() + " using a "
+						+ stepUtensil.getSelectedItem().toString() + " " + stepDetails.getText() + ". Estimated Time:" + time.getText() + " minutes");
 			}
 			fullStepList.add(new Step(stepAction.getSelectedItem().toString(),
 					stepOn.getSelectedItem().toString(), stepUtensil.getSelectedItem().toString(),
-					stepDetails.getText()));
+					stepDetails.getText(), Double.parseDouble(time.getText())));
 		}  
 		
 	}
@@ -381,7 +400,7 @@ public class RecipeEditor extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//add info to thing
-			if (details.getText() != null) {
+			if (!details.getText().equals("")) {
 				dlm2.addElement(utensilName.getText()+ " (" + details.getText() + ")");
 			} else {
 				dlm2.addElement(utensilName.getText());
@@ -438,174 +457,6 @@ public class RecipeEditor extends JFrame {
 			fullStepList.remove(stepList.getSelectedIndex());
 			dlm3.removeElement(stepList.getSelectedValue());
 		}
-		
-	}
-	
-	private class OpenListener implements ActionListener {
-
-		JTextField name;
-		JTextField serves;
-		JTextField ingNameInput;
-		JTextField ingDetailsInput;
-		JTextField ingAmountInput;
-		JComboBox ingUnitCombo;
-		JList ingList;
-		JList stepList;
-		JList utensilList;
-		JComboBox stepUtensilCombo;
-		private String currentFileName;
-		
-		public OpenListener(JTextField name, JTextField serves, JTextField ingNameInput, 
-				JTextField ingDetailsInput, JTextField ingAmountInput, JComboBox ingUnitCombo, JList ingList,
-				JList stepList, JList utensilList, JComboBox stepUtensilCombo) {
-			this.name = name;
-			this.serves = serves;
-			this.ingAmountInput = ingAmountInput;
-			this.ingDetailsInput = ingDetailsInput;
-			this.ingUnitCombo = ingUnitCombo;
-			this.ingNameInput = ingNameInput;
-			this.ingList = ingList;
-			this.stepList = stepList;
-			this.utensilList = utensilList;
-			this.stepUtensilCombo = stepUtensilCombo;
-		}
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JFileChooser chooser = new JFileChooser();
-	        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-	                "RCP files", "rcp");
-	        chooser.setFileFilter(filter);
-	        int returnVal = chooser.showOpenDialog(null);
-	        if(returnVal == JFileChooser.APPROVE_OPTION) {
-	            System.out.println("You chose to open this file: " +
-	                    chooser.getSelectedFile().getName());
-//	            File file = new File(chooser.getSelectedFile(), chooser.getSelectedFile().getName());
-	            currentFileName = chooser.getSelectedFile().getAbsolutePath();
-	            try {
-					Recipe loaded = Recipe.loadRecipeFromFile(chooser.getSelectedFile().getAbsolutePath());
-					name.setText(loaded.getName());
-					serves.setText(String.valueOf(loaded.getServes()));
-					for (RecipeIngredient ri : loaded.getIngredients()) {
-						fullIngredientList.add(ri);
-					}
-					//sort fullingredientslist somehow
-					for (RecipeIngredient ri : fullIngredientList) {
-						if (ri.getDetails() != null) {
-							dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " (" + ri.getDetails() + ") " + ri.getName());
-						} else {
-							dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " " + ri.getName());
-						}
-					}
-					
-					for (Utensil ut : loaded.getUtenils()) {
-						if (ut.getDetails() != null) {
-							dlm2.addElement(ut.getName()+ " (" + ut.getDetails() + ")");
-							fullUtensilList.add(ut);
-						} else {
-							dlm2.addElement(ut.getName());
-							fullUtensilList.add(ut);
-						}
-						stepUtensilCombo.addItem(ut.getName());
-					}
-					for (Step st : loaded.getSteps()) {
-						if (st.getDetails() == null) {
-							dlm3.addElement(st.getAction() + " " + st.getSourceUtensilOrIngredient() + " "
-									+ st.getDestinationUtensil());
-						} else {
-							dlm3.addElement(st.getAction() + " " + st.getSourceUtensilOrIngredient() + " "
-									+ st.getDestinationUtensil() + " " + st.getDetails());
-						}
-						
-						fullStepList.add(st);
-					}
-					ingList.setModel(dlm);
-					stepList.setModel(dlm3);
-					utensilList.setModel(dlm2);
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	        }
-			
-			
-		}
-		
-		public String getCurrentFileName() {
-      return currentFileName;
-		}
-		
-	}
-	
-	private class SaveListener implements ActionListener {
-	  
-	  OpenListener openListener;
-	  JTextField name;
-    JTextField serves;
-
-    public SaveListener(OpenListener openListener, JTextField name, JTextField serves) {
-        this.openListener = openListener;
-        this.name = name;
-        this.serves = serves;
-    }
-    
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-		  try {
-		    String fileName = openListener.getCurrentFileName();
-	      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
-	      
-		    // If new Recipe
-	      if (fileName == null)
-	      {
-	        fileName = updatedRecipe.getFileName();
-	      }
-	      
-	      // Save recipe to its file
-	      updatedRecipe.saveRecipeToFile(fileName);
-	      
-		  } catch(IOException ex) {
-		    ex.printStackTrace();
-		  }
-			
-		}
-		
-	}
-	
-	private class SaveAsListener implements ActionListener {
-	  JTextField name;
-    JTextField serves;
-    
-    public SaveAsListener(JTextField nameText, JTextField servesText) {
-      this.name = nameText;
-      this.serves = servesText;
-    }
-    
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		  //Allow user to type in filename
-		  JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle("Save Recipe As");
-      int userSelection = fileChooser.showSaveDialog(null);
-      
-      if (userSelection == JFileChooser.APPROVE_OPTION) {
-          String fileName = fileChooser.getSelectedFile().getAbsolutePath();
-          
-          try {
-              // Create an updated recipe and save it to the chosen file name
-              Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
-              newRecipe.saveRecipeToFile(fileName);
-          } catch (IOException ex) {
-              ex.printStackTrace();
-          }
-      }
-			
-		}  
 		
 	}
 	

@@ -77,15 +77,15 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
   
   @SuppressWarnings("unchecked")
-  public static void loadIngredients(String file) throws IOException, ClassNotFoundException
+  public static List<Ingredient> loadIngredients(String file) throws IOException, ClassNotFoundException
   {
     try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file)))
     {
-      ingredients = (List<Ingredient>) input.readObject();
+      return (List<Ingredient>) input.readObject();
     }
   }
   
-  public static void saveIngredients(String file) throws IOException
+  public void saveIngredients(String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
     {

@@ -1,9 +1,13 @@
 package gui.UnitConverterListeners;
 
 import java.awt.event.ActionEvent;
-
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,73 +18,93 @@ import UnitConversion.MassUnitConverter;
 import UnitConversion.MassVolumeConverter;
 import UnitConversion.VolumeUnitConverter;
 
-//Action Listener for the Calculator button
-public class CalculatorListener implements ActionListener
-{
+public class CalculatorListener implements ActionListener {
   
-  JLabel toAmount;
-  JComboBox<String> from;
-  JComboBox<String> to;
-  JComboBox<String> ingredient;
-  JTextField amount;
-  
-  public CalculatorListener(JLabel toAmount, JComboBox<String> from, JComboBox<String> to, JComboBox<String> ingredient, JTextField amount) 
-  {
-    this.toAmount = toAmount;
-    this.from = from;
-    this.to = to;
-    this.ingredient = ingredient;
-    this.amount = amount;
+  private JLabel toAmount;
+  private JComboBox<String> from;
+  private JComboBox<String> to;
+  private JComboBox<String> ingredient;
+  private JTextField amount;
+  private Locale currentLocale;
+  private ResourceBundle strings;
+
+  public CalculatorListener(JLabel toAmount, JComboBox<String> from, JComboBox<String> to, JComboBox<String> ingredient, JTextField amount, Locale locale) {
+      this.toAmount = toAmount;
+      this.from = from;
+      this.to = to;
+      this.ingredient = ingredient;
+      this.amount = amount;
+      this.currentLocale = locale;
+      this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
-  
-  //Displays the calculated unit conversion if the user inputs everything correctly
-  public void actionPerformed(ActionEvent e) 
-  {
-    Boolean isNumber = true;
-    int count = 0;
-    if(!(from.getSelectedItem().equals("")) && !(to.getSelectedItem().equals("")) && !(amount.getText().equals(""))) {
-      for (int i = 0; i < amount.getText().length(); i++) {
-        if (!Character.isDigit(amount.getText().charAt(i))) {
-          if (!(amount.getText().charAt(i) == '.')) {
-            isNumber = false;
-          } 
-          else if (count != 0)
-          {
-            isNumber = false;
-          } 
-          else 
-          {
-            count++;
+
+  public void actionPerformed(ActionEvent e) {
+      if (!(from.getSelectedItem().equals("")) && !(to.getSelectedItem().equals("")) && !(amount.getText().isEmpty())) {
+          try {
+              NumberFormat numberFormat = NumberFormat.getInstance(currentLocale);
+              Number parsedAmount = numberFormat.parse(amount.getText());
+              double amountValue = parsedAmount.doubleValue();
+
+              if (amountValue < 0) {
+                  toAmount.setText(strings.getString("to_amount_label") + ": " + strings.getString("not_a_positive_number"));
+                  return;
+              }
+
+              MassVolumeConverter.Unit fromUnit = stringToUnit((String) from.getSelectedItem());
+              MassVolumeConverter.Unit toUnit = stringToUnit((String) to.getSelectedItem());
+
+              String result;
+
+              if (isMassUnit(fromUnit) && isMassUnit(toUnit)) {
+                  result = numberFormat.format(MassUnitConverter.convert(amountValue, fromUnit, toUnit));
+              } else if (!isMassUnit(fromUnit) && !isMassUnit(toUnit)) {
+                  result = numberFormat.format(VolumeUnitConverter.convert(amountValue, fromUnit, toUnit));
+              } else {
+                  if (!(ingredient.getSelectedItem().equals(""))) {
+                      Ingredient selectedIngredient = Ingredient.getIngredientbyName((String) ingredient.getSelectedItem());
+                      result = numberFormat.format(MassVolumeConverter.convert(amountValue, fromUnit, toUnit, selectedIngredient));
+                  } else {
+                      toAmount.setText(strings.getString("to_amount_label") + ": " + strings.getString("ingredient_required"));
+                      return;
+                  }
+              }
+
+              toAmount.setText(strings.getString("to_amount_label") + ": " + result + " " + to.getSelectedItem());
+          } catch (ParseException ex) {
+              toAmount.setText(strings.getString("to_amount_label") + ": " + strings.getString("not_a_number"));
           }
-        }
       }
-      if (isNumber) 
-      {
-        ArrayList<String> massUnits = new ArrayList<>();
-        massUnits.add("Pounds");
-        massUnits.add("Grams");
-        massUnits.add("Drams");
-        massUnits.add("Ounces");
-        if (massUnits.contains(from.getSelectedItem()) && massUnits.contains(to.getSelectedItem())) 
-        {
-          toAmount.setText("To Amount: " + String.format("%.2f" , MassUnitConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
-              (String) to.getSelectedItem())) + " " + to.getSelectedItem());
-        }
-        else if (!(massUnits.contains(from.getSelectedItem())) && !(massUnits.contains(to.getSelectedItem()))) 
-        {
-          toAmount.setText("To Amount: " + String.format("%.2f", VolumeUnitConverter.convert(Double.parseDouble(amount.getText()), (String) from.getSelectedItem(), 
-              (String) to.getSelectedItem())) + " " + to.getSelectedItem());
-        }
-        else {
-          if (!(ingredient.getSelectedItem().equals(""))) {
-            toAmount.setText("To Amount: " + String.format("%.2f", MassVolumeConverter.convert(Double.parseDouble(amount.getText()), ((String) from.getSelectedItem()), 
-                ((String) to.getSelectedItem()), Ingredient.getIngredientbyName((String) ingredient.getSelectedItem()))) + " " + to.getSelectedItem());
-          }
-        }
-      } 
-      else {
-        toAmount.setText("To Amount: Not a number!");
-      }
-    }
+  }
+
+  private MassVolumeConverter.Unit stringToUnit(String unitStr) {
+      if (unitStr.equals(strings.getString("unit_pinches"))) return MassVolumeConverter.Unit.PINCHES;
+      if (unitStr.equals(strings.getString("unit_teaspoons"))) return MassVolumeConverter.Unit.TEASPOONS;
+      if (unitStr.equals(strings.getString("unit_tablespoons"))) return MassVolumeConverter.Unit.TABLESPOONS;
+      if (unitStr.equals(strings.getString("unit_fluid_ounces"))) return MassVolumeConverter.Unit.FLUID_OUNCES;
+      if (unitStr.equals(strings.getString("unit_cups"))) return MassVolumeConverter.Unit.CUPS;
+      if (unitStr.equals(strings.getString("unit_pints"))) return MassVolumeConverter.Unit.PINTS;
+      if (unitStr.equals(strings.getString("unit_quarts"))) return MassVolumeConverter.Unit.QUARTS;
+      if (unitStr.equals(strings.getString("unit_gallons"))) return MassVolumeConverter.Unit.GALLONS;
+      if (unitStr.equals(strings.getString("unit_milliliters"))) return MassVolumeConverter.Unit.MILLILITERS;
+      if (unitStr.equals(strings.getString("unit_drams"))) return MassVolumeConverter.Unit.DRAMS;
+      if (unitStr.equals(strings.getString("unit_grams"))) return MassVolumeConverter.Unit.GRAMS;
+      if (unitStr.equals(strings.getString("unit_ounces"))) return MassVolumeConverter.Unit.OUNCES;
+      if (unitStr.equals(strings.getString("unit_pounds"))) return MassVolumeConverter.Unit.POUNDS;
+      throw new IllegalArgumentException("Unknown unit: " + unitStr);
+  }
+
+  private boolean isMassUnit(MassVolumeConverter.Unit unit) {
+      List<MassVolumeConverter.Unit> massUnits = Arrays.asList(
+          MassVolumeConverter.Unit.POUNDS,
+          MassVolumeConverter.Unit.GRAMS,
+          MassVolumeConverter.Unit.DRAMS,
+          MassVolumeConverter.Unit.OUNCES
+      );
+      return massUnits.contains(unit);
+  }
+
+  public void updateLocale(Locale newLocale) {
+      this.currentLocale = newLocale;
+      this.strings = ResourceBundle.getBundle("resources.Strings", newLocale);
   }
 }

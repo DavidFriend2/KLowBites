@@ -1,10 +1,12 @@
 package gui;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.*;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -86,9 +88,9 @@ public class MealEditor extends JFrame
         
         //bottom half of recipe box
         JPanel recipeBoxBottom = new JPanel(new BorderLayout());
-        JTextArea recipes = new JTextArea(12, 48);
+        JList recipes = new JList();
         JScrollPane scroll = new JScrollPane(recipes);
-        recipeBoxBottom.add(scroll, BorderLayout.WEST);
+        recipeBoxBottom.add(scroll);
         //bottom right half
         JPanel bottomRight = new JPanel(new BorderLayout());
         JButton delete = new JButton("Delete");
