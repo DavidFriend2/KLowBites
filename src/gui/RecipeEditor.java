@@ -74,6 +74,7 @@ public class RecipeEditor extends JFrame {
         namePanel.add(servesText);
         
         
+        
         //utensils editor ---------------------------------------------
         JPanel utensilPanel = new JPanel(new BorderLayout());
         utensilPanel.setPreferredSize(new Dimension(575,200));
@@ -182,9 +183,10 @@ public class RecipeEditor extends JFrame {
         }
         JLabel stepOn = new JLabel("On: ");
         JComboBox<String> stepOnCombo = new JComboBox<>();
-        for (Ingredient food : Ingredient.getIngredients()) {
-        	stepOnCombo.addItem(food.getName());
-        }
+        stepOnCombo.addItem("none");
+//        for (Ingredient food : Ingredient.getIngredients()) {
+//        	stepOnCombo.addItem(food.getName());
+//        }
         JLabel stepUtensil = new JLabel("Utensil: ");
         JComboBox<String> stepUtensilCombo = new JComboBox<String>();
         stepUtensilCombo.addItem("nothing");

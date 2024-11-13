@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>KILowBites User Guide</title>
+</head>
+<body>
+  <div class="entireDiv">
+    <div class="entireText">
+      KILowBites User Guide
+    </div>
+  </div>
+  <button type="button" class="collapsible">Main Window</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+  <button type="button" class="collapsible">Recipe Editor</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+  <button type="button" class="collapsible">Meal Editor</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+  <button type="button" class="collapsible">Unit Conversion</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+  <button type="button" class="collapsible">Calorie Calculator</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+  <button type="button" class="collapsible">Shopping List</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+  <button type="button" class="collapsible">Process Viewer</button>
+  <div class="content">
+    <p>test</p>
+  </div>
+</body>
+<style>
+  .entireDiv {
+    height: 100pt;
+    width: 100%;
+    background-color: #555;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10pt;
+  }
+  .entireText {
+    font-size: 30pt;
+  }
+  body {
+    background-color: darkgrey;
+  }
+  .section {
+    margin-top: 15pt;
+    margin-left: 5pt;
+    width: 100%;
+    font-size: 20pt;
+  }
+  .collapsible {
+    background-color: #888;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+  .active, .collapsible:hover {
+    background-color: #555;
+    color: white;
+  }
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+  }
+</style>
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+  </script>
+</html>
