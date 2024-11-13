@@ -39,6 +39,11 @@ public class Meal implements Serializable
     return "meals/" +  this.name.replaceAll(" ", "_") + ".mel";
   }
   
+  public String toString()
+  {
+    return this.name;
+  }
+  
   public void saveMealToFile(String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))

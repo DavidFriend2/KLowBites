@@ -23,6 +23,15 @@ import javax.swing.SwingUtilities;
 
 import Information.*;
 
+/*
+ * Recipe Searcher Class
+ * 
+ * @author Ryan Mendez
+ * 
+ * Allows users to search for recipes from a directory that contain given ingredients
+ * Clicking on the recipes opens a process viewer for the users.
+ * 
+ */
 public class RecipeSearcher extends JFrame
 {
 

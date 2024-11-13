@@ -23,6 +23,15 @@ import javax.swing.SwingUtilities;
 
 import Information.*;
 
+/*
+ * Meal Searcher Class
+ * 
+ * @author Ryan Mendez
+ * 
+ * Allows users to search for meals from a directory that contain given ingredients
+ * Clicking on the meals opens a meal process viewer for the users.
+ * 
+ */
 public class MealSearcher extends JFrame
 {
 
@@ -35,8 +44,6 @@ public class MealSearcher extends JFrame
 
   private List<Meal> selectedMeals = new ArrayList<>();
   private JComboBox<Meal> mealDropdown;
-
-  // private JTextArea status;
 
   public MealSearcher()
   {
@@ -56,14 +63,9 @@ public class MealSearcher extends JFrame
     chooserPanel.add(chooserLabel);
     chooserPanel.add(chooseDirectoryButton);
 
-    // // Status text box
-    // status = new JTextArea(10, 30);
-    // status.setEditable(false);
-
     // Top panel
     JPanel topPanel = new JPanel(new BorderLayout());
     topPanel.add(chooserPanel, BorderLayout.WEST);
-    // topPanel.add(new JScrollPane(status), BorderLayout.CENTER);
 
     // Ingredients panel
     JPanel ingredientPanel = new JPanel();
@@ -136,10 +138,10 @@ public class MealSearcher extends JFrame
 
   }
 
+  //Helper function to load in each meal from a directory 
   private void loadAllMeals(File directory)
   {
     File[] files = directory.listFiles((dir, name) -> name.endsWith(".mel"));
-    // status.setText("");
 
     if (files.length > 0)
     {
@@ -151,7 +153,6 @@ public class MealSearcher extends JFrame
         {
           Meal meal = Meal.loadMealFromFile(file.getAbsolutePath());
           selectedMeals.add(meal);
-          // status.append("Loaded recipe: " + recipe.getName() + "\n");
 
         }
         catch (Exception e)
@@ -159,9 +160,6 @@ public class MealSearcher extends JFrame
           e.printStackTrace();
         }
       }
-      // status.append( "Loaded " + selectedRecipes.size() + " recipes from directory: " +
-      // directory.getName());
-
     }
     else
     {
@@ -170,9 +168,7 @@ public class MealSearcher extends JFrame
 
   }
 
-  /*
-   * Add Ingredient Listener
-   */
+  // Add Ingredient listener
   private class AddIngredientListener implements ActionListener
   {
     @Override
@@ -190,6 +186,7 @@ public class MealSearcher extends JFrame
     }
   }
 
+  // Action Listener to delete added ingredients
   private class deleteIngredientListener implements ActionListener
   {
 
@@ -209,7 +206,9 @@ public class MealSearcher extends JFrame
     }
 
   }
-
+  
+  //Action Listener to search for meals
+  // Searches through meals to see if a recipe in the meal contains the specified ingredients
   private class SearchMealsListener implements ActionListener
   {
 
@@ -222,6 +221,7 @@ public class MealSearcher extends JFrame
       for (Meal meal : selectedMeals)
       {
         boolean mealContainsAllIngredients = true;
+
         // every recipe in each meal
         for (Recipe recipe : meal.getRecipes())
         {
@@ -252,10 +252,11 @@ public class MealSearcher extends JFrame
             }
 
           }
-
-          if (!containsIngredients)
+          
+          //If one recipe contains the ingredients were done looking
+          if (containsIngredients)
           {
-            mealContainsAllIngredients = false;
+            mealContainsAllIngredients = true;
             break;
           }
         }
@@ -282,14 +283,17 @@ public class MealSearcher extends JFrame
 
   }
 
+  //Opens a Process viewer when a meal is clicked
   private ActionListener mealDropdownListener = e -> {
     Meal selectedMeal = (Meal) mealDropdown.getSelectedItem();
     if (selectedMeal != null)
     {
-      // new ProcessViewer(selectedMeal).setVisible(true);
+      // new MealProcessViewer(selectedMeal).setVisible(true);
     }
   };
-
+  
+  
+  //Main to display the searcher
   public static void main(String[] args)
   {
     SwingUtilities.invokeLater(() -> {
