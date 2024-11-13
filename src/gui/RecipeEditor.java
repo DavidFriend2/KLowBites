@@ -29,6 +29,7 @@ import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
 import UnitConversion.MassVolumeConverter;
+import UnitConversion.MassVolumeConverter.Unit;
 import gui.EditorListeners.*;
 
 public class RecipeEditor extends JFrame {
@@ -72,7 +73,6 @@ public class RecipeEditor extends JFrame {
         namePanel.add(nameText);
         namePanel.add(serves);
         namePanel.add(servesText);
-        
         
         
         //utensils editor ---------------------------------------------
@@ -134,8 +134,8 @@ public class RecipeEditor extends JFrame {
         JLabel ingUnits = new JLabel("Units: ");
         JComboBox<String> ingUnitCombo = new JComboBox<String>();
         ingUnitCombo.addItem("");
-        for (String unit : MassVolumeConverter.getUnits()) {
-        	ingUnitCombo.addItem(unit);
+        for (Unit unit : MassVolumeConverter.getUnits()) {
+        	ingUnitCombo.addItem(unit.toString());
         }
         JButton ingAdd = new JButton(add);
         AddIngListener ingAddListen = new AddIngListener(ingNameInput,
@@ -185,17 +185,10 @@ public class RecipeEditor extends JFrame {
         }
         JLabel stepOn = new JLabel("On: ");
         JComboBox<String> stepOnCombo = new JComboBox<>();
-<<<<<<< HEAD
-        stepOnCombo.addItem("none");
-//        for (Ingredient food : Ingredient.getIngredients()) {
-//        	stepOnCombo.addItem(food.getName());
-//        }
-=======
         stepOnCombo.addItem("");
         for (Ingredient food : Ingredient.getIngredients()) {
         	stepOnCombo.addItem(food.getName());
         }
->>>>>>> branch 'main' of https://github.com/bernstdh/f24team3c
         JLabel stepUtensil = new JLabel("Utensil: ");
         JComboBox<String> stepUtensilCombo = new JComboBox<String>();
         stepUtensilCombo.addItem("");
