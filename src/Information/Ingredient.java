@@ -48,6 +48,11 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     return ingredients;
   }
   
+  public static void setIngredients(List<Ingredient> loaded)
+  {
+    ingredients = loaded;
+  }
+  
   public int compareTo(Ingredient o)
   {
     return 0;
@@ -85,7 +90,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     }
   }
   
-  public void saveIngredients(String file) throws IOException
+  public static void saveIngredients(String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
     {
