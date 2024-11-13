@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -346,15 +348,69 @@ public class RecipeEditor extends JFrame {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-      //add info to thing
-      if (!ingDetail.getText().equals("")) {
-        dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase()
-        + " (" + ingDetail.getText() + ") " + ingName.getText());
-      } else {
-        dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() + " " + ingName.getText());
+      try {
+        //load in ingredients
+        Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
+        
+        Ingredient exists = Ingredient.getIngredientbyName(ingName.getText());
+        
+        if (exists == null) 
+        {
+          //If the ingredient isnt found, promt to make new one
+          JTextField newname = new JTextField(ingName.getText());
+          JTextField newcals = new JTextField();
+          JTextField newgperml = new JTextField();
+          JPanel newpanel = new JPanel(new GridLayout(0, 1));
+          newpanel.add(new JLabel("Ingredient Name:"));
+          newpanel.add(newname);
+          newpanel.add(new JLabel("Calories per 100g:"));
+          newpanel.add(newcals);
+          newpanel.add(new JLabel("Grams per ml:"));
+          newpanel.add(newgperml);
+          
+          int result = JOptionPane.showConfirmDialog(null, newpanel, "Add New Ingredient", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+          
+          // Get inputs and make new ingredient, then save it
+          if(result == JOptionPane.OK_OPTION)
+          {
+            String name = newname.getText();
+            int cals = Integer.parseInt(newcals.getText());
+            double gramsper = Double.parseDouble(newgperml.getText());
+            
+            Ingredient newIngredient = new Ingredient(name, cals, gramsper);
+            Ingredient.addIngredient(newIngredient);
+            Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
+            
+            //add ingredient to list, using name incase they change it while adding
+            fullIngredientList.add(new RecipeIngredient(name, ingDetail.getText(),
+                Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+            
+          }
+          
+        } else {
+          fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
+              Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+        }
+        
+        
+        if (!ingDetail.getText().equals("")) {
+          dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase()
+          + " (" + ingDetail.getText() + ") " + ingName.getText());
+        } else {
+          dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() + " " + ingName.getText());
+        }
+        
       }
-      fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
-          Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+      catch(IOException | ClassNotFoundException ex)
+      {
+        JOptionPane.showMessageDialog(null, "Error loading or saving ingredients", "Error", JOptionPane.ERROR_MESSAGE);
+      }
+      catch(NumberFormatException ex)
+      {
+        JOptionPane.showMessageDialog(null, "Error with inputs for new ingredient", "Error", JOptionPane.ERROR_MESSAGE);
+      }
+      
+      
     }
     
   }
