@@ -82,9 +82,9 @@ public class OpenListener implements ActionListener {
         //sort fullingredientslist somehow
         for (RecipeIngredient ri : fullIngredientList) {
           if (!ri.getDetails().equals("")) {
-            dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " (" + ri.getDetails() + ") " + ri.getName());
+            dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " (" + ri.getDetails() + ") " + ri.getName());
           } else {
-            dlm.addElement(ri.getAmount() + " " + ri.getUnit() + " " + ri.getName());
+            dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " " + ri.getName());
           }
         }
         

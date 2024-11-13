@@ -53,4 +53,8 @@ public class SaveListener implements ActionListener {
     
   }
   
+  public Recipe getRecipe() {
+    return new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
+  }
+  
 }
