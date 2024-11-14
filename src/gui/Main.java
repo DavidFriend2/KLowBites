@@ -166,6 +166,14 @@ public class Main extends JFrame {
             RecipeEditor recipeViewer = new RecipeEditor(currentLocale);
             recipeViewer.setVisible(true);
         });
+        
+        JMenuItem mealEditorItem = new JMenuItem(strings.getString("menu_item_meal"));
+        editMenu.add(mealEditorItem);
+        
+        mealEditorItem.addActionListener(e -> {
+            MealEditor mealViewer = new MealEditor();
+            mealViewer.setVisible(true);
+        });
     }
 
     // Add the "View" menu to our menu bar
