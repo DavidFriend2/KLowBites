@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -119,22 +120,29 @@ public class UnitConverterWindow extends JFrame
   }
   
   private void addIngredientComponents() {
-    JLabel inLabel = new JLabel(strings.getString("ingredient_label"));
-    ingredient.add(inLabel);
-    List<Ingredient> ingred = Ingredient.getIngredients();
-    String[] ingredAr = new String[ingred.size() + 1];
-    ingredAr[0] = "";
-    int count = 1;
-    for (Ingredient ingre : ingred) {
-      ingredAr[count] = ingre.getName();
-      count++;
+    try {
+      Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
+      JLabel inLabel = new JLabel(strings.getString("ingredient_label"));
+      ingredient.add(inLabel);
+      List<Ingredient> ingred = Ingredient.getIngredients();
+      String[] ingredAr = new String[ingred.size() + 1];
+      ingredAr[0] = "";
+      int count = 1;
+      for (Ingredient ingre : ingred) {
+        ingredAr[count] = ingre.getName();
+        count++;
+      }
+      inDrop = new JComboBox<>(ingredAr);
+      inDrop.setEnabled(false);
+      ingredient.add(inDrop);
+      from.add(ingredient);
+      from.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 10));
+      fromTo.add(from, BorderLayout.NORTH);
+      
+    }catch(IOException | ClassNotFoundException ex) {
+      System.out.println("Couldnt load ingredients");
     }
-    inDrop = new JComboBox<>(ingredAr);
-    inDrop.setEnabled(false);
-    ingredient.add(inDrop);
-    from.add(ingredient);
-    from.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 10));
-    fromTo.add(from, BorderLayout.NORTH);
+    
   }
   
   private void addFromAmountComponents() {

@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -136,46 +138,58 @@ public class CalorieCalculatorWindow extends JFrame {
     }
 
     private void addInputComponents() {
-      inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
+      try {
+        // load in ingredients automatically
+        Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
 
-      List<Ingredient> ingredientsList = Ingredient.getIngredients();
-      String[] ingredientChoices = new String[ingredientsList.size() + 1];
-      ingredientChoices[0] = ""; // Default empty item
+        List<Ingredient> ingredientsList = Ingredient.getIngredients();
+        ingredientsList.sort(Comparator.comparing(Ingredient::getName));
+        
+        inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
+        
+        String[] ingredientChoices = new String[ingredientsList.size() + 1];
+        ingredientChoices[0] = ""; // Default empty item
 
-      int count = 1;
-      for (Ingredient currIngredient : ingredientsList) {
-          ingredientChoices[count] = currIngredient.getName(); // Use English name directly
-          count++;
+        int count = 1;
+        for (Ingredient currIngredient : ingredientsList) {
+            ingredientChoices[count] = currIngredient.getName(); // Use English name directly
+            count++;
+        }
+
+        ingredientComboBox = new JComboBox<>(ingredientChoices);
+        inputPanel.add(ingredientComboBox);
+
+        inputPanel.add(new JLabel(strings.getString("calorie_calculator_amount_label")));
+        
+        amountField = new JTextField(5);
+        inputPanel.add(amountField);
+
+        inputPanel.add(new JLabel(strings.getString("calorie_calculator_units_label")));
+        
+        unitsComboBox = new JComboBox<>(new String[]{
+            "", 
+            strings.getString("unit_pinches"),
+            strings.getString("unit_teaspoons"),
+            strings.getString("unit_tablespoons"),
+            strings.getString("unit_fluid_ounces"),
+            strings.getString("unit_cups"),
+            strings.getString("unit_pints"),
+            strings.getString("unit_quarts"),
+            strings.getString("unit_gallons"),
+            strings.getString("unit_milliliters"),
+            strings.getString("unit_drams"),
+            strings.getString("unit_grams"),
+            strings.getString("unit_ounces"),
+            strings.getString("unit_pounds")
+        });
+        
+        inputPanel.add(unitsComboBox);
+        
+        
+      }catch(IOException | ClassNotFoundException ex) {
+        System.out.println("Couldnt load ingredients");
       }
-
-      ingredientComboBox = new JComboBox<>(ingredientChoices);
-      inputPanel.add(ingredientComboBox);
-
-      inputPanel.add(new JLabel(strings.getString("calorie_calculator_amount_label")));
       
-      amountField = new JTextField(5);
-      inputPanel.add(amountField);
-
-      inputPanel.add(new JLabel(strings.getString("calorie_calculator_units_label")));
-      
-      unitsComboBox = new JComboBox<>(new String[]{
-          "", 
-          strings.getString("unit_pinches"),
-          strings.getString("unit_teaspoons"),
-          strings.getString("unit_tablespoons"),
-          strings.getString("unit_fluid_ounces"),
-          strings.getString("unit_cups"),
-          strings.getString("unit_pints"),
-          strings.getString("unit_quarts"),
-          strings.getString("unit_gallons"),
-          strings.getString("unit_milliliters"),
-          strings.getString("unit_drams"),
-          strings.getString("unit_grams"),
-          strings.getString("unit_ounces"),
-          strings.getString("unit_pounds")
-      });
-      
-      inputPanel.add(unitsComboBox);
   }
 
     private void addCaloriesComponents() {
