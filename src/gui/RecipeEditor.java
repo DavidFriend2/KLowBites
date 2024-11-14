@@ -228,7 +228,7 @@ public class RecipeEditor extends JFrame {
         stepBR.add(stepDelete, BorderLayout.SOUTH);
         stepBR.add(stepAdd, BorderLayout.NORTH);
         stepBottom.add(stepBR, BorderLayout.EAST);
-        stepPanel.add(stepInputs, BorderLayout.NORTH);
+        stepPanel.add(stepInputs, BorderLayout.NORTH); 
         stepPanel.add(stepBottom, BorderLayout.SOUTH);
         
         
