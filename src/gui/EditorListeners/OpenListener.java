@@ -83,7 +83,7 @@ public class OpenListener implements ActionListener {
         }
         //sort fullingredientslist somehow
         for (RecipeIngredient ri : fullIngredientList) {
-          if (!ri.getDetails().equals("")) {
+          if (ri.getDetails() != null && !ri.getDetails().equals("")) {
             dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " (" + ri.getDetails() + ") " + ri.getName());
           } else {
             dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " " + ri.getName());
@@ -92,7 +92,7 @@ public class OpenListener implements ActionListener {
         }
         
         for (Utensil ut : loaded.getUtenils()) {
-          if (!ut.getDetails().equals("")) {
+          if (ut.getDetails()!= null && !ut.getDetails().equals("")) {
             dlm2.addElement(ut.getName()+ " (" + ut.getDetails() + ")");
             fullUtensilList.add(ut);
           } else {
@@ -102,7 +102,7 @@ public class OpenListener implements ActionListener {
           stepUtensilCombo.addItem(ut.getName());
         }
         for (Step st : loaded.getSteps()) {
-          if (st.getDetails().equals("")) {
+          if (st.getDetails() == null || st.getDetails().equals("")) {
             dlm3.addElement(st.getAction() + " the " + st.getSourceUtensilOrIngredient() + " using a "
                 + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
           } else {
@@ -125,6 +125,46 @@ public class OpenListener implements ActionListener {
         }
     
     
+  }
+  public void openMeal(Recipe recipe) {
+    name.setText(recipe.getName());
+    serves.setText(String.valueOf(recipe.getServes()));
+    for (RecipeIngredient ri : recipe.getIngredients()) {
+      fullIngredientList.add(ri);
+    }
+    //sort fullingredientslist somehow
+    for (RecipeIngredient ri : fullIngredientList) {
+      if (ri.getDetails() != null && !ri.getDetails().equals("")) {
+        dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " (" + ri.getDetails() + ") " + ri.getName());
+      } else {
+        dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " " + ri.getName());
+      }
+    }
+    
+    for (Utensil ut : recipe.getUtenils()) {
+      if (ut.getDetails() != null && !ut.getDetails().equals("")) {
+        dlm2.addElement(ut.getName()+ " (" + ut.getDetails() + ")");
+        fullUtensilList.add(ut);
+      } else {
+        dlm2.addElement(ut.getName());
+        fullUtensilList.add(ut);
+      }
+      stepUtensilCombo.addItem(ut.getName());
+    }
+    for (Step st : recipe.getSteps()) {
+      if (st.getDetails() == null || st.getDetails().equals("")) {
+        dlm3.addElement(st.getAction() + " the " + st.getSourceUtensilOrIngredient() + " using a "
+            + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
+      } else {
+        dlm3.addElement(st.getAction() + " the " + st.getSourceUtensilOrIngredient() + " using a "
+            + st.getDestinationUtensil() + " " + st.getDetails() + ". Estimated Time: " + st.getTime() + " minutes");
+      }
+      
+      fullStepList.add(st);
+    }
+    ingList.setModel(dlm);
+    stepList.setModel(dlm3);
+    utensilList.setModel(dlm2);
   }
   
   public String getCurrentFileName() {

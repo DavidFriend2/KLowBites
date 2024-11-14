@@ -49,6 +49,7 @@ public class RecipeEditor extends JFrame {
   private SaveListener saveListener;
   private OpenListener openListener;
   private JButton openButton;
+  private JButton closeButton;
   public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
   public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
   public DefaultListModel<String> dlm3 = new DefaultListModel<>();
@@ -280,7 +281,7 @@ public class RecipeEditor extends JFrame {
       
     ImageIcon closeIcon = createImageIcon("/img/close.png");
     Image closeImg = closeIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    JButton closeButton = new JButton(new ImageIcon(closeImg));
+    closeButton = new JButton(new ImageIcon(closeImg));
     closeButton.setPreferredSize(new Dimension(50, 50));
     closeButton.setToolTipText(strings.getString("tooltip_close"));
     CloseListener closeListener = new CloseListener();
@@ -303,9 +304,15 @@ public class RecipeEditor extends JFrame {
 protected JButton getOpenButton() {
     return openButton;
 }
+protected JButton getCloseButton() {
+  return closeButton;
+}
 
 protected SaveListener getSaveListener() {
     return saveListener;
+}
+protected OpenListener getOpenListener() {
+  return openListener;
 }
 
 public ImageIcon createImageIcon(String path) {
