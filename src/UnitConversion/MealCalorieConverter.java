@@ -8,7 +8,7 @@ import Information.Recipe;
 public class MealCalorieConverter
 {
   @SuppressWarnings("unlikely-arg-type")
-  public double convertMeal(Meal meal) 
+  public static double convertMeal(Meal meal) 
   {
     double totalCalories = 0.0;
     
@@ -16,15 +16,7 @@ public class MealCalorieConverter
     {
         for (RecipeIngredient getIngredient : recipe.getIngredients()) { // go through each ingredient
           
-          Ingredient currIngredient = null; // turn a RecipeIngredient into an ingredient for the CalorieConverter convert method
-          for (Ingredient ingredient : Ingredient.getIngredients()) 
-          {
-            if (getIngredient.equals(ingredient))
-            {
-              currIngredient = ingredient;
-              break;
-            }
-          }
+          Ingredient currIngredient = Ingredient.getIngredientbyName(getIngredient.getName());
           
           MassVolumeConverter.Unit currUnit = null; // turn a String into a Unit for the CalorieConverter convert method
           for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits())
@@ -36,7 +28,7 @@ public class MealCalorieConverter
             }
           }
           
-          totalCalories = CalorieConverter.convert(currIngredient, getIngredient.getAmount(), currUnit);
+          totalCalories += CalorieConverter.convert(currIngredient, getIngredient.getAmount(), currUnit);
         }
     }
     return totalCalories;

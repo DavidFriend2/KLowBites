@@ -11,17 +11,9 @@ public class RecipeCalorieConverter
   {
     double totalCalories = 0.0;
     
-    for (RecipeIngredient getIngredient : recipe.getIngredients()) {
+    for (RecipeIngredient getIngredient : recipe.getIngredients()) { // go through each ingredient
           
-      Ingredient currIngredient = null; // turn a RecipeIngredient into an ingredient for the CalorieConverter convert method
-      for (Ingredient ingredient : Ingredient.getIngredients()) 
-      {
-        if (getIngredient.equals(ingredient))
-        {
-          currIngredient = ingredient;
-          break;
-        }
-      }
+      Ingredient currIngredient = Ingredient.getIngredientbyName(getIngredient.getName());
           
       MassVolumeConverter.Unit currUnit = null; // turn a String into a Unit for the CalorieConverter convert method
       for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits())
@@ -33,7 +25,7 @@ public class RecipeCalorieConverter
         }
       }
           
-      totalCalories = CalorieConverter.convert(currIngredient, getIngredient.getAmount(), currUnit);
+      totalCalories += CalorieConverter.convert(currIngredient, getIngredient.getAmount(), currUnit);
     }  
     return totalCalories;
   }
