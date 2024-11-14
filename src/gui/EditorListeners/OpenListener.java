@@ -29,6 +29,7 @@ public class OpenListener implements ActionListener {
   JList stepList;
   JList utensilList;
   JComboBox stepUtensilCombo;
+  JComboBox stepOnCombo;
   String currentFileName;
   List<RecipeIngredient> fullIngredientList;
   List<Step> fullStepList;
@@ -39,7 +40,7 @@ public class OpenListener implements ActionListener {
   
   public OpenListener(JTextField name, JTextField serves, JTextField ingNameInput, 
       JTextField ingDetailsInput, JTextField ingAmountInput, JComboBox ingUnitCombo, JList ingList,
-      JList stepList, JList utensilList, JComboBox stepUtensilCombo, List<RecipeIngredient> fullIngredientList, 
+      JList stepList, JList utensilList, JComboBox stepOnCombo, JComboBox stepUtensilCombo, List<RecipeIngredient> fullIngredientList, 
       List<Step> fullStepList, List<Utensil> fullUtensilList, DefaultListModel<String> dlm, DefaultListModel<String> dlm2, DefaultListModel<String> dlm3) {
     this.name = name;
     this.serves = serves;
@@ -50,6 +51,7 @@ public class OpenListener implements ActionListener {
     this.ingList = ingList;
     this.stepList = stepList;
     this.utensilList = utensilList;
+    this.stepOnCombo = stepOnCombo;
     this.stepUtensilCombo = stepUtensilCombo;
     this.fullIngredientList = fullIngredientList;
     this.fullStepList = fullStepList;
@@ -86,6 +88,7 @@ public class OpenListener implements ActionListener {
           } else {
             dlm.addElement(ri.getAmount() + " " + ri.getUnit().toLowerCase() + " " + ri.getName());
           }
+          stepOnCombo.addItem(ri.getName());
         }
         
         for (Utensil ut : loaded.getUtenils()) {

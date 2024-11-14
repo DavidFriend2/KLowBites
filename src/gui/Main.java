@@ -246,7 +246,7 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Locale desiredLocale = Locale.ITALIAN; // CHANGE THIS FOR LANGUAGE (: EXAMPLE: Locale.ITALIAN
+            Locale desiredLocale = Locale.getDefault(); // CHANGE THIS FOR LANGUAGE (: EXAMPLE: Locale.ITALIAN
             Main window = new Main(desiredLocale);
             if (strings != null) {
                 window.setVisible(true);
