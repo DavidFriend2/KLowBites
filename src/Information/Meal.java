@@ -12,9 +12,8 @@ public class Meal implements Serializable
 {
   private static final long serialVersionUID = 1L;
   String name;
-  static List<Recipe> recipes;
+  List<Recipe> recipes;
   
-  @SuppressWarnings("static-access")
   public Meal(String name, List<Recipe> recipes)
   {
     this.name = name;
@@ -26,11 +25,10 @@ public class Meal implements Serializable
     return this.name;
   }
   
-  public static List<Recipe> getRecipes(){
+  public List<Recipe> getRecipes(){
     return recipes;
   }
   
-  @SuppressWarnings("static-access")
   public void addRecipe(Recipe recipe)
   {
     this.recipes.add(recipe);

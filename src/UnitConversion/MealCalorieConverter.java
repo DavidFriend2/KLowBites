@@ -8,14 +8,13 @@ import Information.Recipe;
 public class MealCalorieConverter
 {
   @SuppressWarnings("unlikely-arg-type")
-  public static double convertMeal(String name) 
+  public double convertMeal(Meal meal) 
   {
     double totalCalories = 0.0;
     
-    for (Recipe recipe : Meal.getRecipes())
+    for (Recipe recipe : meal.getRecipes())
     {
-      if (recipe.getName().toLowerCase().equals(name.toLowerCase())) {
-        for (RecipeIngredient getIngredient : recipe.getIngredients()) {
+        for (RecipeIngredient getIngredient : recipe.getIngredients()) { // go through each ingredient
           
           Ingredient currIngredient = null; // turn a RecipeIngredient into an ingredient for the CalorieConverter convert method
           for (Ingredient ingredient : Ingredient.getIngredients()) 
@@ -39,11 +38,6 @@ public class MealCalorieConverter
           
           totalCalories = CalorieConverter.convert(currIngredient, getIngredient.getAmount(), currUnit);
         }
-      }
-      if (totalCalories != 0.0)
-      {
-        break;
-      }
     }
     return totalCalories;
   }
