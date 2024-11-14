@@ -16,10 +16,12 @@ public class Main extends JFrame {
     // Load the resource bundle for internationalization
     private static ResourceBundle strings;
     private static Locale currentLocale;
-
+    private JPanel mainPanel;
+    
     // Path to our logo image
     private String logoPath;
     private String htmlPath = "src/gui/index.html";
+    private Color backgroundColor = Color.WHITE; // Default to white
 
     // Some UI components we'll need later
     private ImageIcon logoIcon;
@@ -37,9 +39,10 @@ public class Main extends JFrame {
       System.out.println("ResourceBundle loaded: " + (strings != null));
       if (strings != null) {
           initializeWindow();
+          loadConfig(); // Load configuration including background color
           initializeLogo();
           createMenuBar();
-          createMainPanel();
+          createMainPanel(); // Now this will use the loaded background color
       } else {
           System.err.println("Cannot initialize window due to missing ResourceBundle");
       }
@@ -49,16 +52,39 @@ public class Main extends JFrame {
     private void loadConfig() {
       try {
           Properties config = new Properties();
-          // Adjusted path to include the resources package
           InputStream input = getClass().getResourceAsStream("/resources/config.properties");
           if (input != null) {
               config.load(input);
-              logoPath = config.getProperty("logo_path", "/img/logo.png"); // Default logo if not specified
+              logoPath = config.getProperty("logo_path", "/img/logo.png");
+              
+              // Load background color
+              String colorName = config.getProperty("background_color", "WHITE");
+              backgroundColor = getColorFromString(colorName);
           } else {
               System.err.println("Could not find config.properties");
           }
       } catch (Exception e) {
           e.printStackTrace();
+      }
+  }
+    
+    
+    private Color getColorFromString(String colorName) {
+      switch (colorName.toUpperCase()) {
+          case "BLACK": return Color.BLACK;
+          case "BLUE": return Color.BLUE;
+          case "CYAN": return Color.CYAN;
+          case "DARK_GRAY": return Color.DARK_GRAY;
+          case "GRAY": return Color.GRAY;
+          case "GREEN": return Color.GREEN;
+          case "LIGHT_GRAY": return Color.LIGHT_GRAY;
+          case "MAGENTA": return Color.MAGENTA;
+          case "ORANGE": return Color.ORANGE;
+          case "PINK": return Color.PINK;
+          case "RED": return Color.RED;
+          case "WHITE": return Color.WHITE;
+          case "YELLOW": return Color.YELLOW;
+          default: return Color.WHITE; // Default
       }
   }
 
@@ -137,7 +163,7 @@ public class Main extends JFrame {
         editMenu.add(recipeEditorItem);
         
         recipeEditorItem.addActionListener(e -> {
-            RecipeEditor recipeViewer = new RecipeEditor();
+            RecipeEditor recipeViewer = new RecipeEditor(currentLocale);
             recipeViewer.setVisible(true);
         });
     }
@@ -210,16 +236,16 @@ public class Main extends JFrame {
 
  // Create the main panel and add our logo to it
     private void createMainPanel() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setLayout(new BorderLayout());
+      mainPanel = new JPanel();
+      mainPanel.setBackground(backgroundColor); // Use the loaded background color
+      mainPanel.setLayout(new BorderLayout());
 
-        if (logoLabel != null) {
-            mainPanel.add(logoLabel, BorderLayout.CENTER); 
-        }
+      if (logoLabel != null) {
+          mainPanel.add(logoLabel, BorderLayout.CENTER);
+      }
 
-        add(mainPanel, BorderLayout.CENTER);
-    }
+      add(mainPanel, BorderLayout.CENTER);
+  }
     
     private void createHelpMenu(JMenuBar menuBar) {
     	JMenu helpMenu = new JMenu("Help");
@@ -230,7 +256,7 @@ public class Main extends JFrame {
 
         JMenuItem userGuide = new JMenuItem("User Guide");
         helpMenu.add(userGuide);
-        
+          
         userGuide.addActionListener(e -> {
         	try {
         		File htmlFile = new File(htmlPath);

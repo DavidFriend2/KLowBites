@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -38,6 +39,7 @@ public class MealEditor extends JFrame
 	static final String OPEN = "Open";
 	private JPanel mainPanel;
 	private List<RecipeEditor> recipeEditors = new ArrayList<>();
+  private static Locale currentLocale;
 	
 	/**
 	 * default constructor for the window
@@ -138,7 +140,7 @@ public class MealEditor extends JFrame
     public void actionPerformed(ActionEvent e)
     {
       if (recipeEditors.size() > 0) {
-        RecipeEditor re = new RecipeEditor();
+        RecipeEditor re = new RecipeEditor(currentLocale);
         re.getOpenButton().doClick();
         JPanel recipeBoxBottom = new JPanel(new BorderLayout());
         JList recipes = new JList();
@@ -161,7 +163,7 @@ public class MealEditor extends JFrame
         frame.setSize(1000, 800);
         recipeEditors.add(re);
       } else {
-        RecipeEditor re = new RecipeEditor();
+        RecipeEditor re = new RecipeEditor(currentLocale);
         recipeEditors.add(re);
         re.getOpenButton().doClick();
         JPanel j = new JPanel();

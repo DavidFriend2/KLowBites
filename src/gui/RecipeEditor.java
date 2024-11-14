@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -52,410 +55,406 @@ public class RecipeEditor extends JFrame {
   public List<Step> fullStepList = new ArrayList<>();
   public DefaultListModel<String> dlm2 = new DefaultListModel<>();
   public List<Utensil> fullUtensilList = new ArrayList<>();
+  private ResourceBundle strings;
+  private Locale currentLocale;
   
-  public RecipeEditor() {
-    setTitle("KiLowBites Recipe Editor");
-    setSize(825,775);
+  
+  public RecipeEditor(Locale locale) {
+    this.currentLocale = locale;
+    strings = ResourceBundle.getBundle("resources.Strings", locale); // Corrected line
+    setTitle(strings.getString("recipe_editor_title"));
+    setSize(825, 775);
     setResizable(false);
     setLocationRelativeTo(null);
     //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
     // Create main content panel
-        mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        
-        // Create image panel with FlowLayout aligned to the left
-        JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        
+    mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
     
-        
-        //namepanel to add name and serves ---------------------------------
-        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel nameLabel = new JLabel(name);
-        JTextField nameText = new JTextField(25);
-        JLabel serves = new JLabel("Serves: ");
-        JTextField servesText = new JTextField(10);
-        namePanel.add(nameLabel);
-        namePanel.add(nameText);
-        namePanel.add(serves);
-        namePanel.add(servesText);
-        
-        
-        //utensils editor ---------------------------------------------
-        JPanel utensilPanel = new JPanel(new BorderLayout());
-        utensilPanel.setPreferredSize(new Dimension(800,200));
-        TitledBorder utensilBorder = new TitledBorder("Utensils");
-        utensilPanel.setBorder(utensilBorder);
+    // Create image panel with FlowLayout aligned to the left
+    JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+    
+    // Name panel to add name and serves ---------------------------------
+    JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JLabel nameLabel = new JLabel(strings.getString("label_name"));
+    JTextField nameText = new JTextField(25);
+    JLabel serves = new JLabel(strings.getString("label_serves"));
+    JTextField servesText = new JTextField(10);
+    namePanel.add(nameLabel);
+    namePanel.add(nameText);
+    namePanel.add(serves);
+    namePanel.add(servesText);
+    
+    //utensils editor ---------------------------------------------
+    JPanel utensilPanel = new JPanel(new BorderLayout());
+    utensilPanel.setPreferredSize(new Dimension(800,200));
+    TitledBorder utensilBorder = new TitledBorder(strings.getString("label_utensils"));
+    utensilPanel.setBorder(utensilBorder);
 
-        //Top half of utensil editor -----------
-        JPanel utensilInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel utensilName = new JLabel(name);
-        JTextField utensilNameText = new JTextField(20);
-        JLabel details = new JLabel("Details: ");
-        JTextField detailsText = new JTextField(15);
-        JButton addUtensil = new JButton(add);
-        
-        utensilInputs.add(utensilName);
-        utensilInputs.add(utensilNameText);
-        utensilInputs.add(details);
-        utensilInputs.add(detailsText);
-        
-        
-        //Bottom half of utensil editor ----------
-        JPanel utensilBottom = new JPanel(new BorderLayout());
-        JList utensilsList = new JList(dlm2);
-        JScrollPane utensilScroll = new JScrollPane(utensilsList);
-        utensilBottom.add(utensilScroll);
-        //button
-        JPanel utensilBR = new JPanel(new BorderLayout());
-        JButton utensilDelete = new JButton("Delete");
-        
-        utensilBR.add(utensilDelete, BorderLayout.SOUTH);
-        utensilBR.add(addUtensil, BorderLayout.NORTH);
-        utensilBottom.add(utensilBR, BorderLayout.EAST);
-        //add everything to panel
-        utensilPanel.add(utensilBottom, BorderLayout.SOUTH);
-        utensilPanel.add(utensilInputs, BorderLayout.NORTH);
+    //Top half of utensil editor -----------
+    JPanel utensilInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JLabel utensilName = new JLabel(strings.getString("label_name"));
+    JTextField utensilNameText = new JTextField(20);
+    JLabel details = new JLabel(strings.getString("label_details"));
+    JTextField detailsText = new JTextField(15);
+    JButton addUtensil = new JButton(strings.getString("button_add"));
+    
+    utensilInputs.add(utensilName);
+    utensilInputs.add(utensilNameText);
+    utensilInputs.add(details);
+    utensilInputs.add(detailsText);
         
         
-        
-        
-        //ingredients editor ---------------------------------------------
-        JPanel ingPanel = new JPanel(new BorderLayout());
-        ingPanel.setPreferredSize(new Dimension(800,200));
-        TitledBorder ingBorder = new TitledBorder("Ingredients");
-        ingPanel.setBorder(ingBorder);
+  //Bottom half of utensil editor ----------
+    JPanel utensilBottom = new JPanel(new BorderLayout());
+    JList utensilsList = new JList(dlm2);
+    JScrollPane utensilScroll = new JScrollPane(utensilsList);
+    utensilBottom.add(utensilScroll);
+    //button
+    JPanel utensilBR = new JPanel(new BorderLayout());
+    JButton utensilDelete = new JButton(strings.getString("button_delete"));
 
-        //Top half of ingredients editor -----------
-        JPanel ingInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel ingName = new JLabel(name);
-        JTextField ingNameInput = new JTextField(8);
-        JLabel ingDetails = new JLabel("Details: ");
-        JTextField ingDetailsInput = new JTextField(6);
-        JLabel ingAmount = new JLabel("Amount: ");
-        JTextField ingAmountInput = new JTextField(3);
-        JLabel ingUnits = new JLabel("Units: ");
-        JComboBox<String> ingUnitCombo = new JComboBox<String>();
-        ingUnitCombo.addItem("");
-        for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits()) {
-          ingUnitCombo.addItem(unit.name());
-        }
-        JButton ingAdd = new JButton(add);
-        
-        ingInputs.add(ingName);
-        ingInputs.add(ingNameInput);
-        ingInputs.add(ingDetails);
-        ingInputs.add(ingDetailsInput);
-        ingInputs.add(ingAmount);
-        ingInputs.add(ingAmountInput);
-        ingInputs.add(ingUnits);
-        ingInputs.add(ingUnitCombo);
+    utensilBR.add(utensilDelete, BorderLayout.SOUTH);
+    utensilBR.add(addUtensil, BorderLayout.NORTH);
+    utensilBottom.add(utensilBR, BorderLayout.EAST);
+    //add everything to panel
+    utensilPanel.add(utensilBottom, BorderLayout.SOUTH);
+    utensilPanel.add(utensilInputs, BorderLayout.NORTH);
 
-        //bottom half of ingredients-----------
-        JPanel ingBottom = new JPanel(new BorderLayout());
-        JList<String> ingList = new JList(dlm);
-        JScrollPane sp = new JScrollPane(ingList);
-        ingBottom.add(sp);
-        //button
-        JPanel ingBR = new JPanel(new BorderLayout());
-        JButton ingDelete = new JButton("Delete");
+    //ingredients editor ---------------------------------------------
+    JPanel ingPanel = new JPanel(new BorderLayout());
+    ingPanel.setPreferredSize(new Dimension(800,200));
+    TitledBorder ingBorder = new TitledBorder(strings.getString("label_ingredients"));
+    ingPanel.setBorder(ingBorder);
 
-        ingBR.add(ingDelete, BorderLayout.SOUTH);
-        ingBR.add(ingAdd, BorderLayout.NORTH);
-        ingBottom.add(ingBR, BorderLayout.EAST);
-        
-        ingPanel.add(ingBottom, BorderLayout.SOUTH);
-        ingPanel.add(ingInputs, BorderLayout.NORTH);
-        
-        
-        
-        //steps editor ---------------------------------------------------
-        JPanel stepPanel = new JPanel(new BorderLayout());
-        stepPanel.setPreferredSize(new Dimension(800,200));
-        TitledBorder stepBorder = new TitledBorder("Steps");
-        stepPanel.setBorder(stepBorder);
-        
-        //top half of steps
-        JPanel stepInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel stepAction = new JLabel("Action: ");
-        JComboBox<String> stepActionCombo = new JComboBox<String>();
-        stepActionCombo.addItem("");
-        for (String s : Step.getActions()) {
-          stepActionCombo.addItem(s);
-        }
-        JLabel stepOn = new JLabel("On: ");
-        JComboBox<String> stepOnCombo = new JComboBox<>();
+    //Top half of ingredients editor -----------
+    JPanel ingInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JLabel ingName = new JLabel(strings.getString("label_name"));
+    JTextField ingNameInput = new JTextField(8);
+    JLabel ingDetails = new JLabel(strings.getString("label_details"));
+    JTextField ingDetailsInput = new JTextField(6);
+    JLabel ingAmount = new JLabel(strings.getString("label_amount"));
+    JTextField ingAmountInput = new JTextField(3);
+    JLabel ingUnits = new JLabel(strings.getString("label_units"));
+    JComboBox<String> ingUnitCombo = new JComboBox<String>();
+    ingUnitCombo.addItem("");
+    for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits()) {
+        ingUnitCombo.addItem(unit.name());
+    }
+    JButton ingAdd = new JButton(strings.getString("button_add"));
 
-//        for (Ingredient food : Ingredient.getIngredients()) {
-//          stepOnCombo.addItem(food.getName());
-//        }
-        JLabel stepUtensil = new JLabel("Utensil: ");
-        JComboBox<String> stepUtensilCombo = new JComboBox<String>();
-//        stepUtensilCombo.addItem("");
-        JLabel stepDetails = new JLabel("Details: ");
-        JLabel time = new JLabel("Time: ");
-        JTextField timeInput = new JTextField(3);
-        JTextField stepDetailsText = new JTextField(5);
-        JButton stepAdd = new JButton(add);
-        AddStepListener stepAddListen = new AddStepListener(stepActionCombo,
-            stepOnCombo, stepUtensilCombo, stepDetailsText, timeInput);
-        stepAdd.addActionListener(stepAddListen);
-        stepInputs.add(stepAction);
-        stepInputs.add(stepActionCombo);
-        stepInputs.add(stepOn);
-        stepInputs.add(stepOnCombo);
-        //stepInputs.add(time);
-        //stepInputs.add(timeInput);
-        stepInputs.add(stepUtensil);
-        stepInputs.add(stepUtensilCombo);
-        stepInputs.add(stepDetails);
-        stepInputs.add(stepDetailsText);
-        stepInputs.add(time);
-        stepInputs.add(timeInput);
-        //stepInputs.add(time);
-        //stepInputs.add(timeInput);
+    ingInputs.add(ingName);
+    ingInputs.add(ingNameInput);
+    ingInputs.add(ingDetails);
+    ingInputs.add(ingDetailsInput);
+    ingInputs.add(ingAmount);
+    ingInputs.add(ingAmountInput);
+    ingInputs.add(ingUnits);
+    ingInputs.add(ingUnitCombo);
+
+  //bottom half of ingredients-----------
+    JPanel ingBottom = new JPanel(new BorderLayout());
+    JList<String> ingList = new JList(dlm);
+    JScrollPane sp = new JScrollPane(ingList);
+    ingBottom.add(sp);
+    //button
+    JPanel ingBR = new JPanel(new BorderLayout());
+    JButton ingDelete = new JButton(strings.getString("button_delete"));
+
+    ingBR.add(ingDelete, BorderLayout.SOUTH);
+    ingBR.add(ingAdd, BorderLayout.NORTH);
+    ingBottom.add(ingBR, BorderLayout.EAST);
+
+    ingPanel.add(ingBottom, BorderLayout.SOUTH);
+    ingPanel.add(ingInputs, BorderLayout.NORTH);
+
+    //steps editor ---------------------------------------------------
+    JPanel stepPanel = new JPanel(new BorderLayout());
+    stepPanel.setPreferredSize(new Dimension(800,200));
+    TitledBorder stepBorder = new TitledBorder(strings.getString("label_steps"));
+    stepPanel.setBorder(stepBorder);
+
+    //top half of steps
+    JPanel stepInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JLabel stepAction = new JLabel(strings.getString("label_action"));
+    JComboBox<String> stepActionCombo = new JComboBox<String>();
+    stepActionCombo.addItem("");
+    for (String s : Step.getActions()) {
+        stepActionCombo.addItem(s);
+    }
+    JLabel stepOn = new JLabel(strings.getString("label_on"));
+    JComboBox<String> stepOnCombo = new JComboBox<>();
+
+    JLabel stepUtensil = new JLabel(strings.getString("label_utensil"));
+    JComboBox<String> stepUtensilCombo = new JComboBox<String>();
+    JLabel stepDetails = new JLabel(strings.getString("label_details"));
+    JLabel time = new JLabel(strings.getString("label_time"));
+    JTextField timeInput = new JTextField(3);
+    JTextField stepDetailsText = new JTextField(5);
+    JButton stepAdd = new JButton(strings.getString("button_add"));
+    AddStepListener stepAddListen = new AddStepListener(stepActionCombo,
+        stepOnCombo, stepUtensilCombo, stepDetailsText, timeInput);
+    stepAdd.addActionListener(stepAddListen);
+    stepInputs.add(stepAction);
+    stepInputs.add(stepActionCombo);
+    stepInputs.add(stepOn);
+    stepInputs.add(stepOnCombo);
+    stepInputs.add(stepUtensil);
+    stepInputs.add(stepUtensilCombo);
+    stepInputs.add(stepDetails);
+    stepInputs.add(stepDetailsText);
+    stepInputs.add(time);
+    stepInputs.add(timeInput);
         
 
-        //bottom half of step-----------
-        JPanel stepBottom = new JPanel(new BorderLayout());
-        JList<String> stepList = new JList(dlm3);
-        JScrollPane stepScroll = new JScrollPane(stepList);
-        stepBottom.add(stepScroll);
-        //button
-        JPanel stepBR = new JPanel(new BorderLayout());
-        JButton stepDelete = new JButton("Delete");
-        deleteStepListener stepDeleteListener = new deleteStepListener(stepList);
-        stepDelete.addActionListener(stepDeleteListener);
-        stepBR.add(stepDelete, BorderLayout.SOUTH);
-        stepBR.add(stepAdd, BorderLayout.NORTH);
-        stepBottom.add(stepBR, BorderLayout.EAST);
-        stepPanel.add(stepInputs, BorderLayout.NORTH); 
-        stepPanel.add(stepBottom, BorderLayout.SOUTH);
-        
-        
-        
-        //utensil listener
-        AddUtensilListener utensilAddListen = new AddUtensilListener(utensilNameText,
-                detailsText, stepUtensilCombo);
-        addUtensil.addActionListener(utensilAddListen);
-        deleteUtensilListener utensilDeleteListener = new deleteUtensilListener(utensilsList, stepUtensilCombo);
-        utensilDelete.addActionListener(utensilDeleteListener);
-        AddIngListener ingAddListen = new AddIngListener(ingNameInput,
-                ingDetailsInput, ingAmountInput, ingUnitCombo, stepOnCombo);
-            ingAdd.addActionListener(ingAddListen);
-        deleteIngListener ingDeleteListener= new deleteIngListener(ingList, stepOnCombo);
-        ingDelete.addActionListener(ingDeleteListener);
-        
-      //initialize new button ----------------------------------------------
-        ImageIcon newIcon = createImageIcon("/img/new.png");
-      Image newImg = newIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-      JButton newButton = new JButton(new ImageIcon(newImg));
-      newButton.setPreferredSize(new Dimension(50, 50));
-      newButton.setToolTipText("New");
-      NewListener newListener = new NewListener();
-      newButton.addActionListener(newListener);
-      imagePanel.add(newButton);
+  //bottom half of step-----------
+    JPanel stepBottom = new JPanel(new BorderLayout());
+    JList<String> stepList = new JList(dlm3);
+    JScrollPane stepScroll = new JScrollPane(stepList);
+    stepBottom.add(stepScroll);
+    //button
+    JPanel stepBR = new JPanel(new BorderLayout());
+    JButton stepDelete = new JButton(strings.getString("button_delete"));
+    deleteStepListener stepDeleteListener = new deleteStepListener(stepList);
+    stepDelete.addActionListener(stepDeleteListener);
+    stepBR.add(stepDelete, BorderLayout.SOUTH);
+    stepBR.add(stepAdd, BorderLayout.NORTH);
+    stepBottom.add(stepBR, BorderLayout.EAST);
+    stepPanel.add(stepInputs, BorderLayout.NORTH); 
+    stepPanel.add(stepBottom, BorderLayout.SOUTH);
+
+    //utensil listener
+    AddUtensilListener utensilAddListen = new AddUtensilListener(utensilNameText,
+            detailsText, stepUtensilCombo);
+    addUtensil.addActionListener(utensilAddListen);
+    deleteUtensilListener utensilDeleteListener = new deleteUtensilListener(utensilsList, stepUtensilCombo);
+    utensilDelete.addActionListener(utensilDeleteListener);
+    AddIngListener ingAddListen = new AddIngListener(ingNameInput,
+            ingDetailsInput, ingAmountInput, ingUnitCombo, stepOnCombo);
+    ingAdd.addActionListener(ingAddListen);
+    deleteIngListener ingDeleteListener= new deleteIngListener(ingList, stepOnCombo);
+    ingDelete.addActionListener(ingDeleteListener);
+
+    //initialize new button ----------------------------------------------
+    ImageIcon newIcon = createImageIcon("/img/new.png");
+    Image newImg = newIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton newButton = new JButton(new ImageIcon(newImg));
+    newButton.setPreferredSize(new Dimension(50, 50));
+    newButton.setToolTipText(strings.getString("tooltip_new"));
+    NewListener newListener = new NewListener();
+    newButton.addActionListener(newListener);
+    imagePanel.add(newButton);
+
+    //initialize open button ----------------------------------------------
+    ImageIcon openIcon = createImageIcon("/img/open.png");
+    Image openImg = openIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    openButton = new JButton(new ImageIcon(openImg));
+    openButton.setPreferredSize(new Dimension(50, 50));
+    openButton.setToolTipText(strings.getString("tooltip_open"));
+    openListener = new OpenListener(nameText, servesText, ingNameInput,
+        ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
+        utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
+        fullStepList, fullUtensilList, dlm, dlm2, dlm3);
+    openButton.addActionListener(openListener);
+    imagePanel.add(openButton);
+
+    //initialize save button ----------------------------------------------
+    ImageIcon saveIcon = createImageIcon("/img/save.png");
+    Image saveImg = saveIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton saveButton = new JButton(new ImageIcon(saveImg));
+    saveButton.setPreferredSize(new Dimension(50, 50));
+    saveButton.setToolTipText(strings.getString("tooltip_save"));
+    saveListener = new SaveListener(openListener, nameText, servesText, fullIngredientList, fullStepList, fullUtensilList);
+    saveButton.addActionListener(saveListener);
+    imagePanel.add(saveButton);
+
+    //initialize save as button ----------------------------------------------
+    ImageIcon saveAsIcon = createImageIcon("/img/saveas.png");
+    Image saveAsImg = saveAsIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
+    saveAsButton.setPreferredSize(new Dimension(50, 50));
+    saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
+    SaveAsListener saveAsListener = new SaveAsListener(nameText, servesText, fullIngredientList, fullUtensilList, fullStepList);
+    saveAsButton.addActionListener(saveAsListener);
+    imagePanel.add(saveAsButton);
       
-      //initialize open button ----------------------------------------------
-        ImageIcon openIcon = createImageIcon("/img/open.png");
-      Image openImg = openIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-      openButton = new JButton(new ImageIcon(openImg));
-      openButton.setPreferredSize(new Dimension(50, 50));
-      openButton.setToolTipText("Open");
-      openListener = new OpenListener(nameText, servesText, ingNameInput,
-          ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
-          utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
-          fullStepList, fullUtensilList, dlm, dlm2, dlm3);
-      openButton.addActionListener(openListener);
-      imagePanel.add(openButton);
-      
-      //initialize save button ----------------------------------------------
-        ImageIcon saveIcon = createImageIcon("/img/save.png");
-      Image saveImg = saveIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-      JButton saveButton = new JButton(new ImageIcon(saveImg));
-      saveButton.setPreferredSize(new Dimension(50, 50));
-      saveButton.setToolTipText("Save");
-      saveListener = new SaveListener(openListener, nameText, servesText, fullIngredientList, fullStepList, fullUtensilList);
-      saveButton.addActionListener(saveListener);
-      imagePanel.add(saveButton);
-      
-      //initialize save as button ----------------------------------------------
-        ImageIcon saveAsIcon = createImageIcon("/img/saveas.png");
-      Image saveAsImg = saveAsIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-      JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
-      saveAsButton.setPreferredSize(new Dimension(50, 50));
-      saveAsButton.setToolTipText("Save As");
-      SaveAsListener saveAsListener = new SaveAsListener(nameText, servesText, fullIngredientList, fullUtensilList, fullStepList);
-      saveAsButton.addActionListener(saveAsListener);
-      imagePanel.add(saveAsButton);
-      
-      //initialize close button ----------------------------------------------
-        ImageIcon closeIcon = createImageIcon("/img/close.png");
-      Image closeImg = closeIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-      JButton closeButton = new JButton(new ImageIcon(closeImg));
-      closeButton.setPreferredSize(new Dimension(50, 50));
-      closeButton.setToolTipText("Close");
-      CloseListener closeListener = new CloseListener();
-      closeButton.addActionListener(closeListener);
-      imagePanel.add(closeButton);
-      
-      
-        mainPanel.add(imagePanel);
-        mainPanel.add(namePanel);
-        mainPanel.add(utensilPanel);
-        mainPanel.add(ingPanel);
-        mainPanel.add(stepPanel);
-        
-        add(mainPanel);
+    ImageIcon closeIcon = createImageIcon("/img/close.png");
+    Image closeImg = closeIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton closeButton = new JButton(new ImageIcon(closeImg));
+    closeButton.setPreferredSize(new Dimension(50, 50));
+    closeButton.setToolTipText(strings.getString("tooltip_close"));
+    CloseListener closeListener = new CloseListener();
+    closeButton.addActionListener(closeListener);
+    imagePanel.add(closeButton);
+
+    mainPanel.add(imagePanel);
+    mainPanel.add(namePanel);
+    mainPanel.add(utensilPanel);
+    mainPanel.add(ingPanel);
+    mainPanel.add(stepPanel);
+
+    add(mainPanel);
   }
   
   protected JPanel getMainPanel() {
     return mainPanel;
-  }
-  protected JButton getOpenButton() {
-    return openButton;
-  }
-  protected SaveListener getSaveListener() {
-    return saveListener;
-  }
-  public ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = getClass().getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
-    }
-  
-  private class NewListener implements ActionListener {
+}
 
+protected JButton getOpenButton() {
+    return openButton;
+}
+
+protected SaveListener getSaveListener() {
+    return saveListener;
+}
+
+public ImageIcon createImageIcon(String path) {
+    java.net.URL imgURL = getClass().getResource(path);
+    if (imgURL != null) {
+        return new ImageIcon(imgURL);
+    } else {
+        System.err.println(strings.getString("error_file_not_found") + path);
+        return null;
+    }
+}
+
+private class NewListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-      RecipeEditor re = new RecipeEditor();
-       re.setVisible(true);
+        RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
+        re.setVisible(true);
     }
-    
-  }
+}
   
-  private class AddIngListener implements ActionListener {
+private class AddIngListener implements ActionListener {
+  JTextField ingName;
+  JTextField ingDetail;
+  JTextField ingAmount;
+  JComboBox<String> ingUnit;
+  JComboBox<String> stepOnCombo;
 
-    JTextField ingName;
-    JTextField ingDetail;
-    JTextField ingAmount;
-    JComboBox ingUnit;
-    JComboBox stepOnCombo;
-    
-    public AddIngListener(JTextField ingName, JTextField ingDetail,
-        JTextField ingAmount, JComboBox ingUnit, JComboBox stepOnCombo) {
+  public AddIngListener(JTextField ingName, JTextField ingDetail,
+                        JTextField ingAmount, JComboBox<String> ingUnit, JComboBox<String> stepOnCombo) {
       this.ingName = ingName;
       this.ingDetail = ingDetail;
       this.ingAmount = ingAmount;
       this.ingUnit = ingUnit;
       this.stepOnCombo = stepOnCombo;
-    }
-    @SuppressWarnings("unchecked")
-	@Override
-    public void actionPerformed(ActionEvent e) {
-      try {
-        //load in ingredients
-        Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
-        
-        Ingredient exists = Ingredient.getIngredientbyName(ingName.getText());
-        
-        if (exists == null) 
-        {
-          //If the ingredient isnt found, promt to make new one
-          JTextField newname = new JTextField(ingName.getText());
-          JTextField newcals = new JTextField();
-          JTextField newgperml = new JTextField();
-          JPanel newpanel = new JPanel(new GridLayout(0, 1));
-          newpanel.add(new JLabel("Ingredient Name:"));
-          newpanel.add(newname);
-          newpanel.add(new JLabel("Calories per 100g:"));
-          newpanel.add(newcals);
-          newpanel.add(new JLabel("Grams per ml:"));
-          newpanel.add(newgperml);
-          
-          int result = JOptionPane.showConfirmDialog(null, newpanel, "Add New Ingredient", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-          
-          // Get inputs and make new ingredient, then save it
-          if(result == JOptionPane.OK_OPTION)
-          {
-            String name = newname.getText();
-            int cals = Integer.parseInt(newcals.getText());
-            double gramsper = Double.parseDouble(newgperml.getText());
-            
-            Ingredient newIngredient = new Ingredient(name, cals, gramsper);
-            Ingredient.addIngredient(newIngredient);
-            Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
-            
-            //add ingredient to list, using name incase they change it while adding
-            fullIngredientList.add(new RecipeIngredient(name, ingDetail.getText(),
-                Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
-            
-          }
-          
-        } else {
-          fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
-              Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
-        }
-        
-        
-        if (!ingDetail.getText().equals("")) {
-          dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase()
-          + " (" + ingDetail.getText() + ") " + ingName.getText());
-        } else {
-          dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() + " " + ingName.getText());
-        }
-        stepOnCombo.addItem(ingName.getText());
-        
-      }
-      catch(IOException | ClassNotFoundException ex)
-      {
-        JOptionPane.showMessageDialog(null, "Error loading or saving ingredients", "Error", JOptionPane.ERROR_MESSAGE);
-      }
-      catch(NumberFormatException ex)
-      {
-        JOptionPane.showMessageDialog(null, "Error with inputs for new ingredient", "Error", JOptionPane.ERROR_MESSAGE);
-      }
-      
-      
-    }
-    
   }
-  
-  private class AddStepListener implements ActionListener {
 
-    JComboBox stepAction;
-    JComboBox stepOn;
-    JComboBox stepUtensil;
-    JTextField stepDetails;
-    JTextField time;
-    
-    public AddStepListener(JComboBox stepAction, JComboBox stepOn, JComboBox stepUtensil,
-        JTextField stepDetails, JTextField time) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public void actionPerformed(ActionEvent e) {
+      try {
+          // Load ingredients
+          Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
+
+          Ingredient exists = Ingredient.getIngredientbyName(ingName.getText());
+
+          if (exists == null) {
+              // If the ingredient isn't found, prompt to make a new one
+              JTextField newname = new JTextField(ingName.getText());
+              JTextField newcals = new JTextField();
+              JTextField newgperml = new JTextField();
+              JPanel newpanel = new JPanel(new GridLayout(0, 1));
+              newpanel.add(new JLabel(strings.getString("label_ingredient_name")));
+              newpanel.add(newname);
+              newpanel.add(new JLabel(strings.getString("label_calories_per_100g")));
+              newpanel.add(newcals);
+              newpanel.add(new JLabel(strings.getString("label_grams_per_ml")));
+              newpanel.add(newgperml);
+
+              int result = JOptionPane.showConfirmDialog(null, newpanel,
+                      strings.getString("dialog_add_new_ingredient"),
+                      JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+              // Get inputs and make a new ingredient, then save it
+              if (result == JOptionPane.OK_OPTION) {
+                  String name = newname.getText();
+                  int cals = Integer.parseInt(newcals.getText());
+                  double gramsper = Double.parseDouble(newgperml.getText());
+
+                  Ingredient newIngredient = new Ingredient(name, cals, gramsper);
+                  Ingredient.addIngredient(newIngredient);
+                  Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
+
+                  // Add ingredient to list, using name in case they change it while adding
+                  fullIngredientList.add(new RecipeIngredient(name, ingDetail.getText(),
+                          Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+              }
+          } else {
+              fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
+                      Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+          }
+
+          // Adding the ingredient to the list display
+          if (!ingDetail.getText().equals("")) {
+              dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() +
+                      " (" + ingDetail.getText() + ") " + ingName.getText());
+          } else {
+              dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() +
+                      " " + ingName.getText());
+          }
+          stepOnCombo.addItem(ingName.getText());
+      } catch (IOException | ClassNotFoundException ex) {
+          JOptionPane.showMessageDialog(null,
+                  strings.getString("error_loading_saving_ingredients"),
+                  strings.getString("error_title"),
+                  JOptionPane.ERROR_MESSAGE);
+      } catch (NumberFormatException ex) {
+          JOptionPane.showMessageDialog(null,
+                  strings.getString("error_new_ingredient_inputs"),
+                  strings.getString("error_title"),
+                  JOptionPane.ERROR_MESSAGE);
+      }
+  }
+}
+  
+private class AddStepListener implements ActionListener {
+  JComboBox<String> stepAction;
+  JComboBox<String> stepOn;
+  JComboBox<String> stepUtensil;
+  JTextField stepDetails;
+  JTextField time;
+
+  public AddStepListener(JComboBox<String> stepAction, JComboBox<String> stepOn, JComboBox<String> stepUtensil,
+                         JTextField stepDetails, JTextField time) {
       this.stepAction = stepAction;
       this.stepOn = stepOn;
       this.stepUtensil = stepUtensil;
       this.stepDetails = stepDetails;
       this.time = time;
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      //add info to thing
-      if (stepDetails.getText().equals("")) {
-        dlm3.addElement(stepAction.getSelectedItem().toString() + " the " + stepOn.getSelectedItem().toString() + " using a "
-            + stepUtensil.getSelectedItem().toString() + ". Estimated Time" + time.getText() + " minutes");
-      } else {
-        dlm3.addElement(stepAction.getSelectedItem().toString() + " the " + stepOn.getSelectedItem().toString() + " using a "
-            + stepUtensil.getSelectedItem().toString() + " " + stepDetails.getText() + ". Estimated Time:" + time.getText() + " minutes");
-      }
-      fullStepList.add(new Step(stepAction.getSelectedItem().toString(),
-          stepOn.getSelectedItem().toString(), stepUtensil.getSelectedItem().toString(),
-          stepDetails.getText(), Double.parseDouble(time.getText())));
-    }  
-    
   }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+      // Add info to the list
+      StringBuilder stepDescription = new StringBuilder();
+      stepDescription.append(stepAction.getSelectedItem().toString())
+                     .append(" the ")
+                     .append(stepOn.getSelectedItem().toString())
+                     .append(" using a ")
+                     .append(stepUtensil.getSelectedItem().toString())
+                     .append(". ");
+
+      if (!stepDetails.getText().equals("")) {
+          stepDescription.append(stepDetails.getText()).append(". ");
+      }
+
+      stepDescription.append(strings.getString("estimated_time"))
+                     .append(time.getText()).append(" minutes");
+
+      dlm3.addElement(stepDescription.toString());
+      
+      fullStepList.add(new Step(
+          stepAction.getSelectedItem().toString(),
+          stepOn.getSelectedItem().toString(),
+          stepUtensil.getSelectedItem().toString(),
+          stepDetails.getText(),
+          Double.parseDouble(time.getText())
+      ));
+  }
+}
   
   private class AddUtensilListener implements ActionListener {
 
@@ -487,78 +486,94 @@ public class RecipeEditor extends JFrame {
   }
   
   private class deleteIngListener implements ActionListener {
+    JList<String> ingredientList;
+    JComboBox<String> stepOnCombo;
 
-    JList ingredientList;
-    JComboBox stepOnCombo;
-    
-    public deleteIngListener(JList ingredientList, JComboBox stepOnCombo) {
-      this.ingredientList = ingredientList;
-      this.stepOnCombo = stepOnCombo;
+    public deleteIngListener(JList<String> ingredientList, JComboBox<String> stepOnCombo) {
+        this.ingredientList = ingredientList;
+        this.stepOnCombo = stepOnCombo;
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
-      fullIngredientList.remove(ingredientList.getSelectedIndex());
-      dlm.removeElement(ingredientList.getSelectedValue());
-      stepOnCombo.removeAllItems();
-      for (RecipeIngredient ri : fullIngredientList) {
-    	  stepOnCombo.addItem(ri.getName());
-      }
+        int selectedIndex = ingredientList.getSelectedIndex();
+        if (selectedIndex != -1) { // Ensure an item is selected
+            fullIngredientList.remove(selectedIndex);
+            dlm.removeElement(ingredientList.getSelectedValue());
+            stepOnCombo.removeAllItems();
+            for (RecipeIngredient ri : fullIngredientList) {
+                stepOnCombo.addItem(ri.getName());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    strings.getString("error_no_ingredient_selected"),
+                    strings.getString("error_title"),
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
-    
-  }
+}
   
   private class deleteUtensilListener implements ActionListener {
+    JList<String> utensilList;
+    JComboBox<String> stepUtensilCombo;
 
-    JList utensilList;
-    JComboBox stepUtensilCombo;
-    
-    public deleteUtensilListener(JList utensilList, JComboBox stepUtensilCombo) {
-      this.utensilList = utensilList;
-      this.stepUtensilCombo = stepUtensilCombo;
+    public deleteUtensilListener(JList<String> utensilList, JComboBox<String> stepUtensilCombo) {
+        this.utensilList = utensilList;
+        this.stepUtensilCombo = stepUtensilCombo;
     }
-    
-    @SuppressWarnings("unchecked")
-	@Override
+
+    @Override
     public void actionPerformed(ActionEvent e) {
-      fullUtensilList.remove(utensilList.getSelectedIndex());
-      dlm2.removeElement(utensilList.getSelectedValue());
-      stepUtensilCombo.removeAllItems();
-      for (Utensil r : fullUtensilList) {
-    	  stepUtensilCombo.addItem(r.getName());
-      }
+        int selectedIndex = utensilList.getSelectedIndex();
+        if (selectedIndex != -1) { // Ensure an item is selected
+            fullUtensilList.remove(selectedIndex);
+            dlm2.removeElement(utensilList.getSelectedValue());
+            stepUtensilCombo.removeAllItems();
+            for (Utensil r : fullUtensilList) {
+                stepUtensilCombo.addItem(r.getName());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    strings.getString("error_no_utensil_selected"),
+                    strings.getString("error_title"),
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
-    
-  }
+}
   
   private class deleteStepListener implements ActionListener {
+    JList<String> stepList;
 
-    JList stepList;
-    
-    public deleteStepListener(JList stepList) {
-      this.stepList = stepList;
+    public deleteStepListener(JList<String> stepList) {
+        this.stepList = stepList;
     }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      fullStepList.remove(stepList.getSelectedIndex());
-      dlm3.removeElement(stepList.getSelectedValue());
-    }
-    
-  }
-  
-  private class CloseListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      System.exit(0);
+        int selectedIndex = stepList.getSelectedIndex();
+        if (selectedIndex != -1) { // Ensure an item is selected
+            fullStepList.remove(selectedIndex);
+            dlm3.removeElement(stepList.getSelectedValue());
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    strings.getString("error_no_step_selected"),
+                    strings.getString("error_title"),
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
-    
-  }
+}
+
+private class CloseListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.exit(0);
+    }
+}
   
-  public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new RecipeEditor().setVisible(true);
-        });
-    }
+public static void main(String[] args) {
+  SwingUtilities.invokeLater(() -> {
+      Locale locale = Locale.ITALIAN; // to change language (:
+      new RecipeEditor(locale).setVisible(true);
+  });
+}
 }
