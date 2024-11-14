@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -10,8 +11,12 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import Information.Ingredient;
+import Information.Meal;
+import Information.Recipe;
 import UnitConversion.CalorieConverter;
 import UnitConversion.MassVolumeConverter;
+import UnitConversion.MealCalorieConverter;
+import UnitConversion.RecipeCalorieConverter;
 
 /**
  * Creates the Calorie Calculator Window for KILowBites
@@ -23,6 +28,7 @@ public class CalorieCalculatorWindow extends JFrame {
 
     private static final String ICON1_PATH = "/img/calculate.png";
     private static final String ICON2_PATH = "/img/reset.png";
+    private static final String ICON3_PATH = "/img/open.png";
 
     private JPanel mainPanel;
     private JPanel iconPanel;
@@ -30,6 +36,7 @@ public class CalorieCalculatorWindow extends JFrame {
     private JPanel caloriesPanel;
     private JButton calculateButton;
     private JButton resetButton;
+    private JButton openButton;
     private JComboBox<String> ingredientComboBox;
     private JTextField amountField;
     private JComboBox<String> unitsComboBox;
@@ -117,8 +124,10 @@ public class CalorieCalculatorWindow extends JFrame {
     }
 
     private void addIconsToPanel() {
+        openButton = createIconButton(ICON3_PATH, 30, 30, "tooltip_open");
         calculateButton = createIconButton(ICON1_PATH, 30, 30, "calorie_calculator_calculate_tooltip");
         resetButton = createIconButton(ICON2_PATH, 30, 30, "calorie_calculator_reset_tooltip");
+        iconPanel.add(openButton);
         iconPanel.add(calculateButton);
         iconPanel.add(resetButton);
     }
@@ -228,6 +237,8 @@ public class CalorieCalculatorWindow extends JFrame {
         calculateButton.addActionListener(e -> calculateCalories());
         
         resetButton.addActionListener(e -> resetFields());
+        
+        openButton.addActionListener(e -> openFiles());
     }
 
     private void calculateCalories() {
@@ -277,6 +288,58 @@ public class CalorieCalculatorWindow extends JFrame {
          amountField.setText("");
          unitsComboBox.setSelectedIndex(0);
          caloriesField.setText("");
+     }
+     
+     private void openFiles() {
+       resetFields();
+       JFileChooser chooser = new JFileChooser();
+       chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+       chooser.setDialogTitle("Chose a file");
+
+       int userSelection = chooser.showOpenDialog(null);
+       if (userSelection == JFileChooser.APPROVE_OPTION)
+       {
+         File chosen = chooser.getSelectedFile();
+         if (chosen.getName().endsWith(".mel")) {
+           Meal meal;
+          try
+          {
+            meal = Meal.loadMealFromFile(chosen.getAbsolutePath());
+            String result = String.format("%.2f", MealCalorieConverter.convertMeal(meal));
+            caloriesField.setText(meal.getName() + " " + result);
+          }
+          catch (ClassNotFoundException e)
+          {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          catch (IOException e)
+          {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+         } else if (chosen.getName().endsWith(".rcp")) {
+           Recipe recipe;
+          try
+          {
+            recipe = Recipe.loadRecipeFromFile(chosen.getAbsolutePath());
+            String result = String.format("%.2f", RecipeCalorieConverter.convertRecipe(recipe));
+            caloriesField.setText(recipe.getName() + " " + result);
+          }
+          catch (ClassNotFoundException e)
+          {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          catch (IOException e)
+          {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+         } else {
+           caloriesField.setText("File not permitted");
+         }
+       }
      }
 
      public static void main(String[] args) {
