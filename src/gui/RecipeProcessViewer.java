@@ -3,6 +3,9 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.print.*;
+import java.io.File;
+import java.sql.Time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class RecipeProcessViewer extends JFrame implements Printable
     private JComponent delegate;
     private JButton printButton, openButton;
     private JPanel printPanel, mainPanel, utensilsPanel, stepsPanel;
+    private JTextField platingTime;
+    private List<Recipe> selectedRecipes = new ArrayList<>();
 	
 	public RecipeProcessViewer() 
 	{
@@ -76,6 +81,7 @@ public class RecipeProcessViewer extends JFrame implements Printable
         add(mainPanel, BorderLayout.CENTER);
         addPrintButton();
         addOpenButton();
+        addTimePrompt();
     }
 	
 	private void addPrintButton() 
@@ -95,15 +101,28 @@ public class RecipeProcessViewer extends JFrame implements Printable
 	private void addOpenButton()
 	{
 		openButton = createButton(OPEN_ICON_PATH, 50, 50, "Open");
-        openButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                new RecipeSearcher().setVisible(true);
-            }
-        });
+        openButton.addActionListener(new OpenRecipesListener());
         printPanel.add(openButton);
+	}
+	
+	private void addTimePrompt()
+	{
+		JLabel platingTimeLabel = new JLabel("Plating time:");
+		
+		platingTime = new JTextField(3);
+		
+		platingTime.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						//enteredTime = ((Object) platingTime).parseTime();
+						//createStepsPanel(enteredTime);
+						
+					}
+				});
+		
+		printPanel.add(platingTimeLabel);
+		printPanel.add(platingTime);
 	}
 	
 	private void printRecipe() 
@@ -124,24 +143,74 @@ public class RecipeProcessViewer extends JFrame implements Printable
         }
     }
 	
+	private class OpenRecipesListener implements ActionListener 
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			// Allow user to select a directory to search through
+			JFileChooser directoryChooser = new JFileChooser();
+			directoryChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			directoryChooser.setDialogTitle("Chose Directory");
+
+			int userSelection = directoryChooser.showSaveDialog(null);
+
+			if (userSelection == JFileChooser.APPROVE_OPTION) 
+			{
+				File directory = directoryChooser.getSelectedFile();
+				loadAllRecipes(directory);
+				for (Recipe r : selectedRecipes) 
+				{
+					new RecipeProcessViewer(r).setVisible(true);
+				}
+			}
+
+		}
+
+	}
+	
+	private void loadAllRecipes(File directory)
+	{
+		File[] files = directory.listFiles((dir, name) -> name.endsWith(".rcp"));
+
+		if (files.length > 0) 
+		{
+			selectedRecipes.clear();
+
+			for (File file : files) 
+			{
+				try 
+				{
+					Recipe recipe = Recipe.loadRecipeFromFile(file.getAbsolutePath());
+					selectedRecipes.add(recipe);
+				} 
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+				}
+			}
+		} else {
+			// status.setText("No recipe files found");
+		}
+
+	}
+	
 	private JScrollPane createUtensilsPanel() 
 	{
 		
 		JScrollPane utensilsPanel = new JScrollPane();
         utensilsPanel.setPreferredSize(new Dimension(10,1000));
-		JList<String> utensilsList;
-		DefaultListModel<String> DLM;
+		DefaultListModel<String> DLM = new DefaultListModel<>();
+		JList<String> utensilsList = new JList<>(DLM);
 		
 		if (this.recipe != null) 
 		{
-			DLM = new DefaultListModel<>();
-		    utensilsList = new JList<>(DLM);
-		
-		    // Add items to utensils list
+			// Add items to utensils list
 		    for (Utensil utensil : recipe.getUtenils())	    
 		    {
-		        String name = utensil.getName();
-		        String details = utensil.getDetails() != null ? utensil.getDetails() : "No description";
+		    	String name = utensil.getName();
+		        String details = utensil.getDetails() != null ? utensil.getDetails() : "";
 		        DLM.addElement(name + ": " + details);
 		    }
 		    
@@ -161,10 +230,11 @@ public class RecipeProcessViewer extends JFrame implements Printable
 	    
 	    JScrollPane stepsPanel = new JScrollPane(stepsList);
 	    
-	    if (this.recipe != null)
+	    if (this.recipe != null) // && enteredTime != null)
 	    {
+	    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+	        //String formattedTime = time.format(formatter);
 		    int stepCount = 1;
-		    double time = 0;
 		
 		    // Iterate through each step in the recipe and format it
 		    for (Step step : recipe.getSteps()) 
@@ -172,7 +242,6 @@ public class RecipeProcessViewer extends JFrame implements Printable
 		    	String source = step.getSourceUtensilOrIngredient();
 		    	String destination = " in " + step.getDestinationUtensil();
 		    	String info = source.toString();
-		    	time = step.getTime();
 		    	
 		    	if (source.equals(step.getDestinationUtensil())) 
 		    	{
@@ -188,16 +257,40 @@ public class RecipeProcessViewer extends JFrame implements Printable
 		    		}
 		    	}
 		    	
-		    	String actionText = String.format("Step %d (%s min): %s %s%s%s\n",
-		            stepCount++,
-		            time,
-		            step.getAction(),
-		            info,
-		            destination,
-		            step.getDetails() != null ? " - " + step.getDetails() : ""
+		    	String actionText = String.format("Step %d: %s %s%s%s",
+		    			stepCount++,
+		    			step.getAction(),
+		    			info,
+		    			destination,
+		    			step.getDetails() != null ? " - " + step.getDetails() : ""
 		        );
 		        DLM.addElement(actionText);
 		    }
+		    /*
+		    stepsList.addMouseListener(new MouseListener()
+	        {
+				@Override
+				public void mouseClicked(MouseEvent e) 
+				{
+					Recipe selectedRecipe = (Recipe) stepsList.getSelectedValue();
+					if (selectedRecipe.equals(recipe)) 
+	                {
+	                    new RecipeProcessViewer(selectedRecipe).setVisible(true);
+	                }
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+
+				@Override
+				public void mouseExited(MouseEvent e) {}
+	        });*/
 	    }
 	    
 	    stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
@@ -205,6 +298,93 @@ public class RecipeProcessViewer extends JFrame implements Printable
 	    // Holds the steps
 	    return stepsPanel;
 	}
+	/*
+	private JScrollPane createStepsPanel(Time time) 
+	{
+		DefaultListModel<String> DLM = new DefaultListModel<>();
+	    JList<String> stepsList = new JList<>(DLM);
+	    
+	    JScrollPane stepsPanel = new JScrollPane(stepsList);
+	    
+	    if (this.recipe != null && enteredTime != null)
+	    {
+		    int stepCount = 1;
+		    double cumTime;
+		    
+		    try {
+	            cumTime = Double.parseDouble(enteredTime);
+	        } catch (NumberFormatException e) {
+	            JOptionPane.showMessageDialog(this, "Invalid time entered", "Error", JOptionPane.ERROR_MESSAGE);
+	            return stepsPanel;
+	        }
+		
+		    // Iterate through each step in the recipe and format it
+		    for (Step step : recipe.getSteps()) 
+		    {
+		    	double stepTime = step.getTime();
+	            cumTime -= stepTime;
+		    	String source = step.getSourceUtensilOrIngredient();
+		    	String destination = " in " + step.getDestinationUtensil();
+		    	String info = source.toString();
+		    	
+		    	if (source.equals(step.getDestinationUtensil())) 
+		    	{
+		    		destination = "";
+		    	}
+		    	
+		    	for (RecipeIngredient ingredient : recipe.getIngredients())
+		    	{
+		    		if (ingredient.getName().equalsIgnoreCase(step.getSourceUtensilOrIngredient()))
+		    		{
+		    			info = ingredient.toString();
+		    			break;
+		    		}
+		    	}
+		    	
+		    	String actionText = String.format("At %.2f min - Step %d (%s min): %s %s%s%s",
+		    			cumTime,
+		    			stepCount++,
+		    			stepTime,
+		    			step.getAction(),
+		    			info,
+		    			destination,
+		    			step.getDetails() != null ? " - " + step.getDetails() : ""
+		        );
+		        DLM.addElement(actionText);
+		    }
+		    /*
+		    stepsList.addMouseListener(new MouseListener()
+	        {
+				@Override
+				public void mouseClicked(MouseEvent e) 
+				{
+					Recipe selectedRecipe = (Recipe) stepsList.getSelectedValue();
+					if (selectedRecipe.equals(recipe)) 
+	                {
+	                    new RecipeProcessViewer(selectedRecipe).setVisible(true);
+	                }
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+
+				@Override
+				public void mouseExited(MouseEvent e) {}
+	        });
+	    }
+	    
+	    stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
+	    
+	    // Holds the steps
+	    return stepsPanel;
+	}*/
+	
 	
 	private JButton createButton(String imagePath, int width, int height, String toolTipText) 
 	{  
@@ -281,7 +461,7 @@ public class RecipeProcessViewer extends JFrame implements Printable
 	{
 	    SwingUtilities.invokeLater(() -> {
 	        Recipe bananasFoster = Recipe.getRecipes().get(0);
-	        new RecipeProcessViewer(bananasFoster).setVisible(true);
+	        new RecipeProcessViewer().setVisible(true);
 	    });
 	}
 }
