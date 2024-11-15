@@ -8,6 +8,8 @@ import java.sql.Time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 
@@ -24,24 +26,26 @@ import gui.EditorListeners.*;
  * 
  * @author Josh Browning.
  */
-public class RecipeProcessViewer extends JFrame implements Printable
-{
+public class RecipeProcessViewer extends JFrame implements Printable {
 
-	private static final long serialVersionUID = 1L;
-	private static final String PRINT_ICON_PATH = "/img/print.png";
-	private static final String OPEN_ICON_PATH = "/img/open.png";
-	private Recipe recipe;
-	private boolean doubleBuffered;
-    private JComponent delegate;
-    private JButton printButton, openButton;
-    private JPanel printPanel, mainPanel, utensilsPanel, stepsPanel;
-    private JTextField platingTime;
-    private List<Recipe> selectedRecipes = new ArrayList<>();
+  private static final long serialVersionUID = 1L;
+  private static final String PRINT_ICON_PATH = "/img/print.png";
+  private static final String OPEN_ICON_PATH = "/img/open.png";
+  private Recipe recipe;
+  private boolean doubleBuffered;
+  private JComponent delegate;
+  private JButton printButton, openButton;
+  private JPanel printPanel, mainPanel, utensilsPanel, stepsPanel;
+  private JTextField platingTime;
+  private List<Recipe> selectedRecipes = new ArrayList<>();
+  private ResourceBundle strings;
+    
 	
-	public RecipeProcessViewer() 
-	{
-	    initialize();
-	}
+  public RecipeProcessViewer(Recipe recipe, Locale locale) {
+    this.recipe = recipe;
+    strings = ResourceBundle.getBundle("resources.Strings", locale);
+    initialize();
+}
 	
 	public RecipeProcessViewer(Recipe recipe) 
 	{
@@ -84,91 +88,71 @@ public class RecipeProcessViewer extends JFrame implements Printable
         addTimePrompt();
     }
 	
-	private void addPrintButton() 
-	{
-        printButton = createButton(PRINT_ICON_PATH, 50, 50, "Print");
-        printButton.addActionListener(new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                printRecipe();
-            }
-        });
-        printPanel.add(printButton);
-    }
-	
-	private void addOpenButton()
-	{
-		openButton = createButton(OPEN_ICON_PATH, 50, 50, "Open");
-        openButton.addActionListener(new OpenRecipesListener());
-        printPanel.add(openButton);
-	}
-	
-	private void addTimePrompt()
-	{
-		JLabel platingTimeLabel = new JLabel("Plating time:");
-		
-		platingTime = new JTextField(3);
-		
-		platingTime.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						//enteredTime = ((Object) platingTime).parseTime();
-						//createStepsPanel(enteredTime);
-						
-					}
-				});
-		
-		printPanel.add(platingTimeLabel);
-		printPanel.add(platingTime);
-	}
-	
-	private void printRecipe() 
-	{
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(this);
+	private void addPrintButton() {
+    printButton = createButton(PRINT_ICON_PATH, 50, 50, strings.getString("print_button_tooltip"));
+    printButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            printRecipe();
+        }
+    });
+    printPanel.add(printButton);
+}
 
-        if (job.printDialog()) 
-        {
-            try 
-            {
-                job.print();
-            } 
-            catch (PrinterException e) 
-            {
-                JOptionPane.showMessageDialog(this, "Unable to print", "Error", JOptionPane.ERROR_MESSAGE);
+private void addOpenButton() {
+    openButton = createButton(OPEN_ICON_PATH, 50, 50, strings.getString("open_button_tooltip"));
+    openButton.addActionListener(new OpenRecipesListener());
+    printPanel.add(openButton);
+}
+
+private void addTimePrompt() {
+    JLabel platingTimeLabel = new JLabel(strings.getString("plating_time_label"));
+    
+    platingTime = new JTextField(3);
+    
+    platingTime.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //enteredTime = ((Object) platingTime).parseTime();
+            //createStepsPanel(enteredTime);
+        }
+    });
+    
+    printPanel.add(platingTimeLabel);
+    printPanel.add(platingTime);
+}
+
+private void printRecipe() {
+    PrinterJob job = PrinterJob.getPrinterJob();
+    job.setPrintable(this);
+
+    if (job.printDialog()) {
+        try {
+            job.print();
+        } catch (PrinterException e) {
+            JOptionPane.showMessageDialog(this, strings.getString("print_error_message"), strings.getString("error_title"), JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+
+private class OpenRecipesListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFileChooser directoryChooser = new JFileChooser();
+        directoryChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        directoryChooser.setDialogTitle(strings.getString("choose_directory_dialog_title"));
+
+        int userSelection = directoryChooser.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File directory = directoryChooser.getSelectedFile();
+            loadAllRecipes(directory);
+            for (Recipe r : selectedRecipes) {
+                new RecipeProcessViewer(r).setVisible(true);
             }
         }
     }
-	
-	private class OpenRecipesListener implements ActionListener 
-	{
-
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			// Allow user to select a directory to search through
-			JFileChooser directoryChooser = new JFileChooser();
-			directoryChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			directoryChooser.setDialogTitle("Chose Directory");
-
-			int userSelection = directoryChooser.showSaveDialog(null);
-
-			if (userSelection == JFileChooser.APPROVE_OPTION) 
-			{
-				File directory = directoryChooser.getSelectedFile();
-				loadAllRecipes(directory);
-				for (Recipe r : selectedRecipes) 
-				{
-					new RecipeProcessViewer(r).setVisible(true);
-				}
-			}
-
-		}
-
-	}
+}
 	
 	private void loadAllRecipes(File directory)
 	{
@@ -196,108 +180,72 @@ public class RecipeProcessViewer extends JFrame implements Printable
 
 	}
 	
-	private JScrollPane createUtensilsPanel() 
-	{
-		
-		JScrollPane utensilsPanel = new JScrollPane();
-        utensilsPanel.setPreferredSize(new Dimension(10,1000));
-		DefaultListModel<String> DLM = new DefaultListModel<>();
-		JList<String> utensilsList = new JList<>(DLM);
-		
-		if (this.recipe != null) 
-		{
-			// Add items to utensils list
-		    for (Utensil utensil : recipe.getUtenils())	    
-		    {
-		    	String name = utensil.getName();
-		        String details = utensil.getDetails() != null ? utensil.getDetails() : "";
-		        DLM.addElement(name + ": " + details);
-		    }
-		    
-		    utensilsPanel = new JScrollPane(utensilsList);
-		}
-	    
-	    // Create border with title
-	    utensilsPanel.setBorder(BorderFactory.createTitledBorder("Utensils"));
-	    
-	    return utensilsPanel;
-	}
+	private JScrollPane createUtensilsPanel() {
+    JScrollPane utensilsPanel = new JScrollPane();
+    utensilsPanel.setPreferredSize(new Dimension(10, 1000));
+    DefaultListModel<String> DLM = new DefaultListModel<>();
+    JList<String> utensilsList = new JList<>(DLM);
+    
+    if (this.recipe != null) {
+        // Add items to utensils list
+        for (Utensil utensil : recipe.getUtenils()) {
+            String name = utensil.getName();
+            String details = utensil.getDetails() != null ? utensil.getDetails() : "";
+            DLM.addElement(strings.getString("utensil_format").formatted(name, details));
+        }
+        
+        utensilsPanel = new JScrollPane(utensilsList);
+    }
+    
+    // Create border with title
+    utensilsPanel.setBorder(BorderFactory.createTitledBorder(strings.getString("utensils_panel_title")));
+    
+    return utensilsPanel;
+}
 	
-	private JScrollPane createStepsPanel() 
-	{
-		DefaultListModel<String> DLM = new DefaultListModel<>();
-	    JList<String> stepsList = new JList<>(DLM);
-	    
-	    JScrollPane stepsPanel = new JScrollPane(stepsList);
-	    
-	    if (this.recipe != null) // && enteredTime != null)
-	    {
-	    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-	        //String formattedTime = time.format(formatter);
-		    int stepCount = 1;
-		
-		    // Iterate through each step in the recipe and format it
-		    for (Step step : recipe.getSteps()) 
-		    {
-		    	String source = step.getSourceUtensilOrIngredient();
-		    	String destination = " in " + step.getDestinationUtensil();
-		    	String info = source.toString();
-		    	
-		    	if (source.equals(step.getDestinationUtensil())) 
-		    	{
-		    		destination = "";
-		    	}
-		    	
-		    	for (RecipeIngredient ingredient : recipe.getIngredients())
-		    	{
-		    		if (ingredient.getName().equalsIgnoreCase(step.getSourceUtensilOrIngredient()))
-		    		{
-		    			info = ingredient.toString();
-		    			break;
-		    		}
-		    	}
-		    	
-		    	String actionText = String.format("Step %d: %s %s%s%s",
-		    			stepCount++,
-		    			step.getAction(),
-		    			info,
-		    			destination,
-		    			step.getDetails() != null ? " - " + step.getDetails() : ""
-		        );
-		        DLM.addElement(actionText);
-		    }
-		    /*
-		    stepsList.addMouseListener(new MouseListener()
-	        {
-				@Override
-				public void mouseClicked(MouseEvent e) 
-				{
-					Recipe selectedRecipe = (Recipe) stepsList.getSelectedValue();
-					if (selectedRecipe.equals(recipe)) 
-	                {
-	                    new RecipeProcessViewer(selectedRecipe).setVisible(true);
-	                }
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {}
-
-				@Override
-				public void mouseExited(MouseEvent e) {}
-	        });*/
-	    }
-	    
-	    stepsPanel.setBorder(BorderFactory.createTitledBorder("Steps"));
-	    
-	    // Holds the steps
-	    return stepsPanel;
-	}
+	private JScrollPane createStepsPanel() {
+    DefaultListModel<String> DLM = new DefaultListModel<>();
+    JList<String> stepsList = new JList<>(DLM);
+    
+    JScrollPane stepsPanel = new JScrollPane(stepsList);
+    
+    if (this.recipe != null) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        int stepCount = 1;
+    
+        // Iterate through each step in the recipe and format it
+        for (Step step : recipe.getSteps()) {
+            String source = step.getSourceUtensilOrIngredient();
+            String destination = strings.getString("step_destination_format").formatted(step.getDestinationUtensil());
+            String info = source.toString();
+            
+            if (source.equals(step.getDestinationUtensil())) {
+                destination = "";
+            }
+            
+            for (RecipeIngredient ingredient : recipe.getIngredients()) {
+                if (ingredient.getName().equalsIgnoreCase(step.getSourceUtensilOrIngredient())) {
+                    info = ingredient.toString();
+                    break;
+                }
+            }
+            
+            String actionText = strings.getString("step_format").formatted(
+                stepCount++,
+                step.getAction(),
+                info,
+                destination,
+                step.getDetails() != null ? strings.getString("step_details_format").formatted(step.getDetails()) : ""
+            );
+            DLM.addElement(actionText);
+        }
+    }
+    
+    stepsPanel.setBorder(BorderFactory.createTitledBorder(strings.getString("steps_panel_title")));
+    
+    return stepsPanel;
+}
+	
 	/*
 	private JScrollPane createStepsPanel(Time time) 
 	{
@@ -457,11 +405,16 @@ public class RecipeProcessViewer extends JFrame implements Printable
         return PAGE_EXISTS;
     }
 	
-	public static void main(String[] args) 
-	{
-	    SwingUtilities.invokeLater(() -> {
-	        Recipe bananasFoster = Recipe.getRecipes().get(0);
-	        new RecipeProcessViewer().setVisible(true);
-	    });
-	}
+	public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+        // You can change this to the desired default locale
+        Locale desiredLocale = Locale.getDefault();
+        
+        Recipe bananasFoster = Recipe.getRecipes().get(0);
+        
+        // Create a new RecipeProcessViewer instance with the desired locale and recipe
+        RecipeProcessViewer viewer = new RecipeProcessViewer(bananasFoster, desiredLocale);
+        viewer.setVisible(true);
+    });
+}
 }

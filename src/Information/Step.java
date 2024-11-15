@@ -6,16 +6,16 @@ import java.util.List;
 
 public class Step implements Serializable
 {
+  private static final List<String> ACTIONS = new ArrayList<>(); 
   private static final long serialVersionUID = 1L;
   private String action;
   private String on;
   private String destinationUtensil;
   private String details;
   private double timeEstimate;
-  
-  private static final List<String> actions = new ArrayList<>(); 
-  
-  public Step(String action, String on, String destinationUtensil, String details, double timeEstimate)
+    
+  public Step(final String action, final String on, final String destinationUtensil, 
+      final String details, final double timeEstimate)
   {
     this.action = action;
     this.on = on;
@@ -52,43 +52,43 @@ public class Step implements Serializable
   
   public static List<String> getActions()
   {
-    return new ArrayList<>(actions);
+    return new ArrayList<>(ACTIONS);
   }
   
   //Setters for editing
-  public void setAction(String action)
+  public void setAction(final String action)
   {
     this.action = action;
   }
 
-  public void setSourceUtensilOrIngredient(String on)
+  public void setSourceUtensilOrIngredient(final String on)
   {
     this.on = on;
   }
   
-  public void setDestinationUtensil(String destUtensil)
+  public void setDestinationUtensil(final String destUtensil)
   {
     this.destinationUtensil = destUtensil;
   }
   
-  public void setDetails(String details)
+  public void setDetails(final String details)
   {
     this.details = details;
   }
   
   static 
   {
-    actions.add("Bake");
-    actions.add("Boil");
-    actions.add("Cook");
-    actions.add("Dip");
-    actions.add("Drain");
-    actions.add("Heat");
-    actions.add("Ignite");
-    actions.add("Melt");
-    actions.add("Put");
-    actions.add("Saute");
-    actions.add("Simmer");
+    ACTIONS.add("Bake");
+    ACTIONS.add("Boil");
+    ACTIONS.add("Cook");
+    ACTIONS.add("Dip");
+    ACTIONS.add("Drain");
+    ACTIONS.add("Heat");
+    ACTIONS.add("Ignite");
+    ACTIONS.add("Melt");
+    ACTIONS.add("Put");
+    ACTIONS.add("Saute");
+    ACTIONS.add("Simmer");
     
   }
   

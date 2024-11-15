@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -12,12 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -27,9 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import Information.Ingredient;
-import Information.Recipe;
 import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
@@ -50,17 +47,18 @@ public class RecipeEditor extends JFrame {
   private OpenListener openListener;
   private JButton openButton;
   private JButton closeButton;
+  private ResourceBundle strings;
+  private Locale currentLocale;
+  
   public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
   public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
   public DefaultListModel<String> dlm3 = new DefaultListModel<>();
   public List<Step> fullStepList = new ArrayList<>();
   public DefaultListModel<String> dlm2 = new DefaultListModel<>();
   public List<Utensil> fullUtensilList = new ArrayList<>();
-  private ResourceBundle strings;
-  private Locale currentLocale;
   
   
-  public RecipeEditor(Locale locale) {
+  public RecipeEditor(final Locale locale) {
     this.currentLocale = locale;
     strings = ResourceBundle.getBundle("resources.Strings", locale); // Corrected line
     setTitle(strings.getString("recipe_editor_title"));
@@ -139,8 +137,9 @@ public class RecipeEditor extends JFrame {
     JLabel ingUnits = new JLabel(strings.getString("label_units"));
     JComboBox<String> ingUnitCombo = new JComboBox<String>();
     ingUnitCombo.addItem("");
-    for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits()) {
-        ingUnitCombo.addItem(unit.name());
+    for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits()) 
+    {
+      ingUnitCombo.addItem(unit.name());
     }
     JButton ingAdd = new JButton(strings.getString("button_add"));
 
@@ -180,8 +179,9 @@ public class RecipeEditor extends JFrame {
     JLabel stepAction = new JLabel(strings.getString("label_action"));
     JComboBox<String> stepActionCombo = new JComboBox<String>();
     stepActionCombo.addItem("");
-    for (String s : Step.getActions()) {
-        stepActionCombo.addItem(s);
+    for (String s : Step.getActions()) 
+    {
+      stepActionCombo.addItem(s);
     }
     JLabel stepOn = new JLabel(strings.getString("label_on"));
     JComboBox<String> stepOnCombo = new JComboBox<>();
@@ -216,7 +216,7 @@ public class RecipeEditor extends JFrame {
     //button
     JPanel stepBR = new JPanel(new BorderLayout());
     JButton stepDelete = new JButton(strings.getString("button_delete"));
-    deleteStepListener stepDeleteListener = new deleteStepListener(stepList);
+    DeleteStepListener stepDeleteListener = new DeleteStepListener(stepList);
     stepDelete.addActionListener(stepDeleteListener);
     stepBR.add(stepDelete, BorderLayout.SOUTH);
     stepBR.add(stepAdd, BorderLayout.NORTH);
@@ -228,12 +228,13 @@ public class RecipeEditor extends JFrame {
     AddUtensilListener utensilAddListen = new AddUtensilListener(utensilNameText,
             detailsText, stepUtensilCombo);
     addUtensil.addActionListener(utensilAddListen);
-    deleteUtensilListener utensilDeleteListener = new deleteUtensilListener(utensilsList, stepUtensilCombo);
+    DeleteUtensilListener utensilDeleteListener = 
+        new DeleteUtensilListener(utensilsList, stepUtensilCombo);
     utensilDelete.addActionListener(utensilDeleteListener);
     AddIngListener ingAddListen = new AddIngListener(ingNameInput,
             ingDetailsInput, ingAmountInput, ingUnitCombo, stepOnCombo);
     ingAdd.addActionListener(ingAddListen);
-    deleteIngListener ingDeleteListener= new deleteIngListener(ingList, stepOnCombo);
+    DeleteIngListener ingDeleteListener= new DeleteIngListener(ingList, stepOnCombo);
     ingDelete.addActionListener(ingDeleteListener);
 
     //initialize new button ----------------------------------------------
@@ -265,7 +266,8 @@ public class RecipeEditor extends JFrame {
     JButton saveButton = new JButton(new ImageIcon(saveImg));
     saveButton.setPreferredSize(new Dimension(50, 50));
     saveButton.setToolTipText(strings.getString("tooltip_save"));
-    saveListener = new SaveListener(openListener, nameText, servesText, fullIngredientList, fullStepList, fullUtensilList);
+    saveListener = new SaveListener(openListener, nameText, 
+        servesText, fullIngredientList, fullStepList, fullUtensilList);
     saveButton.addActionListener(saveListener);
     imagePanel.add(saveButton);
 
@@ -275,7 +277,8 @@ public class RecipeEditor extends JFrame {
     JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
     saveAsButton.setPreferredSize(new Dimension(50, 50));
     saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
-    SaveAsListener saveAsListener = new SaveAsListener(nameText, servesText, fullIngredientList, fullUtensilList, fullStepList);
+    SaveAsListener saveAsListener = new SaveAsListener(nameText, 
+        servesText, fullIngredientList, fullUtensilList, fullStepList);
     saveAsButton.addActionListener(saveAsListener);
     imagePanel.add(saveAsButton);
       
@@ -297,145 +300,178 @@ public class RecipeEditor extends JFrame {
     add(mainPanel);
   }
   
-  protected JPanel getMainPanel() {
+  protected JPanel getMainPanel() 
+  {
     return mainPanel;
-}
+  }
 
-protected JButton getOpenButton() {
+  protected JButton getOpenButton() 
+  {
     return openButton;
-}
-protected JButton getCloseButton() {
-  return closeButton;
-}
+  }
+  protected JButton getCloseButton() 
+  {
+    return closeButton;
+  }
 
-protected SaveListener getSaveListener() {
+  protected SaveListener getSaveListener() 
+  {
     return saveListener;
-}
-protected OpenListener getOpenListener() {
-  return openListener;
-}
+  }
+  protected OpenListener getOpenListener() 
+  {
+    return openListener;
+  }
 
-public ImageIcon createImageIcon(String path) {
+  public ImageIcon createImageIcon(final String path) 
+  {
     java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null) {
-        return new ImageIcon(imgURL);
-    } else {
-        System.err.println(strings.getString("error_file_not_found") + path);
-        return null;
+    if (imgURL != null) 
+    {
+      return new ImageIcon(imgURL);
     }
-}
+    else 
+    {
+      System.err.println(strings.getString("error_file_not_found") + path);
+      return null;
+    }
+  }
 
-private class NewListener implements ActionListener {
+  private class NewListener implements ActionListener 
+  {
     @Override
-    public void actionPerformed(ActionEvent e) {
-        RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
-        re.setVisible(true);
+    public void actionPerformed(final ActionEvent e) 
+    {
+      RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
+      re.setVisible(true);
     }
-}
+  }
   
-private class AddIngListener implements ActionListener {
-  JTextField ingName;
-  JTextField ingDetail;
-  JTextField ingAmount;
-  JComboBox<String> ingUnit;
-  JComboBox<String> stepOnCombo;
-
-  public AddIngListener(JTextField ingName, JTextField ingDetail,
-                        JTextField ingAmount, JComboBox<String> ingUnit, JComboBox<String> stepOnCombo) {
+  private class AddIngListener implements ActionListener 
+  {
+    JTextField ingName;
+    JTextField ingDetail;
+    JTextField ingAmount;
+    JComboBox<String> ingUnit;
+    JComboBox<String> stepOnCombo;
+  
+    public AddIngListener(final JTextField ingName, final JTextField ingDetail,
+        final JTextField ingAmount, final JComboBox<String> ingUnit, 
+        final JComboBox<String> stepOnCombo) 
+    {
       this.ingName = ingName;
       this.ingDetail = ingDetail;
       this.ingAmount = ingAmount;
       this.ingUnit = ingUnit;
       this.stepOnCombo = stepOnCombo;
-  }
-
-  @SuppressWarnings("unchecked")
+    }
+  
+    @SuppressWarnings("unchecked")
   @Override
-  public void actionPerformed(ActionEvent e) {
-      try {
+  public void actionPerformed(final ActionEvent e) 
+    {
+      try 
+      {
           // Load ingredients
-          Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
-
-          Ingredient exists = Ingredient.getIngredientbyName(ingName.getText());
-
-          if (exists == null) {
+        Ingredient.setIngredients(Ingredient.loadIngredients(
+            "IngredientsNutrition/ingredients.ntr"));
+  
+        Ingredient exists = Ingredient.getIngredientbyName(ingName.getText());
+  
+        if (exists == null) 
+        {
               // If the ingredient isn't found, prompt to make a new one
-              JTextField newname = new JTextField(ingName.getText());
-              JTextField newcals = new JTextField();
-              JTextField newgperml = new JTextField();
-              JPanel newpanel = new JPanel(new GridLayout(0, 1));
-              newpanel.add(new JLabel(strings.getString("label_ingredient_name")));
-              newpanel.add(newname);
-              newpanel.add(new JLabel(strings.getString("label_calories_per_100g")));
-              newpanel.add(newcals);
-              newpanel.add(new JLabel(strings.getString("label_grams_per_ml")));
-              newpanel.add(newgperml);
+          JTextField newname = new JTextField(ingName.getText());
+          JTextField newcals = new JTextField();
+          JTextField newgperml = new JTextField();
+          JPanel newpanel = new JPanel(new GridLayout(0, 1));
+          newpanel.add(new JLabel(strings.getString("label_ingredient_name")));
+          newpanel.add(newname);
+          newpanel.add(new JLabel(strings.getString("label_calories_per_100g")));
+          newpanel.add(newcals);
+          newpanel.add(new JLabel(strings.getString("label_grams_per_ml")));
+          newpanel.add(newgperml);
 
-              int result = JOptionPane.showConfirmDialog(null, newpanel,
-                      strings.getString("dialog_add_new_ingredient"),
-                      JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+          int result = JOptionPane.showConfirmDialog(null, newpanel,
+                  strings.getString("dialog_add_new_ingredient"),
+                  JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-              // Get inputs and make a new ingredient, then save it
-              if (result == JOptionPane.OK_OPTION) {
-                  String name = newname.getText();
-                  int cals = Integer.parseInt(newcals.getText());
-                  double gramsper = Double.parseDouble(newgperml.getText());
+          // Get inputs and make a new ingredient, then save it
+          if (result == JOptionPane.OK_OPTION) 
+          {
+            String name = newname.getText();
+            int cals = Integer.parseInt(newcals.getText());
+            double gramsper = Double.parseDouble(newgperml.getText());
 
-                  Ingredient newIngredient = new Ingredient(name, cals, gramsper);
-                  Ingredient.addIngredient(newIngredient);
-                  Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
-
+            Ingredient newIngredient = new Ingredient(name, cals, gramsper);
+            Ingredient.addIngredient(newIngredient);
+            Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
+  
                   // Add ingredient to list, using name in case they change it while adding
-                  fullIngredientList.add(new RecipeIngredient(name, ingDetail.getText(),
-                          Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
-              }
-          } else {
-              fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
-                      Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+            fullIngredientList.add(new RecipeIngredient(name, ingDetail.getText(),
+                Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
           }
-
+        } 
+        else 
+        {
+          fullIngredientList.add(new RecipeIngredient(ingName.getText(), ingDetail.getText(),
+                  Double.valueOf(ingAmount.getText()), ingUnit.getSelectedItem().toString()));
+        }
+  
           // Adding the ingredient to the list display
-          if (!ingDetail.getText().equals("")) {
-              dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() +
-                      " (" + ingDetail.getText() + ") " + ingName.getText());
-          } else {
-              dlm.addElement(ingAmount.getText() + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() +
-                      " " + ingName.getText());
-          }
-          stepOnCombo.addItem(ingName.getText());
-      } catch (IOException | ClassNotFoundException ex) {
-          JOptionPane.showMessageDialog(null,
+        if (!ingDetail.getText().equals("")) 
+        {
+          dlm.addElement(ingAmount.getText() 
+              + " " + ((String) ingUnit.getSelectedItem()).toLowerCase() +
+                  " (" + ingDetail.getText() + ") " + ingName.getText());
+        } 
+        else 
+        {
+          dlm.addElement(ingAmount.getText() + " " + ((
+              String) ingUnit.getSelectedItem()).toLowerCase() 
+              + " " + ingName.getText());
+        }
+        stepOnCombo.addItem(ingName.getText());
+      } catch (IOException | ClassNotFoundException ex) 
+      {
+        JOptionPane.showMessageDialog(null,
                   strings.getString("error_loading_saving_ingredients"),
                   strings.getString("error_title"),
                   JOptionPane.ERROR_MESSAGE);
-      } catch (NumberFormatException ex) {
-          JOptionPane.showMessageDialog(null,
+      } 
+      catch (NumberFormatException ex) 
+      {
+        JOptionPane.showMessageDialog(null,
                   strings.getString("error_new_ingredient_inputs"),
                   strings.getString("error_title"),
-                  JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
       }
+    }
   }
-}
   
-private class AddStepListener implements ActionListener {
-  JComboBox<String> stepAction;
-  JComboBox<String> stepOn;
-  JComboBox<String> stepUtensil;
-  JTextField stepDetails;
-  JTextField time;
-
-  public AddStepListener(JComboBox<String> stepAction, JComboBox<String> stepOn, JComboBox<String> stepUtensil,
-                         JTextField stepDetails, JTextField time) {
+  private class AddStepListener implements ActionListener 
+  {
+    JComboBox<String> stepAction;
+    JComboBox<String> stepOn;
+    JComboBox<String> stepUtensil;
+    JTextField stepDetails;
+    JTextField time;
+  
+    public AddStepListener(final JComboBox<String> stepAction, 
+        final JComboBox<String> stepOn, final JComboBox<String> stepUtensil,
+        final JTextField stepDetails, final JTextField time) 
+    {
       this.stepAction = stepAction;
       this.stepOn = stepOn;
       this.stepUtensil = stepUtensil;
       this.stepDetails = stepDetails;
       this.time = time;
-  }
-
-  @Override
-  public void actionPerformed(ActionEvent e) {
-      // Add info to the list
+    }
+  
+    @Override
+    public void actionPerformed(final ActionEvent e) 
+    {
+        // Add info to the list
       StringBuilder stepDescription = new StringBuilder();
       stepDescription.append(stepAction.getSelectedItem().toString())
                      .append(" the ")
@@ -444,8 +480,9 @@ private class AddStepListener implements ActionListener {
                      .append(stepUtensil.getSelectedItem().toString())
                      .append(". ");
 
-      if (!stepDetails.getText().equals("")) {
-          stepDescription.append(stepDetails.getText()).append(". ");
+      if (!stepDetails.getText().equals("")) 
+      {
+        stepDescription.append(stepDetails.getText()).append(". ");
       }
 
       stepDescription.append(strings.getString("estimated_time"))
@@ -460,16 +497,19 @@ private class AddStepListener implements ActionListener {
           stepDetails.getText(),
           Double.parseDouble(time.getText())
       ));
+    }
   }
-}
   
-  private class AddUtensilListener implements ActionListener {
+  private class AddUtensilListener implements ActionListener 
+  {
 
     JTextField utensilName;
     JTextField details;
     JComboBox stepUtensilCombo;
     
-    public AddUtensilListener(JTextField utensilName, JTextField details, JComboBox stepUtensilCombo) {
+    public AddUtensilListener(final JTextField utensilName, 
+        final JTextField details, final JComboBox stepUtensilCombo) 
+    {
       this.details = details;
       this.utensilName = utensilName;
       this.stepUtensilCombo = stepUtensilCombo;
@@ -477,11 +517,15 @@ private class AddStepListener implements ActionListener {
     }
     @SuppressWarnings("unchecked")
 	@Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) 
+    {
       //add info to thing
-      if (!details.getText().equals("")) {
+      if (!details.getText().equals("")) 
+      {
         dlm2.addElement(utensilName.getText()+ " (" + details.getText() + ")");
-      } else {
+      } 
+      else 
+      {
         dlm2.addElement(utensilName.getText());
       }
       fullUtensilList.add(new Utensil(utensilName.getText(),
@@ -492,95 +536,120 @@ private class AddStepListener implements ActionListener {
     
   }
   
-  private class deleteIngListener implements ActionListener {
+  private class DeleteIngListener implements ActionListener 
+  {
     JList<String> ingredientList;
     JComboBox<String> stepOnCombo;
 
-    public deleteIngListener(JList<String> ingredientList, JComboBox<String> stepOnCombo) {
-        this.ingredientList = ingredientList;
-        this.stepOnCombo = stepOnCombo;
+    public DeleteIngListener(final JList<String> ingredientList, 
+        final JComboBox<String> stepOnCombo)
+    {
+      this.ingredientList = ingredientList;
+      this.stepOnCombo = stepOnCombo;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        int selectedIndex = ingredientList.getSelectedIndex();
-        if (selectedIndex != -1) { // Ensure an item is selected
-            fullIngredientList.remove(selectedIndex);
-            dlm.removeElement(ingredientList.getSelectedValue());
-            stepOnCombo.removeAllItems();
-            for (RecipeIngredient ri : fullIngredientList) {
-                stepOnCombo.addItem(ri.getName());
-            }
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    strings.getString("error_no_ingredient_selected"),
-                    strings.getString("error_title"),
-                    JOptionPane.WARNING_MESSAGE);
+    public void actionPerformed(final ActionEvent e) 
+    {
+      int selectedIndex = ingredientList.getSelectedIndex();
+      if (selectedIndex != -1) 
+      { // Ensure an item is selected
+        fullIngredientList.remove(selectedIndex);
+        dlm.removeElement(ingredientList.getSelectedValue());
+        stepOnCombo.removeAllItems();
+        for (RecipeIngredient ri : fullIngredientList) 
+        {
+          stepOnCombo.addItem(ri.getName());
         }
+      }
+      else 
+      {
+        JOptionPane.showMessageDialog(null,
+                  strings.getString("error_no_ingredient_selected"),
+                  strings.getString("error_title"),
+                  JOptionPane.WARNING_MESSAGE);
+      }
     }
-}
+  }
   
-  private class deleteUtensilListener implements ActionListener {
+  private class DeleteUtensilListener implements ActionListener 
+  {
     JList<String> utensilList;
     JComboBox<String> stepUtensilCombo;
 
-    public deleteUtensilListener(JList<String> utensilList, JComboBox<String> stepUtensilCombo) {
-        this.utensilList = utensilList;
-        this.stepUtensilCombo = stepUtensilCombo;
+    public DeleteUtensilListener(final JList<String> utensilList, 
+        final JComboBox<String> stepUtensilCombo) 
+    {
+      this.utensilList = utensilList;
+      this.stepUtensilCombo = stepUtensilCombo;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        int selectedIndex = utensilList.getSelectedIndex();
-        if (selectedIndex != -1) { // Ensure an item is selected
-            fullUtensilList.remove(selectedIndex);
-            dlm2.removeElement(utensilList.getSelectedValue());
-            stepUtensilCombo.removeAllItems();
-            for (Utensil r : fullUtensilList) {
-                stepUtensilCombo.addItem(r.getName());
-            }
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    strings.getString("error_no_utensil_selected"),
-                    strings.getString("error_title"),
-                    JOptionPane.WARNING_MESSAGE);
+    public void actionPerformed(final ActionEvent e) 
+    {
+      int selectedIndex = utensilList.getSelectedIndex();
+      if (selectedIndex != -1) 
+      { // Ensure an item is selected
+        fullUtensilList.remove(selectedIndex);
+        dlm2.removeElement(utensilList.getSelectedValue());
+        stepUtensilCombo.removeAllItems();
+        for (Utensil r : fullUtensilList) 
+        {
+          stepUtensilCombo.addItem(r.getName());
         }
+      } 
+      else 
+      {
+        JOptionPane.showMessageDialog(null,
+                  strings.getString("error_no_utensil_selected"),
+                  strings.getString("error_title"),
+                  JOptionPane.WARNING_MESSAGE);
+      }
     }
-}
+  }
   
-  private class deleteStepListener implements ActionListener {
+  private class DeleteStepListener implements ActionListener 
+  {
     JList<String> stepList;
 
-    public deleteStepListener(JList<String> stepList) {
-        this.stepList = stepList;
+    public DeleteStepListener(final JList<String> stepList) 
+    {
+      this.stepList = stepList;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        int selectedIndex = stepList.getSelectedIndex();
-        if (selectedIndex != -1) { // Ensure an item is selected
-            fullStepList.remove(selectedIndex);
-            dlm3.removeElement(stepList.getSelectedValue());
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    strings.getString("error_no_step_selected"),
-                    strings.getString("error_title"),
-                    JOptionPane.WARNING_MESSAGE);
-        }
+    public void actionPerformed(final ActionEvent e) 
+    {
+      int selectedIndex = stepList.getSelectedIndex();
+      if (selectedIndex != -1) 
+      { // Ensure an item is selected
+        fullStepList.remove(selectedIndex);
+        dlm3.removeElement(stepList.getSelectedValue());
+      } 
+      else 
+      {
+        JOptionPane.showMessageDialog(null,
+                  strings.getString("error_no_step_selected"),
+                  strings.getString("error_title"),
+                  JOptionPane.WARNING_MESSAGE);
+      }
     }
-}
+  }
 
-private class CloseListener implements ActionListener {
+  private class CloseListener implements ActionListener 
+  {
     @Override
-    public void actionPerformed(ActionEvent e) {
-        System.exit(0);
+    public void actionPerformed(final ActionEvent e) 
+    {
+      System.exit(0);
     }
-}
-  
-public static void main(String[] args) {
-  SwingUtilities.invokeLater(() -> {
+  }
+    
+  public static void main(final String[] args) {
+    SwingUtilities.invokeLater(() -> 
+    {
       Locale locale = Locale.ITALIAN; // to change language (:
       new RecipeEditor(locale).setVisible(true);
-  });
-}
+    });
+  }
 }

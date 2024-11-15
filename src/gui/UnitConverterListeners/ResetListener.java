@@ -21,7 +21,9 @@ public class ResetListener implements ActionListener
   private Locale currentLocale;
   private ResourceBundle strings;
  
-  public ResetListener(JLabel toAmount, JComboBox<String> from, JComboBox<String> to, JComboBox<String> ingredient, JTextField amount, Locale locale) 
+  public ResetListener(final JLabel toAmount, final JComboBox<String> from, 
+      final JComboBox<String> to, final JComboBox<String> ingredient, 
+      final JTextField amount, final Locale locale) 
   {
     this.toAmount = toAmount;
     this.from = from;
@@ -32,17 +34,22 @@ public class ResetListener implements ActionListener
     loadStrings(locale);
   }
   
-  private void loadStrings(Locale locale) {
-    try {
+  private void loadStrings(final Locale locale) 
+  {
+    try 
+    {
       strings = ResourceBundle.getBundle("resources.Strings", locale);
-    } catch (MissingResourceException e) {
-      System.err.println("Could not find resources.Strings for locale " + locale + ": " + e.getMessage());
+    } 
+    catch (MissingResourceException e) 
+    {
+      System.err.println("Could not find resources.Strings for locale " 
+          + locale + ": " + e.getMessage());
       e.printStackTrace();
     }
   }
   
   //Resets the window
-  public void actionPerformed(ActionEvent e)
+  public void actionPerformed(final ActionEvent e)
   {
     toAmount.setText(strings.getString("to_amount_label") + ": ______________");
     from.setSelectedItem("");
@@ -52,7 +59,8 @@ public class ResetListener implements ActionListener
     amount.setText("");
   }
   
-  public void updateLocale(Locale newLocale) {
+  public void updateLocale(final Locale newLocale)
+  {
     this.currentLocale = newLocale;
     loadStrings(newLocale);
   }

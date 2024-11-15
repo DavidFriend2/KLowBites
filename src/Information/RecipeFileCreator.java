@@ -41,7 +41,8 @@ public class RecipeFileCreator
     
     try
     {
-      List<Ingredient> ingredients = Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr");
+      List<Ingredient> ingredients = Ingredient.loadIngredients(
+          "IngredientsNutrition/ingredients.ntr");
       
       for(Ingredient i: ingredients)
       {

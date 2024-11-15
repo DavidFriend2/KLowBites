@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import Information.Recipe;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -257,7 +260,7 @@ public class Main extends JFrame
 
     // Add an action listener to open the meal editor when this item is clicked
     mealEditorItem.addActionListener(e -> {
-      MealEditor mealViewer = new MealEditor();
+      MealEditor mealViewer = new MealEditor(currentLocale);
       mealViewer.setVisible(true);
     });
   }
@@ -277,7 +280,7 @@ public class Main extends JFrame
 
     // Add an action listener to open the recipe process viewer when this item is clicked
     viewProcessItem.addActionListener(e -> {
-      RecipeProcessViewer processViewer = new RecipeProcessViewer();
+      RecipeProcessViewer processViewer = new RecipeProcessViewer(Recipe.getRecipes().get(0), currentLocale);
       processViewer.setVisible(true);
     });
   }
@@ -346,7 +349,7 @@ public class Main extends JFrame
     // Add action listener for Recipe Searcher
     recipeSearcher.addActionListener(e -> {
       // Create and display a new Recipe Searcher window
-      RecipeSearcher rSearcher = new RecipeSearcher();
+      RecipeSearcher rSearcher = new RecipeSearcher(currentLocale);
       rSearcher.setVisible(true);
     });
 
@@ -356,39 +359,38 @@ public class Main extends JFrame
     // Add action listener for Meal Searcher
     mealSearcher.addActionListener(e -> {
       // Create and display a new Meal Searcher window
-      MealSearcher mSearcher = new MealSearcher();
+      MealSearcher mSearcher = new MealSearcher(currentLocale);
       mSearcher.setVisible(true);
     });
   }
 
-  // Create the Preferences menu for language selection
-  @SuppressWarnings("deprecation")
-  private void createPreferencesMenu(JMenuBar menuBar)
-  {
-    // Create a new menu called "Preferences"
-    JMenu preferencesMenu = new JMenu("Preferences");
-    menuBar.add(preferencesMenu);
+//Create the Preferences menu for language selection
+@SuppressWarnings("deprecation")
+private void createPreferencesMenu(JMenuBar menuBar)
+{
+   // Create a new menu called "Preferences" using internationalized string
+   JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
+   menuBar.add(preferencesMenu);
 
-    // Create a submenu for language selection
-    JMenu languageMenu = new JMenu("Languages");
-    preferencesMenu.add(languageMenu);
+   // Create a submenu for language selection using internationalized string
+   JMenu languageMenu = new JMenu(strings.getString("menu_languages"));
+   preferencesMenu.add(languageMenu);
 
-    // Create menu items for each supported language
-    JMenuItem englishItem = new JMenuItem("English");
-    JMenuItem italianItem = new JMenuItem("Italiano");
-    JMenuItem spanishItem = new JMenuItem("Español");
+   // Create menu items for each supported language using internationalized strings
+   JMenuItem englishItem = new JMenuItem(strings.getString("language_english"));
+   JMenuItem italianItem = new JMenuItem(strings.getString("language_italian"));
+   JMenuItem spanishItem = new JMenuItem(strings.getString("language_spanish"));
 
-    // Add language items to the language menu
-    languageMenu.add(englishItem);
-    languageMenu.add(italianItem);
-    languageMenu.add(spanishItem);
+   // Add language items to the language menu
+   languageMenu.add(englishItem);
+   languageMenu.add(italianItem);
+   languageMenu.add(spanishItem);
 
-    // Add action listeners to change the language when a menu item is clicked
-    englishItem.addActionListener(e -> changeLanguage(new Locale("en", "US")));
-    italianItem.addActionListener(e -> changeLanguage(Locale.ITALIAN));
-    spanishItem.addActionListener(e -> changeLanguage(new Locale("es", "ES")));
-  }
-
+   // Add action listeners to change the language when a menu item is clicked
+   englishItem.addActionListener(e -> changeLanguage(new Locale("en", "US")));
+   italianItem.addActionListener(e -> changeLanguage(Locale.ITALIAN));
+   spanishItem.addActionListener(e -> changeLanguage(new Locale("es", "ES")));
+}
   // Method to change the application's language
   private void changeLanguage(Locale newLocale)
   {
