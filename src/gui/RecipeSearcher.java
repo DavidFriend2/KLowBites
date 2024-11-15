@@ -295,8 +295,8 @@ public class RecipeSearcher extends JFrame
     SwingUtilities.invokeLater(() -> 
     {
       Locale locale = Locale.getDefault(); // Or any other Locale
-      UnitConverterWindow window = new UnitConverterWindow(locale);
-      window.setVisible(true);
+      RecipeSearcher recipeSearcher = new RecipeSearcher(locale);
+      recipeSearcher.setVisible(true);
     });
   }
 
