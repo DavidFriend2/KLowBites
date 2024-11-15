@@ -9,9 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -22,19 +20,19 @@ import java.util.ResourceBundle;
 public class Main extends JFrame
 {
   private static final long serialVersionUID = 1293847254;
+  private static UnitConverterWindow converterWindow;
+  private static CalorieCalculatorWindow calorieWindow;
   private static ResourceBundle strings;
   private static Locale currentLocale;
   private JPanel mainPanel;
   private String logoPath;
-  public static String htmlPath;
   private Color backgroundColor = Color.WHITE;
   private ImageIcon logoIcon;
   private JLabel logoLabel;
-  private static UnitConverterWindow converterWindow;
-  private static CalorieCalculatorWindow calorieWindow;
+  public static String htmlPath;
 
   // Constructor that takes a Locale parameter for internationalization
-  public Main(Locale locale)
+  public Main(final Locale locale)
   {
     currentLocale = locale;
     loadStrings(locale);
@@ -85,7 +83,7 @@ public class Main extends JFrame
   }
 
   // Helper method to convert a color name string to a Color object
-  private Color getColorFromString(String colorName)
+  private Color getColorFromString(final String colorName)
   {
     switch (colorName.toUpperCase())
     {
@@ -121,7 +119,7 @@ public class Main extends JFrame
   }
 
   // Method to load internationalized strings based on the given locale
-  private void loadStrings(Locale locale)
+  private void loadStrings(final Locale locale)
   {
     currentLocale = locale;
     try
@@ -179,7 +177,7 @@ public class Main extends JFrame
   }
 
   // Helper method to create an ImageIcon from a file path
-  private ImageIcon createImageIcon(String path)
+  private ImageIcon createImageIcon(final String path)
   {
     // Get the URL of the image file from the class resources
     java.net.URL imgURL = getClass().getResource(path);
@@ -217,7 +215,7 @@ public class Main extends JFrame
   }
 
   // Create the "File" menu
-  private void createFileMenu(JMenuBar menuBar)
+  private void createFileMenu(final JMenuBar menuBar)
   {
     // Create a new JMenu for the File menu, with an internationalized label
     JMenu fileMenu = new JMenu(strings.getString("menu_file"));
@@ -236,7 +234,7 @@ public class Main extends JFrame
   }
 
   // Create the "Edit" menu
-  private void createEditMenu(JMenuBar menuBar)
+  private void createEditMenu(final JMenuBar menuBar)
   {
     // Create a new JMenu for the Edit menu, with an internationalized label
     JMenu editMenu = new JMenu(strings.getString("menu_edit"));
@@ -249,7 +247,8 @@ public class Main extends JFrame
     editMenu.add(recipeEditorItem);
 
     // Add an action listener to open the recipe editor when this item is clicked
-    recipeEditorItem.addActionListener(e -> {
+    recipeEditorItem.addActionListener(e -> 
+    {
       RecipeEditor recipeViewer = new RecipeEditor(currentLocale);
       recipeViewer.setVisible(true);
     });
@@ -259,14 +258,15 @@ public class Main extends JFrame
     editMenu.add(mealEditorItem);
 
     // Add an action listener to open the meal editor when this item is clicked
-    mealEditorItem.addActionListener(e -> {
+    mealEditorItem.addActionListener(e -> 
+    {
       MealEditor mealViewer = new MealEditor(currentLocale);
       mealViewer.setVisible(true);
     });
   }
 
   // Create the "View" menu
-  private void createViewMenu(JMenuBar menuBar)
+  private void createViewMenu(final JMenuBar menuBar)
   {
     // Create a new JMenu for the View menu, with an internationalized label
     JMenu viewMenu = new JMenu(strings.getString("menu_view"));
@@ -279,14 +279,16 @@ public class Main extends JFrame
     viewMenu.add(viewProcessItem);
 
     // Add an action listener to open the recipe process viewer when this item is clicked
-    viewProcessItem.addActionListener(e -> {
-      RecipeProcessViewer processViewer = new RecipeProcessViewer(Recipe.getRecipes().get(0), currentLocale);
+    viewProcessItem.addActionListener(e -> 
+    {
+      RecipeProcessViewer processViewer = new RecipeProcessViewer(
+          Recipe.getRecipes().get(0), currentLocale);
       processViewer.setVisible(true);
     });
   }
 
   // Add the "Tools" menu to our menu bar
-  private void createToolsMenu(JMenuBar menuBar)
+  private void createToolsMenu(final JMenuBar menuBar)
   {
     // Create a new menu for Tools using the internationalized string
     JMenu toolsMenu = new JMenu(strings.getString("menu_tools"));
@@ -302,7 +304,8 @@ public class Main extends JFrame
     toolsMenu.add(unitsConverterItem);
 
     // Add action listener for the Units Converter item
-    unitsConverterItem.addActionListener(e -> {
+    unitsConverterItem.addActionListener(e -> 
+    {
       // Check if the converter window doesn't exist or is not visible
       if (converterWindow == null || !converterWindow.isDisplayable())
       {
@@ -319,7 +322,8 @@ public class Main extends JFrame
     });
 
     // Add action listener for the Calories Calculator item
-    caloriesCalculatorItem.addActionListener(e -> {
+    caloriesCalculatorItem.addActionListener(e -> 
+    {
       // Check if the calorie window doesn't exist or is not visible
       if (calorieWindow == null || !calorieWindow.isDisplayable())
       {
@@ -337,7 +341,7 @@ public class Main extends JFrame
   }
 
   // Create the Search menu
-  private void createSearchMenu(JMenuBar menuBar)
+  private void createSearchMenu(final JMenuBar menuBar)
   {
     // Create a new menu for Search using the internationalized string
     JMenu searchMenu = new JMenu(strings.getString("menu_search"));
@@ -347,7 +351,8 @@ public class Main extends JFrame
     JMenuItem recipeSearcher = new JMenuItem(strings.getString("search_recipe_searcher"));
     searchMenu.add(recipeSearcher);
     // Add action listener for Recipe Searcher
-    recipeSearcher.addActionListener(e -> {
+    recipeSearcher.addActionListener(e -> 
+    {
       // Create and display a new Recipe Searcher window
       RecipeSearcher rSearcher = new RecipeSearcher(currentLocale);
       rSearcher.setVisible(true);
@@ -357,42 +362,43 @@ public class Main extends JFrame
     JMenuItem mealSearcher = new JMenuItem(strings.getString("search_meal_searcher"));
     searchMenu.add(mealSearcher);
     // Add action listener for Meal Searcher
-    mealSearcher.addActionListener(e -> {
+    mealSearcher.addActionListener(e -> 
+    {
       // Create and display a new Meal Searcher window
       MealSearcher mSearcher = new MealSearcher(currentLocale);
       mSearcher.setVisible(true);
     });
   }
 
-//Create the Preferences menu for language selection
-@SuppressWarnings("deprecation")
-private void createPreferencesMenu(JMenuBar menuBar)
-{
-   // Create a new menu called "Preferences" using internationalized string
-   JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
-   menuBar.add(preferencesMenu);
+  //Create the Preferences menu for language selection
+  @SuppressWarnings("deprecation")
+  private void createPreferencesMenu(final JMenuBar menuBar)
+  {
+    // Create a new menu called "Preferences" using internationalized string
+    JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
+    menuBar.add(preferencesMenu);
 
-   // Create a submenu for language selection using internationalized string
-   JMenu languageMenu = new JMenu(strings.getString("menu_languages"));
-   preferencesMenu.add(languageMenu);
+    // Create a submenu for language selection using internationalized string
+    JMenu languageMenu = new JMenu(strings.getString("menu_languages"));
+    preferencesMenu.add(languageMenu);
 
-   // Create menu items for each supported language using internationalized strings
-   JMenuItem englishItem = new JMenuItem(strings.getString("language_english"));
-   JMenuItem italianItem = new JMenuItem(strings.getString("language_italian"));
-   JMenuItem spanishItem = new JMenuItem(strings.getString("language_spanish"));
+    // Create menu items for each supported language using internationalized strings
+    JMenuItem englishItem = new JMenuItem(strings.getString("language_english"));
+    JMenuItem italianItem = new JMenuItem(strings.getString("language_italian"));
+    JMenuItem spanishItem = new JMenuItem(strings.getString("language_spanish"));
 
-   // Add language items to the language menu
-   languageMenu.add(englishItem);
-   languageMenu.add(italianItem);
-   languageMenu.add(spanishItem);
+    // Add language items to the language menu
+    languageMenu.add(englishItem);
+    languageMenu.add(italianItem);
+    languageMenu.add(spanishItem);
 
-   // Add action listeners to change the language when a menu item is clicked
-   englishItem.addActionListener(e -> changeLanguage(new Locale("en", "US")));
-   italianItem.addActionListener(e -> changeLanguage(Locale.ITALIAN));
-   spanishItem.addActionListener(e -> changeLanguage(new Locale("es", "ES")));
-}
+    // Add action listeners to change the language when a menu item is clicked
+    englishItem.addActionListener(e -> changeLanguage(new Locale("en", "US")));
+    italianItem.addActionListener(e -> changeLanguage(Locale.ITALIAN));
+    spanishItem.addActionListener(e -> changeLanguage(new Locale("es", "ES")));
+  }
   // Method to change the application's language
-  private void changeLanguage(Locale newLocale)
+  private void changeLanguage(final Locale newLocale)
   {
     currentLocale = newLocale;
     loadStrings(currentLocale); // Load new language strings
@@ -457,7 +463,7 @@ private void createPreferencesMenu(JMenuBar menuBar)
   }
 
   // Create the Help menu
-  private void createHelpMenu(JMenuBar menuBar)
+  private void createHelpMenu(final JMenuBar menuBar)
   {
     // Create a new menu item for Help using internationalized string
     JMenu helpMenu = new JMenu(strings.getString("menu_help"));
@@ -476,7 +482,7 @@ private void createPreferencesMenu(JMenuBar menuBar)
   }
 
   // Set the appropriate HTML path based on the current locale
-  private void setHtmlPath(Locale locale)
+  private void setHtmlPath(final Locale locale)
   {
     String language = locale.getLanguage();
     switch (language)
@@ -494,90 +500,104 @@ private void createPreferencesMenu(JMenuBar menuBar)
   }
 
   // Open the HTML user guide in the default browser
-  private void openHtmlGuide() {
-	    try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath)) {
-	        if (inputStream == null) {
-	            System.err.println("Resource not found: " + htmlPath);
-	            return;
-	        }
+  private void openHtmlGuide() 
+  {
+    try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath)) 
+    {
+      if (inputStream == null) 
+      {
+        System.err.println("Resource not found: " + htmlPath);
+        return;
+      }
 
-	        // Create a temporary directory for the HTML and images
-	        File tempDir = Files.createTempDirectory("tempHtml").toFile();
+        // Create a temporary directory for the HTML and images
+      File tempDir = Files.createTempDirectory("tempHtml").toFile();
 
-	        // Copy the HTML file to the temporary directory
-	        File tempHtmlFile = new File(tempDir, "index.html");
-	        Files.copy(inputStream, tempHtmlFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+      // Copy the HTML file to the temporary directory
+      File tempHtmlFile = new File(tempDir, "index.html");
+      Files.copy(inputStream, tempHtmlFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-	        // Copy all images from the resources to the temporary directory
-	        // Get the list of images in the 'gui' folder inside the JAR
-	        copyImagesFromGuiFolder(tempDir);
+      // Copy all images from the resources to the temporary directory
+      // Get the list of images in the 'gui' folder inside the JAR
+      copyImagesFromGuiFolder(tempDir);
 
-	        // Update HTML content if needed to ensure image paths are correct
-	        String htmlContent = new String(Files.readAllBytes(tempHtmlFile.toPath()), StandardCharsets.UTF_8);
-	        htmlContent = htmlContent.replaceAll("src=\"../gui/", "src=\"gui/");  // Correct paths in HTML
-	        Files.write(tempHtmlFile.toPath(), htmlContent.getBytes(StandardCharsets.UTF_8));
+        // Update HTML content if needed to ensure image paths are correct
+      String htmlContent = new String(Files.readAllBytes(tempHtmlFile.toPath()), 
+          StandardCharsets.UTF_8);
+      htmlContent = htmlContent.replaceAll("src=\"../gui/", "src=\"gui/");  // Correct paths in HTML
+      Files.write(tempHtmlFile.toPath(), htmlContent.getBytes(StandardCharsets.UTF_8));
 
-	        // Open the HTML file in the default browser
-	        if (Desktop.isDesktopSupported()) {
-	            Desktop.getDesktop().browse(tempHtmlFile.toURI());
-	        }
+      // Open the HTML file in the default browser
+      if (Desktop.isDesktopSupported()) 
+      {
+        Desktop.getDesktop().browse(tempHtmlFile.toURI());
+      }
 
-	        tempDir.deleteOnExit();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
+      tempDir.deleteOnExit();
+    } 
+    catch (IOException e) 
+    {
+      e.printStackTrace();
+    }
 	}
 
-	private void copyImagesFromGuiFolder(File destinationDir) throws IOException {
+	private void copyImagesFromGuiFolder(final File destinationDir) throws IOException 
+	{
 	    // Assuming images are in the "gui" folder inside the JAR
-	    String[] imageFiles = {
-	        "gui/mainEn.png",
-	        "gui/recipeButtonsEn.png",
-	        "gui/recipeUtensilEn.png",
-	        "gui/recipeStepEn.png",
-	        "gui/recipeIngredientEn.png",	        
-	        "gui/buttonsEn.png",
-	        "gui/mealSelectEn.png",
-	        "gui/mealNameEn.png",
-	        "gui/unitResultEn.png",
-	        "gui/unitSelectEn.png",
-	        "gui/buttonsLessEn.png",
-	        "gui/buttonsMoreEn.png",
-	        "gui/calorieResultEn.png",
-	        "gui/calorieSelectEn.png",
-	        "gui/searchRTopEn.png",
-	        "gui/searchRBottomEn.png",
-	        "gui/processStepEn.png",
-	        "gui/processUtensil.png",
-	        "gui/processButtonEn.png"
-	        
-	    };
+    String[] imageFiles = {
+        "gui/mainEn.png",
+        "gui/recipeButtonsEn.png",
+        "gui/recipeUtensilEn.png",
+        "gui/recipeStepEn.png",
+        "gui/recipeIngredientEn.png",	        
+        "gui/buttonsEn.png",
+        "gui/mealSelectEn.png",
+        "gui/mealNameEn.png",
+        "gui/unitResultEn.png",
+        "gui/unitSelectEn.png",
+        "gui/buttonsLessEn.png",
+        "gui/buttonsMoreEn.png",
+        "gui/calorieResultEn.png",
+        "gui/calorieSelectEn.png",
+        "gui/searchRTopEn.png",
+        "gui/searchRBottomEn.png",
+        "gui/processStepEn.png",
+        "gui/processUtensil.png",
+        "gui/processButtonEn.png"
+        
+    };
 
-	    for (String imagePath : imageFiles) {
-	        copyResource(imagePath, destinationDir);
-	    }
+    for (String imagePath : imageFiles) 
+    {
+      copyResource(imagePath, destinationDir);
+    }
 	}
 
-	private void copyResource(String resourcePath, File destinationDir) throws IOException {
-	    // Copy resource from JAR to the temporary directory
-	    try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resourcePath)) {
-	        if (resourceStream == null) {
-	            System.err.println("Resource not found: " + resourcePath);
-	            return;
-	        }
+	private void copyResource(final String resourcePath, 
+	    final File destinationDir) throws IOException 
+	{
+    // Copy resource from JAR to the temporary directory
+    try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resourcePath)) 
+    {
+      if (resourceStream == null) 
+      {
+        System.err.println("Resource not found: " + resourcePath);
+        return;
+      }
 
-	        // Ensure the parent directories for the destination file exist
-	        File destFile = new File(destinationDir, resourcePath);
-	        destFile.getParentFile().mkdirs();
-	        Files.copy(resourceStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-	    }
+      // Ensure the parent directories for the destination file exist
+      File destFile = new File(destinationDir, resourcePath);
+      destFile.getParentFile().mkdirs();
+      Files.copy(resourceStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
 	}
 
   // Main method to start the application
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
     // Use SwingUtilities.invokeLater to ensure thread safety in Swing applications
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(() -> 
+    {
       // Get the default locale of the system (or set to any other desired locale)
       Locale desiredLocale = Locale.getDefault();
 
