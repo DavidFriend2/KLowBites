@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -125,6 +126,7 @@ public class UnitConverterWindow extends JFrame
       JLabel inLabel = new JLabel(strings.getString("ingredient_label"));
       ingredient.add(inLabel);
       List<Ingredient> ingred = Ingredient.getIngredients();
+      ingred.sort(Comparator.comparing(Ingredient::getName));
       String[] ingredAr = new String[ingred.size() + 1];
       ingredAr[0] = "";
       int count = 1;
