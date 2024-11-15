@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -32,10 +34,10 @@ import Information.*;
  * Clicking on the meals opens a meal process viewer for the users.
  * 
  */
-public class MealSearcher extends JFrame
-{
+public class MealSearcher extends JFrame {
 
   private static final long serialVersionUID = 1L;
+  private ResourceBundle strings; // Resource bundle for internationalization
 
   private List<Ingredient> containedIngredients = new ArrayList<>();
   private JList<Ingredient> ingredientJList;
@@ -45,68 +47,74 @@ public class MealSearcher extends JFrame
   private List<Meal> selectedMeals = new ArrayList<>();
   private JComboBox<Meal> mealDropdown;
 
-  public MealSearcher()
-  {
-    setTitle("KiLowBites Meal Seacher");
-    setSize(350, 500);
-    setResizable(false);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  public MealSearcher(Locale locale) {
+      strings = ResourceBundle.getBundle("resources.Strings", locale); // Load the resource bundle based on locale
+      setTitle(strings.getString("meal_searcher_title")); // Set window title
+      setSize(350, 500);
+      setResizable(false);
+      setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    // Main Panel
-    JPanel mainPanel = new JPanel(new BorderLayout());
+      // Main Panel
+      JPanel mainPanel = new JPanel(new BorderLayout());
 
-    // Directory chooser Panel
-    JPanel chooserPanel = new JPanel();
-    JLabel chooserLabel = new JLabel("Choose Directory to Search Through");
-    JButton chooseDirectoryButton = new JButton("Choose");
-    chooseDirectoryButton.addActionListener(new OpenMealsListener());
-    chooserPanel.add(chooserLabel);
-    chooserPanel.add(chooseDirectoryButton);
+      // Directory chooser Panel
+      JPanel chooserPanel = new JPanel();
+      JLabel chooserLabel = new JLabel(strings.getString("choose_directory_label")); // Internationalized label
+      JButton chooseDirectoryButton = new JButton(strings.getString("choose_button")); // Internationalized button
+      chooseDirectoryButton.addActionListener(new OpenMealsListener());
+      chooserPanel.add(chooserLabel);
+      chooserPanel.add(chooseDirectoryButton);
 
-    // Top panel
-    JPanel topPanel = new JPanel(new BorderLayout());
-    topPanel.add(chooserPanel, BorderLayout.WEST);
+      // Top panel
+      JPanel topPanel = new JPanel(new BorderLayout());
+      topPanel.add(chooserPanel, BorderLayout.WEST);
 
-    // Ingredients panel
-    JPanel ingredientPanel = new JPanel();
-    ingredientPanel.setLayout(new BoxLayout(ingredientPanel, BoxLayout.Y_AXIS));
-    // label
-    JLabel ingredientLabel = new JLabel("Add ingredient(s) to look for in meals");
-    ingredientLabel.setAlignmentX(CENTER_ALIGNMENT);
-    ingredientPanel.add(ingredientLabel);
-    // text field
-    ingredientField = new JTextField(15);
-    ingredientField.setMaximumSize(ingredientField.getPreferredSize());
-    ingredientPanel.add(ingredientField);
-    // add ingredient button
-    JButton addIngredientButton = new JButton("Add");
-    addIngredientButton.addActionListener(new AddIngredientListener());
-    addIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
-    ingredientPanel.add(addIngredientButton);
-    // ingredient jlist
-    ingredientDml = new DefaultListModel<>();
-    ingredientJList = new JList<>(ingredientDml);
-    ingredientJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    ingredientPanel.add(new JScrollPane(ingredientJList));
-    // delete button
-    JButton deleteIngredientButton = new JButton("Delete Ingredient");
-    deleteIngredientButton.addActionListener(new deleteIngredientListener());
-    deleteIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
-    ingredientPanel.add(deleteIngredientButton);
-    // search button
-    JButton searchButton = new JButton("Search Meals");
-    searchButton.addActionListener(new SearchMealsListener());
-    searchButton.setAlignmentX(CENTER_ALIGNMENT);
-    ingredientPanel.add(searchButton);
+      // Ingredients panel
+      JPanel ingredientPanel = new JPanel();
+      ingredientPanel.setLayout(new BoxLayout(ingredientPanel, BoxLayout.Y_AXIS));
+      
+      // Label for ingredients
+      JLabel ingredientLabel = new JLabel(strings.getString("add_ingredients_meal_label")); // Internationalized label
+      ingredientLabel.setAlignmentX(CENTER_ALIGNMENT);
+      ingredientPanel.add(ingredientLabel);
+      
+      // Text field for ingredients
+      ingredientField = new JTextField(15);
+      ingredientField.setMaximumSize(ingredientField.getPreferredSize());
+      ingredientPanel.add(ingredientField);
+      
+      // Add ingredient button
+      JButton addIngredientButton = new JButton(strings.getString("add_button")); // Internationalized button
+      addIngredientButton.addActionListener(new AddIngredientListener());
+      addIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
+      ingredientPanel.add(addIngredientButton);
+      
+      // Ingredient JList
+      ingredientDml = new DefaultListModel<>();
+      ingredientJList = new JList<>(ingredientDml);
+      ingredientJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      ingredientPanel.add(new JScrollPane(ingredientJList));
+      
+      // Delete button for ingredients
+      JButton deleteIngredientButton = new JButton(strings.getString("delete_ingredient_button")); // Internationalized button
+      deleteIngredientButton.addActionListener(new DeleteIngredientListener());
+      deleteIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
+      ingredientPanel.add(deleteIngredientButton);
+      
+      // Search button for meals
+      JButton searchButton = new JButton(strings.getString("search_meals_button")); // Internationalized button
+      searchButton.addActionListener(new SearchMealsListener());
+      searchButton.setAlignmentX(CENTER_ALIGNMENT);
+      ingredientPanel.add(searchButton);
 
-    // Recipe Display List
-    mealDropdown = new JComboBox<>();
+      // Meal Display List (Dropdown)
+      mealDropdown = new JComboBox<>();
 
-    mainPanel.add(topPanel, BorderLayout.NORTH);
-    mainPanel.add(ingredientPanel, BorderLayout.CENTER);
-    mainPanel.add(mealDropdown, BorderLayout.SOUTH);
-    this.add(mainPanel);
-
+      mainPanel.add(topPanel, BorderLayout.NORTH);
+      mainPanel.add(ingredientPanel, BorderLayout.CENTER);
+      mainPanel.add(mealDropdown, BorderLayout.SOUTH);
+      
+      this.add(mainPanel);
   }
 
   /*
@@ -187,7 +195,7 @@ public class MealSearcher extends JFrame
   }
 
   // Action Listener to delete added ingredients
-  private class deleteIngredientListener implements ActionListener
+  private class DeleteIngredientListener implements ActionListener
   {
 
     @Override
@@ -293,12 +301,16 @@ public class MealSearcher extends JFrame
   };
   
   
-  //Main to display the searcher
-  public static void main(String[] args)
-  {
-    SwingUtilities.invokeLater(() -> {
-      new MealSearcher().setVisible(true);
-    });
-  }
+//Main to display the searcher
+public static void main(String[] args) {
+   SwingUtilities.invokeLater(() -> {
+       // You can change this to the desired default locale
+       Locale desiredLocale = Locale.getDefault();
+       
+       // Create a new MealSearcher instance with the desired locale
+       MealSearcher mealSearcher = new MealSearcher(desiredLocale);
+       mealSearcher.setVisible(true);
+   });
+}
 
 }

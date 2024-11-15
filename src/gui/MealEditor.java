@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -48,100 +49,93 @@ public class MealEditor extends JFrame
   /**
    * default constructor for the window
    */
-  public MealEditor() 
-  {
-    setTitle("KiLowBites Meal Editor");
-    setSize(1000,400);
+  public MealEditor(Locale locale) {
+    ResourceBundle strings = ResourceBundle.getBundle("resources.Strings", locale);
+
+    setTitle(strings.getString("meal_editor_title"));
+    setSize(1000, 400);
     setResizable(false);
     setLocationRelativeTo(null);
       
-      // Create main content panel
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    // Create main content panel
+    mainPanel = new JPanel();
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         
-        // Create image panel with FlowLayout aligned to the left
-        JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-       // imagePanel.setPreferredSize(new Dimension(100, 1));
+    // Create image panel with FlowLayout aligned to the left
+    JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         
-        buttonCreation buttonCreation = new buttonCreation();
-        //initialize buttons
-        buttonCreation.addImageButton(imagePanel, "/img/new.png", "New");
-        buttonCreation.addImageButton(imagePanel, "/img/open.png", "Open");
-        buttonCreation.addImageButton(imagePanel, "/img/save.png", "Save");
-        buttonCreation.addImageButton(imagePanel, "/img/saveAs.png", "Save As");
-        buttonCreation.addImageButton(imagePanel, "/img/close.png", "Close");
+    buttonCreation buttonCreation = new buttonCreation();
+    //initialize buttons
+    buttonCreation.addImageButton(imagePanel, "/img/new.png", strings.getString("tooltip_new"));
+    buttonCreation.addImageButton(imagePanel, "/img/open.png", strings.getString("tooltip_open"));
+    buttonCreation.addImageButton(imagePanel, "/img/save.png", strings.getString("tooltip_save"));
+    buttonCreation.addImageButton(imagePanel, "/img/saveAs.png", strings.getString("tooltip_save_as"));
+    buttonCreation.addImageButton(imagePanel, "/img/close.png", strings.getString("tooltip_close"));
         
-        // Add image panel to the top (NORTH) of the main panel
-        mainPanel.add(imagePanel);
+    // Add image panel to the top (NORTH) of the main panel
+    mainPanel.add(imagePanel);
 
-        // text box panel
-        JPanel textPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JTextField textBox = new JTextField(20);
-        JLabel textLabel = new JLabel("Name:");
-        //textPanel.setPreferredSize(new Dimension(100,1));
-        //textPanel.setMaximumSize(new Dimension(0,1000));
-        //textPanel.setBorder(BorderFactory.createEmptyBorder(0,6,0,0));
-        textBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        textPanel.add(textLabel);
-        textPanel.add(textBox);
-        mainPanel.add(textPanel);
+    // text box panel
+    JPanel textPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JTextField textBox = new JTextField(20);
+    JLabel textLabel = new JLabel(strings.getString("label_name"));
+    textBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    textPanel.add(textLabel);
+    textPanel.add(textBox);
+    mainPanel.add(textPanel);
         
-        // add recipe window
-        JPanel recipeBox = new JPanel(new BorderLayout());
-        recipeBox.setLayout(new BoxLayout(recipeBox, BoxLayout.Y_AXIS));
-        //recipeBox.setPreferredSize(new Dimension(600,265));
-        recipeBox.setBorder(BorderFactory.createCompoundBorder(
+    // add recipe window
+    JPanel recipeBox = new JPanel(new BorderLayout());
+    recipeBox.setLayout(new BoxLayout(recipeBox, BoxLayout.Y_AXIS));
+    recipeBox.setBorder(BorderFactory.createCompoundBorder(
         BorderFactory.createEmptyBorder(10, 10, 10, 10), BorderFactory.createLineBorder(Color.BLACK, 2)));
         
-        //top half of recipe box
-        JPanel recipeBoxTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton addRecipe = new JButton("Add Recipe");
-        JButton createRecipe = new JButton("Create Recipe");
-        createRecipe.addActionListener(new CreateRecipeListener());
-        //addRecipe.addActionListener(new AddRecipeListener(scroll));
-        recipeBoxTop.add(addRecipe);
-        recipeBoxTop.add(createRecipe);
-        recipeBox.add(recipeBoxTop);
+    //top half of recipe box
+    JPanel recipeBoxTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JButton addRecipe = new JButton(strings.getString("button_add_recipe"));
+    JButton createRecipe = new JButton(strings.getString("button_create_recipe"));
+    createRecipe.addActionListener(new CreateRecipeListener());
+    recipeBoxTop.add(addRecipe);
+    recipeBoxTop.add(createRecipe);
+    recipeBox.add(recipeBoxTop);
         
-        
-        //bottom half of recipe box
-        JPanel recipeBoxBottom = new JPanel(new BorderLayout());
-        JList recipes = new JList();
-        JScrollPane scroll = new JScrollPane(recipes);
-        recipeBoxBottom.add(scroll);
-        //bottom right half
-        JPanel bottomRight = new JPanel(new BorderLayout());
-        JButton delete = new JButton("Delete");
-        bottomRight.add(delete, BorderLayout.SOUTH);
-        recipeBoxBottom.add(bottomRight, BorderLayout.EAST);
-        //JScrollPane scroll2 = new JScrollPane(recipeBoxBottom);
-        recipeBox.add(recipeBoxBottom);
+    //bottom half of recipe box
+    JPanel recipeBoxBottom = new JPanel(new BorderLayout());
+    JList recipes = new JList();
+    JScrollPane scroll = new JScrollPane(recipes);
+    recipeBoxBottom.add(scroll);
+    //bottom right half
+    JPanel bottomRight = new JPanel(new BorderLayout());
+    JButton delete = new JButton(strings.getString("button_delete"));
+    bottomRight.add(delete, BorderLayout.SOUTH);
+    recipeBoxBottom.add(bottomRight, BorderLayout.EAST);
+    recipeBox.add(recipeBoxBottom);
 
-        addRecipe.addActionListener(new AddRecipeListener(this, scroll, recipeBox));
-        //add recipe box
-        JScrollPane d = new JScrollPane(recipeBox);
-        mainPanel.add(d);
+    addRecipe.addActionListener(new AddRecipeListener(this, scroll, recipeBox));
+    //add recipe box
+    JScrollPane d = new JScrollPane(recipeBox);
+    mainPanel.add(d);
         
-        //Initialize buttons listeners
-        JButton newB = (JButton) imagePanel.getComponent(0);
-        newB.addActionListener(new NewListener());
-        JButton open = (JButton) imagePanel.getComponent(1);
-        OpenListener ol = new OpenListener(scroll, this, recipeBox, textBox, open);
-        open.addActionListener(ol);
-        JButton save = (JButton) imagePanel.getComponent(2);
-        save.addActionListener(new SaveListener(textBox, ol));
-        JButton saveAs = (JButton) imagePanel.getComponent(3);
-        saveAs.addActionListener(new SaveAsListener(textBox));
-        close = (JButton) imagePanel.getComponent(4);
-        close.addActionListener(new CloseListener());
+    //Initialize buttons listeners
+    JButton newB = (JButton) imagePanel.getComponent(0);
+    newB.addActionListener(new NewListener());
+    JButton open = (JButton) imagePanel.getComponent(1);
+    OpenListener ol = new OpenListener(scroll, this, recipeBox, textBox, open);
+    open.addActionListener(ol);
+    JButton save = (JButton) imagePanel.getComponent(2);
+    save.addActionListener(new SaveListener(textBox, ol));
+    JButton saveAs = (JButton) imagePanel.getComponent(3);
+    saveAs.addActionListener(new SaveAsListener(textBox));
+    close = (JButton) imagePanel.getComponent(4);
+    close.addActionListener(new CloseListener());
         
-        //initialize delete button listener
-        DeleteListener dl = new DeleteListener(recipeBox, recipeBoxBottom, scroll, this);
-        delete.addActionListener(dl);
+    //initialize delete button listener
+    DeleteListener dl = new DeleteListener(recipeBox, recipeBoxBottom, scroll, this);
+    delete.addActionListener(dl);
         
-        //add everything
-        add(mainPanel);
-  }
+    //add everything
+    add(mainPanel);
+}
   
   private JButton getCloseButton() {
     return close;
@@ -274,7 +268,7 @@ public class MealEditor extends JFrame
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      MealEditor me = new MealEditor();
+      MealEditor me = new MealEditor(currentLocale);
        me.setVisible(true);
        me.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        me.getCloseButton().setEnabled(false);
@@ -479,8 +473,13 @@ public class MealEditor extends JFrame
     
   }
   public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MealEditor().setVisible(true);
-        });
-  }
+    SwingUtilities.invokeLater(() -> {
+        // You can change this to the desired default locale
+        Locale desiredLocale = Locale.getDefault();
+        
+        // Create a new MealEditor instance with the desired locale
+        MealEditor mealEditor = new MealEditor(desiredLocale);
+        mealEditor.setVisible(true);
+    });
+}
 }
