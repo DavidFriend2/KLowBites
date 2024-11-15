@@ -531,8 +531,26 @@ private void createPreferencesMenu(JMenuBar menuBar)
 	private void copyImagesFromGuiFolder(File destinationDir) throws IOException {
 	    // Assuming images are in the "gui" folder inside the JAR
 	    String[] imageFiles = {
-	        "gui/calculate.png",
-	        "gui/mainEn.png"
+	        "gui/mainEn.png",
+	        "gui/recipeButtonsEn.png",
+	        "gui/recipeUtensilEn.png",
+	        "gui/recipeStepEn.png",
+	        "gui/recipeIngredientEn.png",	        
+	        "gui/buttonsEn.png",
+	        "gui/mealSelectEn.png",
+	        "gui/mealNameEn.png",
+	        "gui/unitResultEn.png",
+	        "gui/unitSelectEn.png",
+	        "gui/buttonsLessEn.png",
+	        "gui/buttonsMoreEn.png",
+	        "gui/calorieResultEn.png",
+	        "gui/calorieSelectEn.png",
+	        "gui/searchRTopEn.png",
+	        "gui/searchRBottomEn.png",
+	        "gui/processStepEn.png",
+	        "gui/processUtensil.png",
+	        "gui/processButtonEn.png"
+	        
 	    };
 
 	    for (String imagePath : imageFiles) {
