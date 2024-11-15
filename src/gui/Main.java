@@ -5,6 +5,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -20,7 +22,7 @@ public class Main extends JFrame {
     
     // Path to our logo image
     private String logoPath;
-    private String htmlPath = "src/gui/index.html";
+    public static String htmlPath;
     private Color backgroundColor = Color.WHITE; // Default to white
 
     // Some UI components we'll need later
@@ -258,14 +260,25 @@ public class Main extends JFrame {
         helpMenu.add(userGuide);
           
         userGuide.addActionListener(e -> {
-        	try {
-        		File htmlFile = new File(htmlPath);
-        		Desktop d = Desktop.getDesktop();
-        		d.browse(htmlFile.toURI());
-        	} catch (IOException l) {
-        		// TODO Auto-generated catch block
-        		l.printStackTrace();
-        	}
+        	try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath)) {
+                if (inputStream == null) {
+                    System.err.println("Resource not found: " + htmlPath);
+                    return;
+                }
+                
+                // Create a temporary file
+                File tempFile = File.createTempFile("tempIndex", ".html");
+                Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                // Open in default browser
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().browse(tempFile.toURI());
+                }
+
+                tempFile.deleteOnExit(); // Clean up
+            } catch (IOException m) {
+                m.printStackTrace();
+            }
           });
         
       }
@@ -273,6 +286,7 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Locale desiredLocale = Locale.getDefault(); // CHANGE THIS FOR LANGUAGE (: EXAMPLE: Locale.ITALIAN
+            htmlPath = "indexIt.html"; // this is where we choose which language to open in html
             Main window = new Main(desiredLocale);
             if (strings != null) {
                 window.setVisible(true);
