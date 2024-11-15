@@ -273,7 +273,7 @@ public class Main extends JFrame {
                     System.err.println("Resource not found: " + htmlPath);
                     return;
                 }
-                
+                 
                 // Create a temporary file
                 File tempFile = File.createTempFile("tempIndex", ".html");
                 Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
