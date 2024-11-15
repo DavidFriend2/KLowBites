@@ -22,14 +22,14 @@ class CheckTest
   }
 
   @Test
-  void forContainsTest_empty()
+  void forContainsTestEmpty()
   {
     String[] haystack = {};
     assertFalse(Check.forContains(haystack, "Aardvark"));
   }
 
   @Test
-  void forContainsTest_null()
+  void forContainsTestNull()
   {
     assertFalse(Check.forContains(null, "Aardvark"));
   }

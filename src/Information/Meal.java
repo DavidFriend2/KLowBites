@@ -14,7 +14,7 @@ public class Meal implements Serializable
   String name;
   List<Recipe> recipes;
   
-  public Meal(String name, List<Recipe> recipes)
+  public Meal(final String name, final List<Recipe> recipes)
   {
     this.name = name;
     this.recipes = recipes;
@@ -29,7 +29,7 @@ public class Meal implements Serializable
     return recipes;
   }
   
-  public void addRecipe(Recipe recipe)
+  public void addRecipe(final Recipe recipe)
   {
     this.recipes.add(recipe);
   }
@@ -44,7 +44,7 @@ public class Meal implements Serializable
     return this.name;
   }
   
-  public void saveMealToFile(String file) throws IOException
+  public void saveMealToFile(final String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
     {
@@ -52,7 +52,7 @@ public class Meal implements Serializable
     }
   }
   
-  public static Meal loadMealFromFile(String file) throws IOException, ClassNotFoundException
+  public static Meal loadMealFromFile(final String file) throws IOException, ClassNotFoundException
   {
     try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file)))
     {

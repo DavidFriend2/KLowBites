@@ -13,13 +13,12 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
 {
   
   private static final long serialVersionUID = 1L;
+  private static List<Ingredient> ingredients = new ArrayList<>();
   private String name;
   private int caloriesPer100g;
   private double gramsPerMl;
 
-  private static List<Ingredient> ingredients = new ArrayList<>();
-
-  public Ingredient(String name, int caloriesPer100g, double gramsPerMl)
+  public Ingredient(final String name, final int caloriesPer100g, final double gramsPerMl)
   {
     this.name = name;
     this.caloriesPer100g = caloriesPer100g;
@@ -48,17 +47,17 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     return ingredients;
   }
   
-  public static void setIngredients(List<Ingredient> loaded)
+  public static void setIngredients(final List<Ingredient> loaded)
   {
     ingredients = loaded;
   }
   
-  public int compareTo(Ingredient o)
+  public int compareTo(final Ingredient o)
   {
     return 0;
   }
   
-  public static Ingredient getIngredientbyName(String name)
+  public static Ingredient getIngredientbyName(final String name)
   {
     for(Ingredient ingredient: ingredients)
     {
@@ -76,13 +75,14 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
   
   
-  public static void addIngredient(Ingredient ingredient)
+  public static void addIngredient(final Ingredient ingredient)
   {
     ingredients.add(ingredient);
   }
   
   @SuppressWarnings("unchecked")
-  public static List<Ingredient> loadIngredients(String file) throws IOException, ClassNotFoundException
+  public static List<Ingredient> loadIngredients(final String file) 
+      throws IOException, ClassNotFoundException
   {
     try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file)))
     {
@@ -90,7 +90,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     }
   }
   
-  public static void saveIngredients(String file) throws IOException
+  public static void saveIngredients(final String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
     {
@@ -99,7 +99,8 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
   
   
-  static {
+  static 
+  {
     ingredients.add(new Ingredient("Alcohol", 275, 0.79));
     ingredients.add(new Ingredient("Almond", 601, .46));
     ingredients.add(new Ingredient("American cheese", 440, .34));

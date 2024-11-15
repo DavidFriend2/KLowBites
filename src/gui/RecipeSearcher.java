@@ -48,8 +48,10 @@ public class RecipeSearcher extends JFrame
   private List<Recipe> selectedRecipes = new ArrayList<>();
   private JComboBox<Recipe> recipeDropdown;
 
-  public RecipeSearcher(Locale locale) {
-    strings = ResourceBundle.getBundle("resources.Strings", locale); // Load the resource bundle based on locale
+  public RecipeSearcher(final Locale locale) 
+  {
+    strings = ResourceBundle.getBundle("resources.Strings", locale); 
+    // Load the resource bundle based on locale
     setTitle(strings.getString("recipe_searcher_title")); // Set window title
     setSize(350, 500);
     setResizable(false);
@@ -60,8 +62,10 @@ public class RecipeSearcher extends JFrame
 
     // Directory chooser Panel
     JPanel chooserPanel = new JPanel();
-    JLabel chooserLabel = new JLabel(strings.getString("choose_directory_label")); // Internationalized label
-    JButton chooseDirectoryButton = new JButton(strings.getString("choose_button")); // Internationalized button
+    JLabel chooserLabel = new JLabel(strings.getString("choose_directory_label")); 
+    // Internationalized label
+    JButton chooseDirectoryButton = new JButton(strings.getString("choose_button")); 
+    // Internationalized button
     chooseDirectoryButton.addActionListener(new OpenRecipesListener());
     chooserPanel.add(chooserLabel);
     chooserPanel.add(chooseDirectoryButton);
@@ -75,7 +79,8 @@ public class RecipeSearcher extends JFrame
     ingredientPanel.setLayout(new BoxLayout(ingredientPanel, BoxLayout.Y_AXIS));
     
     // Label for ingredients
-    JLabel ingredientLabel = new JLabel(strings.getString("add_ingredients_label")); // Internationalized label
+    JLabel ingredientLabel = new JLabel(strings.getString("add_ingredients_label")); 
+    // Internationalized label
     ingredientLabel.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(ingredientLabel);
     
@@ -85,7 +90,8 @@ public class RecipeSearcher extends JFrame
     ingredientPanel.add(ingredientField);
     
     // Add ingredient button
-    JButton addIngredientButton = new JButton(strings.getString("add_button")); // Internationalized button
+    JButton addIngredientButton = new JButton(strings.getString("add_button")); 
+    // Internationalized button
     addIngredientButton.addActionListener(new AddIngredientListener());
     addIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(addIngredientButton);
@@ -97,13 +103,15 @@ public class RecipeSearcher extends JFrame
     ingredientPanel.add(new JScrollPane(ingredientJList));
     
     // Delete button for ingredients
-    JButton deleteIngredientButton = new JButton(strings.getString("delete_ingredient_button")); // Internationalized button
+    JButton deleteIngredientButton = new JButton(strings.getString("delete_ingredient_button")); 
+    // Internationalized button
     deleteIngredientButton.addActionListener(new DeleteIngredientListener());
     deleteIngredientButton.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(deleteIngredientButton);
     
     // Search button for recipes
-    JButton searchButton = new JButton(strings.getString("search_recipes_button")); // Internationalized button
+    JButton searchButton = new JButton(strings.getString("search_recipes_button")); 
+    // Internationalized button
     searchButton.addActionListener(new SearchRecipesListener());
     searchButton.setAlignmentX(CENTER_ALIGNMENT);
     ingredientPanel.add(searchButton);
@@ -116,7 +124,7 @@ public class RecipeSearcher extends JFrame
     mainPanel.add(recipeDropdown, BorderLayout.SOUTH);
     
     this.add(mainPanel);
-}
+  }
 
   /*
    * Open Recipes Listener
@@ -128,7 +136,7 @@ public class RecipeSearcher extends JFrame
   {
 
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(final ActionEvent e)
     {
       // Allow user to select a directory to search through
       JFileChooser directoryChooser = new JFileChooser();
@@ -147,7 +155,7 @@ public class RecipeSearcher extends JFrame
 
   }
 
-  private void loadAllRecipes(File directory)
+  private void loadAllRecipes(final File directory)
   {
     File[] files = directory.listFiles((dir, name) -> name.endsWith(".rcp"));
 
@@ -181,7 +189,7 @@ public class RecipeSearcher extends JFrame
   private class AddIngredientListener implements ActionListener
   {
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(final ActionEvent e)
     {
       String ingredientName = ingredientField.getText();
       if (!ingredientName.isEmpty())
@@ -198,7 +206,7 @@ public class RecipeSearcher extends JFrame
   {
 
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(final ActionEvent e)
     {
       int selectedIngredient = ingredientJList.getSelectedIndex();
 
@@ -217,7 +225,7 @@ public class RecipeSearcher extends JFrame
   {
 
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(final ActionEvent e)
     {
       List<Recipe> searchedRecipes = new ArrayList<>();
 
@@ -282,9 +290,10 @@ public class RecipeSearcher extends JFrame
     }
   };
 
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(() -> 
+    {
       Locale locale = Locale.getDefault(); // Or any other Locale
       UnitConverterWindow window = new UnitConverterWindow(locale);
       window.setVisible(true);

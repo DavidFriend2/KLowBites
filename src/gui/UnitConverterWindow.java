@@ -32,7 +32,7 @@ public class UnitConverterWindow extends JFrame
   private ResourceBundle strings;
   private Locale currentLocale;
   
-  public UnitConverterWindow(Locale locale) 
+  public UnitConverterWindow(final Locale locale) 
   {
     this.currentLocale = locale;
     loadStrings(locale);
@@ -43,16 +43,21 @@ public class UnitConverterWindow extends JFrame
     finish();
   }
   
-  private void loadStrings(Locale locale) {
-    try {
+  private void loadStrings(final Locale locale) 
+  {
+    try 
+    {
       strings = ResourceBundle.getBundle("resources.Strings", locale);
-    } catch (MissingResourceException e) {
-      System.err.println("Could not find resources.Strings for locale " + locale + ": " + e.getMessage());
+    } catch (MissingResourceException e) 
+    {
+      System.err.println("Could not find resources.Strings for locale "
+          + locale + ": " + e.getMessage());
       e.printStackTrace();
     }
   }
   
-  private void initializeWindow() {
+  private void initializeWindow() 
+  {
     setTitle(strings.getString("unit_converter_title"));
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setSize(750, 250);
@@ -71,24 +76,28 @@ public class UnitConverterWindow extends JFrame
     temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
   }
   
-  private void addComponents() {
+  private void addComponents() 
+  {
     addFromToComponents();
     addIngredientComponents();
     addFromAmountComponents();
   }
   
-  private void createActionDependentComponents() {
+  private void createActionDependentComponents() 
+  {
     createToAmountLabel();
     createCalculateButton();
     createResetButton();
   }
   
-  private void finish() {
+  private void finish() 
+  {
     addListeners();
     add(temp, BorderLayout.NORTH);
   }
   
-  private void addFromToComponents() {
+  private void addFromToComponents() 
+  {
     JLabel fromLabel = new JLabel(strings.getString("from_units_label"));
     from.add(fromLabel);
     fromDrop = new JComboBox<>(getLocalizedUnits());
@@ -101,9 +110,10 @@ public class UnitConverterWindow extends JFrame
     from.add(to);
   }
   
-  private String[] getLocalizedUnits() {
+  private String[] getLocalizedUnits() 
+  {
     return new String[] {
-      "", 
+        "", 
       strings.getString("unit_cups"),
       strings.getString("unit_drams"),
       strings.getString("unit_fluid_ounces"),
@@ -120,8 +130,10 @@ public class UnitConverterWindow extends JFrame
     };
   }
   
-  private void addIngredientComponents() {
-    try {
+  private void addIngredientComponents() 
+  {
+    try 
+    {
       Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
       JLabel inLabel = new JLabel(strings.getString("ingredient_label"));
       ingredient.add(inLabel);
@@ -130,7 +142,8 @@ public class UnitConverterWindow extends JFrame
       String[] ingredAr = new String[ingred.size() + 1];
       ingredAr[0] = "";
       int count = 1;
-      for (Ingredient ingre : ingred) {
+      for (Ingredient ingre : ingred) 
+      {
         ingredAr[count] = ingre.getName();
         count++;
       }
@@ -141,13 +154,16 @@ public class UnitConverterWindow extends JFrame
       from.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 10));
       fromTo.add(from, BorderLayout.NORTH);
       
-    }catch(IOException | ClassNotFoundException ex) {
+    }
+    catch(IOException | ClassNotFoundException ex) 
+    {
       System.out.println("Couldnt load ingredients");
     }
     
   }
   
-  private void addFromAmountComponents() {
+  private void addFromAmountComponents() 
+  {
     JLabel fromAmountLabel = new JLabel(strings.getString("from_amount_label"));
     text = new JTextField();
     text.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -157,7 +173,8 @@ public class UnitConverterWindow extends JFrame
     fromAmount.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 10));
   }
   
-  private void createToAmountLabel() {
+  private void createToAmountLabel() 
+  {
     toAmountLabel = new JLabel(strings.getString("to_amount_label") + " ______________");
     fromAndToAmount.add(fromAmount);
     fromAndToAmount.add(toAmountLabel);
@@ -166,55 +183,68 @@ public class UnitConverterWindow extends JFrame
     add(fromTo, BorderLayout.CENTER);
   }
   
-  private void addListeners() {
+  private void addListeners() 
+  {
     IngredientListener iListener = new IngredientListener(fromDrop, toDrop, inDrop);
     fromDrop.addActionListener(iListener);
     toDrop.addActionListener(iListener);
-}
+  }
 
-private void createCalculateButton() {
+  private void createCalculateButton() 
+  {
     ImageIcon icon = createImageIcon("/img/calculate.png");
     Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
     JButton calculator = new JButton(new ImageIcon(img));
     calculator.setPreferredSize(new Dimension(50, 50));
     calculator.setToolTipText(strings.getString("calculate_tooltip"));
-    CalculatorListener listener = new CalculatorListener(toAmountLabel, fromDrop, toDrop, inDrop, text, currentLocale);
+    CalculatorListener listener = new CalculatorListener(toAmountLabel, 
+        fromDrop, toDrop, inDrop, text, currentLocale);
     calculator.addActionListener(listener);
     temp.add(calculator);
-}
+  }
 
-private void createResetButton() {
-  ImageIcon icon2 = createImageIcon("/img/reset.png");
-  Image img2 = icon2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-  JButton reset = new JButton(new ImageIcon(img2));
-  reset.setPreferredSize(new Dimension(50, 50));
-  reset.setToolTipText(strings.getString("reset_tooltip"));
-  ResetListener rlistener = new ResetListener(toAmountLabel, fromDrop, toDrop, inDrop, text, currentLocale);
-  reset.addActionListener(rlistener);
-  temp.add(reset);
-}
+  private void createResetButton() 
+  {
+    ImageIcon icon2 = createImageIcon("/img/reset.png");
+    Image img2 = icon2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    JButton reset = new JButton(new ImageIcon(img2));
+    reset.setPreferredSize(new Dimension(50, 50));
+    reset.setToolTipText(strings.getString("reset_tooltip"));
+    ResetListener rlistener = new ResetListener(toAmountLabel, 
+        fromDrop, toDrop, inDrop, text, currentLocale);
+    reset.addActionListener(rlistener);
+    temp.add(reset);
+  }
   
   
-  private ImageIcon createImageIcon(String path) {
+  private ImageIcon createImageIcon(final String path) 
+  {
     java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null) {
-        return new ImageIcon(imgURL);
-    } else {
-        System.err.println("Couldn't find file: " + path);
-        return null;
+    if (imgURL != null) 
+    {
+      return new ImageIcon(imgURL);
+    } 
+    else 
+    {
+      System.err.println("Couldn't find file: " + path);
+      return null;
     }
   }
   
-  public void updateLanguage(Locale newLocale) {
+  public void updateLanguage(final Locale newLocale) 
+  {
     loadStrings(newLocale);
     updateComponentTexts();
     // Update listeners with new locale
-    ((CalculatorListener)((JButton)temp.getComponent(0)).getActionListeners()[0]).updateLocale(newLocale);
-    ((ResetListener)((JButton)temp.getComponent(1)).getActionListeners()[0]).updateLocale(newLocale);
+    ((CalculatorListener)((JButton)temp.getComponent(0)).
+        getActionListeners()[0]).updateLocale(newLocale);
+    ((ResetListener)((JButton)temp.getComponent(1)).
+        getActionListeners()[0]).updateLocale(newLocale);
     SwingUtilities.updateComponentTreeUI(this);
-}
+  }
 
-  private void updateComponentTexts() {
+  private void updateComponentTexts() 
+  {
     setTitle(strings.getString("unit_converter_title"));
     // Update all labels
     ((JLabel)from.getComponent(0)).setText(strings.getString("from_units_label"));
@@ -238,18 +268,21 @@ private void createResetButton() {
   
   
 
-  private void updateComboBox(JComboBox<String> comboBox, String[] newItems) {
+  private void updateComboBox(final JComboBox<String> comboBox, final String[] newItems) 
+  {
     String selectedItem = (String) comboBox.getSelectedItem();
     comboBox.removeAllItems();
-    for (String item : newItems) {
+    for (String item : newItems) 
+    {
       comboBox.addItem(item);
     }
     comboBox.setSelectedItem(selectedItem);
   }
   
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(() -> 
+    {
       Locale locale = Locale.getDefault(); // Or any other Locale
       UnitConverterWindow window = new UnitConverterWindow(locale);
       window.setVisible(true);

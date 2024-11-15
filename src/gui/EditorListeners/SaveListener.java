@@ -12,7 +12,8 @@ import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
 
-public class SaveListener implements ActionListener {
+public class SaveListener implements ActionListener 
+{
   
   OpenListener openListener;
   JTextField name;
@@ -21,22 +22,26 @@ public class SaveListener implements ActionListener {
   List<Step> fullStepList;
   List<Utensil> fullUtensilList;
 
-  public SaveListener(OpenListener openListener, JTextField name, JTextField serves, List<RecipeIngredient> fullIngredientList, 
-      List<Step> fullStepList, List<Utensil> fullUtensilList) {
-      this.openListener = openListener;
-      this.name = name;
-      this.serves = serves;
-      this.fullIngredientList = fullIngredientList;
-      this.fullStepList = fullStepList;
-      this.fullUtensilList = fullUtensilList;
+  public SaveListener(final OpenListener openListener, final JTextField name, 
+      final JTextField serves, final List<RecipeIngredient> fullIngredientList, 
+      final List<Step> fullStepList, final List<Utensil> fullUtensilList)
+  {
+    this.openListener = openListener;
+    this.name = name;
+    this.serves = serves;
+    this.fullIngredientList = fullIngredientList;
+    this.fullStepList = fullStepList;
+    this.fullUtensilList = fullUtensilList;
   }
   
   @Override
-  public void actionPerformed(ActionEvent e) 
+  public void actionPerformed(final ActionEvent e) 
   {
-    try {
+    try 
+    {
       String fileName = openListener.getCurrentFileName();
-      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
+      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.
+          getText()), fullIngredientList, fullUtensilList, fullStepList);
       
       // If new Recipe
       if (fileName == null)
@@ -47,14 +52,17 @@ public class SaveListener implements ActionListener {
       // Save recipe to its file
       updatedRecipe.saveRecipeToFile(fileName);
       
-    } catch(IOException ex) {
+    } catch(IOException ex) 
+    {
       ex.printStackTrace();
     }
     
   }
   
-  public Recipe getRecipe() {
-    return new Recipe(name.getText(), Integer.parseInt(serves.getText()), fullIngredientList, fullUtensilList, fullStepList);
+  public Recipe getRecipe() 
+  {
+    return new Recipe(name.getText(), Integer.parseInt(serves.
+        getText()), fullIngredientList, fullUtensilList, fullStepList);
   }
   
 }
