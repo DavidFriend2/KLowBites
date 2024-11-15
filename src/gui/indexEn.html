@@ -11,24 +11,23 @@
   </div>
   <button type="button" class="collapsible">Main Window</button>
   <div class="content">
+	<img src="gui/mainEn.png">
     <h5>File</h5>
     <ul>Exit - Closes the current application</ul>
-// screenshot
     <h5>Edit</h5>
+    <ul>Meal - Opens Meal editor window</ul>
     <ul>Recipe - Opens the recipe editor window</ul>
-// screenshot
     <h5>Tools</h5>
     <ul>Calories Calculator - Opens the calorie converter window</ul>
     <ul>Units Converter - Opens the unit converter window</ul>
-// screenshot
     <h5>Search</h5>
     <ul>Recipe Searcher - Opens recipe searcher</ul>
     <ul>Meal Searcher - Opens meal searcher</ul>
-// screenshot
+    <h5>Preferences</h5>
+    <ul>Languages - List of languages to select from</ul>
     <h5>Help</h5>
-    <ul>About - Opens about page</ul>
+    <!-- <ul>About - Opens about page</ul> -->
     <ul>User Guide - Opens current page</ul>
-// screenshot
   </div>
   <button type="button" class="collapsible">Recipe Editor</button>
   <div class="content">
@@ -37,8 +36,8 @@
     <ul>New - Opens a new meal editor</ul>
     <ul>Open - Opens a recipe file</ul>
     <ul>Save - Saves to current file working in</ul>
-    <ul>Save As - </ul>
-    <ul>Reset - Resets all drop down boxes and values</ul>
+    <ul>Save As - Saves the current recipe to specified file name</ul>
+    <ul>Close - Closes current file</ul>
     <h5>Text Box</h5>
     <ul>Name - Name of current recipe</ul>
     <ul>Serves - Amount of people the feeds</ul>
@@ -68,11 +67,23 @@
     <h5>Buttons</h5>
     <ul>Add - Adds step based on action, ingredient, utensil, detail and time given</ul>
     <ul>Delete - Deletes selected step from recipe</ul>
-
   </div>
   <button type="button" class="collapsible">Meal Editor</button>
   <div class="content">
-    <p>test</p>
+    <h3>Top Row Inputs</h3>
+    <h5>Buttons</h5>
+    <ul>New - Opens a new meal editor</ul>
+    <ul>Open - Opens a meal file</ul>
+    <ul>Save - Saves to current file working in</ul>
+    <ul>Save As - Saves the current meal to specified file name</ul>
+    <ul>Close - Closes current window</ul>
+    <h5>Selectables</h5>
+    <ul>Name - Name of current meal</ul>
+    <h5>Buttons</h5>
+    <ul>Add Recipe - Adds recipe to current meal</ul>
+    <ul>Create Recipe - Opens recipe editor to create new recipe</ul>
+    <ul>Delete - Deletes selected recipe from meal</ul>
+
   </div>
   <button type="button" class="collapsible">Unit Conversion</button>
   <div class="content">
@@ -94,9 +105,7 @@
   <div class="content">
     <h5>Buttons</h5>
     <ul>Calculate - Calculates calories for selected values</ul>
-// screenshot
     <ul>Reset - Resets all drop down boxes and values</ul>
-// screenshot
     <h5>Selectable</h5>
     <ul>Ingredient - Ingredient to calculate</ul>
     <ul>Amount - Amount of unit of ingredient to calculate</ul>
@@ -135,7 +144,8 @@
   <div class="content">
     <h5>Buttons</h5>
     <ul>Print - Opens a print screen allowing you to print the current recipe</ul>
-    <ul>Open - Opens <i>Recipe Searcher</i> menu</ul>
+    <ul>Open - Opens file searcher allowing user to open recipe</ul>
+    <ul>Plating time - Time it takes to plate recipe</ul>
     <h5>Viewing</h5>
     <ul>Utensils - Shows needed utensils in current recipe</ul>
     <ul>Steps - Shows list of steps in order</ul>

@@ -5,7 +5,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -460,7 +463,7 @@ public class Main extends JFrame
 
     // Create and add an About menu item
     JMenuItem about = new JMenuItem(strings.getString("menu_item_about"));
-    helpMenu.add(about);
+//    helpMenu.add(about);
 
     // Create and add a User Guide menu item
     JMenuItem userGuide = new JMenuItem(strings.getString("menu_item_user_guide"));
@@ -489,33 +492,66 @@ public class Main extends JFrame
   }
 
   // Open the HTML user guide in the default browser
-  private void openHtmlGuide()
-  {
-    try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath))
-    {
-      if (inputStream == null)
-      {
-        System.err.println("Resource not found: " + htmlPath);
-        return;
-      }
+  private void openHtmlGuide() {
+	    try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath)) {
+	        if (inputStream == null) {
+	            System.err.println("Resource not found: " + htmlPath);
+	            return;
+	        }
 
-      // Create a temporary file to store the HTML content
-      File tempFile = File.createTempFile("tempIndex", ".html");
-      Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	        // Create a temporary directory for the HTML and images
+	        File tempDir = Files.createTempDirectory("tempHtml").toFile();
 
-      // Open the temporary file in the default browser
-      if (Desktop.isDesktopSupported())
-      {
-        Desktop.getDesktop().browse(tempFile.toURI());
-      }
+	        // Copy the HTML file to the temporary directory
+	        File tempHtmlFile = new File(tempDir, "index.html");
+	        Files.copy(inputStream, tempHtmlFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-      tempFile.deleteOnExit(); // Schedule the temporary file for deletion when the JVM exits
-    }
-    catch (IOException m)
-    {
-      m.printStackTrace();
-    }
-  }
+	        // Copy all images from the resources to the temporary directory
+	        // Get the list of images in the 'gui' folder inside the JAR
+	        copyImagesFromGuiFolder(tempDir);
+
+	        // Update HTML content if needed to ensure image paths are correct
+	        String htmlContent = new String(Files.readAllBytes(tempHtmlFile.toPath()), StandardCharsets.UTF_8);
+	        htmlContent = htmlContent.replaceAll("src=\"../gui/", "src=\"gui/");  // Correct paths in HTML
+	        Files.write(tempHtmlFile.toPath(), htmlContent.getBytes(StandardCharsets.UTF_8));
+
+	        // Open the HTML file in the default browser
+	        if (Desktop.isDesktopSupported()) {
+	            Desktop.getDesktop().browse(tempHtmlFile.toURI());
+	        }
+
+	        tempDir.deleteOnExit();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	private void copyImagesFromGuiFolder(File destinationDir) throws IOException {
+	    // Assuming images are in the "gui" folder inside the JAR
+	    String[] imageFiles = {
+	        "gui/calculate.png",
+	        "gui/mainEn.png"
+	    };
+
+	    for (String imagePath : imageFiles) {
+	        copyResource(imagePath, destinationDir);
+	    }
+	}
+
+	private void copyResource(String resourcePath, File destinationDir) throws IOException {
+	    // Copy resource from JAR to the temporary directory
+	    try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resourcePath)) {
+	        if (resourceStream == null) {
+	            System.err.println("Resource not found: " + resourcePath);
+	            return;
+	        }
+
+	        // Ensure the parent directories for the destination file exist
+	        File destFile = new File(destinationDir, resourcePath);
+	        destFile.getParentFile().mkdirs();
+	        Files.copy(resourceStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    }
+	}
 
   // Main method to start the application
   public static void main(String[] args)
