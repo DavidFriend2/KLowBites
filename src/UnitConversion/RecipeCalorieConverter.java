@@ -35,13 +35,11 @@ public class RecipeCalorieConverter
         {
           currUnit = unit;
           break;
-        } else if ("individual".equals(getIngredient.getUnit().toLowerCase())) 
-        {
-          currUnit = MassVolumeConverter.Unit.OUNCES;
-          break;
-        }
+        } 
       }
-          
+      if (currUnit == null)  {
+        currUnit = MassVolumeConverter.Unit.OUNCES;
+      }
       totalCalories += CalorieConverter.convert(currIngredient,
           getIngredient.getAmount(), currUnit);
     }  
