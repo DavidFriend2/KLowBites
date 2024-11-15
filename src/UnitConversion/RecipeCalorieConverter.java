@@ -6,7 +6,6 @@ import Information.Recipe;
 
 public class RecipeCalorieConverter
 {
-  @SuppressWarnings("unlikely-arg-type")
   public static double convertRecipe(Recipe recipe) 
   {
     double totalCalories = 0.0;
@@ -18,9 +17,19 @@ public class RecipeCalorieConverter
       MassVolumeConverter.Unit currUnit = null; // turn a String into a Unit for the CalorieConverter convert method
       for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits())
       {
-        if (unit.equals(getIngredient.getUnit()))
+        String unitTest = unit.name();
+        if ((unitTest.toLowerCase().equals(getIngredient.getUnit().toLowerCase())))
         {
           currUnit = unit;
+          break;
+        } else if (unitTest.toLowerCase().substring(0, unitTest.length() - 1).equals(getIngredient.getUnit().toLowerCase())) {
+          currUnit = unit;
+          break;
+        } else if (unitTest.toLowerCase().substring(0, unitTest.length() - 2).equals(getIngredient.getUnit().toLowerCase())) {
+          currUnit = unit;
+          break;
+        } else if ("individual".equals(getIngredient.getUnit().toLowerCase())) {
+          currUnit = MassVolumeConverter.Unit.OUNCES;
           break;
         }
       }

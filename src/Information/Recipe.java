@@ -163,7 +163,7 @@ public class Recipe implements Serializable
    ingredients2.add(new RecipeIngredient("Pepper", "black", 1, "pinch"));
    ingredients2.add(new RecipeIngredient("Milk", null, 1.25, "cup"));
    ingredients2.add(new RecipeIngredient("American cheese", "shredded", 1.5, "cup"));
-   ingredients2.add(new RecipeIngredient("Tomato", "sliced medium", 1, "indivudal"));
+   ingredients2.add(new RecipeIngredient("Tomato", "sliced medium", 1, "individual"));
    
    List<Utensil> utensils2 = new ArrayList<>();
    utensils2.add(new Utensil("Pot", "large"));
