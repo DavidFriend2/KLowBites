@@ -256,7 +256,7 @@ public class RecipeEditor extends JFrame {
     openListener = new OpenListener(nameText, servesText, ingNameInput,
         ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
         utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
-        fullStepList, fullUtensilList, dlm, dlm2, dlm3);
+        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale);
     openButton.addActionListener(openListener);
     imagePanel.add(openButton);
 
@@ -278,7 +278,7 @@ public class RecipeEditor extends JFrame {
     saveAsButton.setPreferredSize(new Dimension(50, 50));
     saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
     SaveAsListener saveAsListener = new SaveAsListener(nameText, 
-        servesText, fullIngredientList, fullUtensilList, fullStepList);
+        servesText, fullIngredientList, fullUtensilList, fullStepList, currentLocale);
     saveAsButton.addActionListener(saveAsListener);
     imagePanel.add(saveAsButton);
       

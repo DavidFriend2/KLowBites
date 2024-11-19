@@ -4,12 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Information.Recipe;
@@ -38,6 +41,7 @@ public class OpenListener implements ActionListener
   DefaultListModel<String> dlm;
   DefaultListModel<String> dlm2;
   DefaultListModel<String> dlm3;
+  private ResourceBundle strings;
   
   public OpenListener(final JTextField name, final JTextField serves, 
       final JTextField ingNameInput, final JTextField ingDetailsInput, 
@@ -46,7 +50,7 @@ public class OpenListener implements ActionListener
       final JComboBox stepUtensilCombo, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
       final DefaultListModel<String> dlm, final DefaultListModel<String> dlm2, 
-      final DefaultListModel<String> dlm3) 
+      final DefaultListModel<String> dlm3, Locale locale) 
   {
     this.name = name;
     this.serves = serves;
@@ -65,12 +69,26 @@ public class OpenListener implements ActionListener
     this.dlm = dlm;
     this.dlm2 = dlm2;
     this.dlm3 = dlm3;
+    this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
   
   @SuppressWarnings("unchecked")
   @Override
   public void actionPerformed(final ActionEvent e) 
   {
+    // Set localized strings for JFileChooser
+    UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
+    UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
+    UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+    UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
+    UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
+    UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
+    UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
+    UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+    UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
+    UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
+    UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
+    UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
     JFileChooser chooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "RCP files", "rcp");

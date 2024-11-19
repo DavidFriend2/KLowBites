@@ -38,13 +38,15 @@ public class MealEditor extends JFrame
   private JButton close;
   private Map<JPanel, RecipeEditor> recipeEditorPanels = new HashMap<>();
   private List<RecipeEditor> recipeEditors = new ArrayList<>();
+  private ResourceBundle strings;
   
   /**
    * default constructor for the window.
    */
   public MealEditor(final Locale locale) 
   {
-    ResourceBundle strings = ResourceBundle.getBundle("resources.Strings", locale);
+    strings = ResourceBundle.getBundle("resources.Strings", 
+        locale); // Load the resource bundle based on locale
 
     setTitle(strings.getString("meal_editor_title"));
     setSize(1000, 400);
@@ -318,6 +320,20 @@ public class MealEditor extends JFrame
     @Override
     public void actionPerformed(final ActionEvent e) 
     {
+      UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add this line
+      UIManager.put("FileChooser.saveInLabelText", strings.getString("file_chooser_save_in"));
+      UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
+      UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+      UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
+      UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
+      UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
+      UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
+      UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+      UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
+      UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
+      UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
+      UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
+      
       //Allow user to type in filename
       JFileChooser fileChooser = new JFileChooser();
       fileChooser.setDialogTitle("Save Recipe As");
@@ -376,6 +392,21 @@ public class MealEditor extends JFrame
     @Override
     public void actionPerformed(final ActionEvent e) 
     {
+      
+      UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name"));
+      UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
+      UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
+      UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+      UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
+      UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
+      UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
+      UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
+      UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+      UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
+      UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
+      UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
+      UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
+
       JFileChooser chooser = new JFileChooser();
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
               "MEL files", "mel");
@@ -526,7 +557,7 @@ public class MealEditor extends JFrame
     SwingUtilities.invokeLater(() -> 
     {
       // You can change this to the desired default locale
-      Locale desiredLocale = Locale.getDefault();
+      Locale desiredLocale = Locale.ITALIAN;
       
       // Create a new MealEditor instance with the desired locale
       MealEditor mealEditor = new MealEditor(desiredLocale);

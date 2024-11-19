@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import Information.*;
 
@@ -138,6 +139,20 @@ public class RecipeSearcher extends JFrame
     @Override
     public void actionPerformed(final ActionEvent e)
     {
+      // Set localized strings for JFileChooser
+      UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add this line
+      UIManager.put("FileChooser.saveInLabelText", strings.getString("file_chooser_save_in"));
+      UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
+      UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+      UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
+      UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
+      UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
+      UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
+      UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+      UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
+      UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
+      UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
+      UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
       // Allow user to select a directory to search through
       JFileChooser directoryChooser = new JFileChooser();
       directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -294,7 +309,7 @@ public class RecipeSearcher extends JFrame
   {
     SwingUtilities.invokeLater(() -> 
     {
-      Locale locale = Locale.getDefault(); // Or any other Locale
+      Locale locale = Locale.ITALIAN; // Or any other Locale
       RecipeSearcher recipeSearcher = new RecipeSearcher(locale);
       recipeSearcher.setVisible(true);
     });

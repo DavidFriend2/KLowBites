@@ -32,26 +32,19 @@ public class Main extends JFrame
   public static String htmlPath;
 
   // Constructor that takes a Locale parameter for internationalization
-  public Main(final Locale locale)
-  {
-    currentLocale = locale;
+  public Main(Locale locale) {
     loadStrings(locale);
-    setHtmlPath(locale);
     System.out.println("ResourceBundle loaded: " + (strings != null));
-
-    if (strings != null)
-    {
-      initializeWindow();
-      loadConfig();
-      initializeLogo();
-      createMenuBar();
-      createMainPanel();
+    if (strings != null) {
+        initializeWindow();
+        loadConfig();
+        initializeLogo();
+        createMenuBar();
+        createMainPanel();
+    } else {
+        System.err.println("Cannot initialize window due to missing ResourceBundle");
     }
-    else
-    {
-      System.err.println("Cannot initialize window due to missing ResourceBundle");
-    }
-  }
+}
 
   // Method to load configuration properties from a file
   private void loadConfig()
