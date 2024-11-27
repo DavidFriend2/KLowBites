@@ -87,6 +87,11 @@ public class MassVolumeConverter
   {
     return Unit.values();
   }
+  
+  public static Unit[] getWeights()
+  {
+    return MassVolumeConverter.WEIGHTS;
+  }
 
   /**
    * Main method for testing the converter.
