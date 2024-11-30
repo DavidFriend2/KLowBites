@@ -42,6 +42,7 @@ public class VolumeUnitConverter
       case QUARTS: return value * 32.0;
       case GALLONS: return value * 128.0;
       case MILLILITERS: return value / 29.57353;
+      // case LITERS: return value / 33.8140227;
       case FLUID_OUNCES: return value;
       default: throw new IllegalArgumentException("Unsupported unit: " + from);
     }
@@ -67,6 +68,7 @@ public class VolumeUnitConverter
       case QUARTS: return value / 32.0;
       case GALLONS: return value / 128.0;
       case MILLILITERS: return value * 29.57353;
+      // case LITERS: return value * 33.8140227;
       case FLUID_OUNCES: return value;
       default: throw new IllegalArgumentException("Unsupported unit: " + to);
     }

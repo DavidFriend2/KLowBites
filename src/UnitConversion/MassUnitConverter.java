@@ -41,6 +41,8 @@ public class MassUnitConverter
         return value / 16; // Convert drams to ounces
       case POUNDS:
         return value * 16; // Convert pounds to ounces
+      // case KILOGRAMs:
+        // return value * 35.273962;
       default:
         throw new IllegalArgumentException("Unsupported mass unit: " + from);
     }
@@ -66,6 +68,8 @@ public class MassUnitConverter
         return value * 16; // Convert ounces to drams
       case POUNDS:
         return value / 16; // Convert ounces to pounds
+      // case KILOGRAMS:
+        // return value / 35.273962;
       default:
         throw new IllegalArgumentException("Unsupported mass unit: " + to);
     }
