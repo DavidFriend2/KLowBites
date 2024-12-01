@@ -26,6 +26,7 @@ public class UnitConverterWindow extends JFrame
   private JComboBox<String> fromDrop;
   private JComboBox<String> toDrop;
   private JComboBox<String> inDrop;
+  private JComboBox<String> unitsComboBox;
   private JTextField text;
   private JLabel toAmountLabel;
   
@@ -95,6 +96,21 @@ public class UnitConverterWindow extends JFrame
     addListeners();
     add(temp, BorderLayout.NORTH);
   }
+  
+  public void updateUnits(UnitSystemPreferences.UnitSystem unitSystem) {
+    unitsComboBox.removeAllItems();
+    if (unitSystem == UnitSystemPreferences.UnitSystem.METRIC) {
+        unitsComboBox.addItem(strings.getString("unit_milliliters"));
+        unitsComboBox.addItem(strings.getString("unit_grams"));
+        // Add other metric units
+    } else {
+        unitsComboBox.addItem(strings.getString("unit_cups"));
+        unitsComboBox.addItem(strings.getString("unit_ounces"));
+        // Add other imperial units
+    }
+    revalidate();
+    repaint();
+}
   
   private void addFromToComponents() 
   {

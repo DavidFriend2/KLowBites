@@ -208,23 +208,48 @@ public class Main extends JFrame
   }
 
   // Create the "File" menu
-  private void createFileMenu(final JMenuBar menuBar)
-  {
-    // Create a new JMenu for the File menu, with an internationalized label
+  private void createFileMenu(JMenuBar menuBar) {
     JMenu fileMenu = new JMenu(strings.getString("menu_file"));
-
-    // Add the File menu to the menu bar
     menuBar.add(fileMenu);
 
-    // Create a menu item for exiting the application
     JMenuItem exitItem = new JMenuItem(strings.getString("menu_item_exit"));
-
-    // Add an action listener to exit the application when this item is clicked
     exitItem.addActionListener(e -> System.exit(0));
-
-    // Add the exit item to the File menu
     fileMenu.add(exitItem);
-  }
+
+    // Add preferences submenu for unit selection
+    JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
+    fileMenu.add(preferencesMenu);
+
+    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(strings.getString("menu_metric_units"));
+    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(strings.getString("menu_imperial_units"));
+
+    ButtonGroup unitGroup = new ButtonGroup();
+    unitGroup.add(metricItem);
+    unitGroup.add(imperialItem);
+
+    preferencesMenu.add(metricItem);
+    preferencesMenu.add(imperialItem);
+
+    metricItem.setSelected(UnitSystemPreferences.isMetric());
+    imperialItem.setSelected(UnitSystemPreferences.isImperial());
+
+    metricItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.METRIC));
+    imperialItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.IMPERIAL));
+}
+  
+  private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem) {
+    UnitSystemPreferences.setCurrentUnitSystem(unitSystem);
+    
+    if (converterWindow != null && converterWindow.isDisplayable()) {
+        converterWindow.updateUnits(unitSystem);
+    }
+    
+    if (calorieWindow != null && calorieWindow.isDisplayable()) {
+        calorieWindow.updateUnits();
+    }
+    
+    SwingUtilities.updateComponentTreeUI(this); // Refresh UI if needed
+}
 
   // Create the "Edit" menu
   private void createEditMenu(final JMenuBar menuBar)
@@ -321,7 +346,7 @@ public class Main extends JFrame
       if (calorieWindow == null || !calorieWindow.isDisplayable())
       {
         // Create a new calorie calculator window and make it visible
-        calorieWindow = new CalorieCalculatorWindow(currentLocale);
+        calorieWindow = new CalorieCalculatorWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem());
         calorieWindow.setVisible(true);
       }
       else
@@ -419,7 +444,7 @@ public class Main extends JFrame
     if (calorieWindow != null && calorieWindow.isDisplayable())
     {
       calorieWindow.dispose();
-      calorieWindow = new CalorieCalculatorWindow(currentLocale);
+      calorieWindow = new CalorieCalculatorWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem());
       calorieWindow.setVisible(true);
     }
 

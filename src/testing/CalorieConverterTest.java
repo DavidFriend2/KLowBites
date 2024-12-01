@@ -21,7 +21,7 @@ class CalorieConverterTest
     Ingredient apple = Ingredient.getIngredientbyName("Apple");
     
     // Pounds to calories
-    assertEquals("2394.97", String.format("%.2f", CalorieConverter.convert(apple, 12, 
+    assertEquals("2394", String.format("%.2f", CalorieConverter.convert(apple, 12, 
         MassVolumeConverter.Unit.POUNDS)));
     
     // Ounces to calories

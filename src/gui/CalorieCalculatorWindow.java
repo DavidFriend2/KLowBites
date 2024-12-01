@@ -45,15 +45,16 @@ public class CalorieCalculatorWindow extends JFrame
 
   private ResourceBundle strings;
 
-  public CalorieCalculatorWindow(final Locale locale) {
+  public CalorieCalculatorWindow(Locale locale, UnitSystemPreferences.UnitSystem unitSystem) {
     strings = ResourceBundle.getBundle("resources.Strings", locale);
     loadStrings(locale);
     initializeWindow();
     createPanels();
-    addComponentsToPanels();
+    addComponentsToPanels(unitSystem); // Pass unit system here
     assembleMainPanel();
     setupActionListeners();
-  }
+}
+  
   
   public void updateLanguage(final Locale newLocale) 
   {
@@ -64,41 +65,31 @@ public class CalorieCalculatorWindow extends JFrame
 
   private void updateComponentTexts() 
   {
-    setTitle(strings.getString("calorie_calculator_title"));
-    
-    calculateButton.setToolTipText(strings.getString("calorie_calculator_calculate_tooltip"));
-    resetButton.setToolTipText(strings.getString("calorie_calculator_reset_tooltip"));
-    
-    // Update labels
-    ((JLabel)inputPanel.getComponent(0)).setText(
-        strings.getString("calorie_calculator_ingredient_label"));
-    ((JLabel)inputPanel.getComponent(2)).setText(
-        strings.getString("calorie_calculator_amount_label"));
-    ((JLabel)inputPanel.getComponent(4)).setText(
-        strings.getString("calorie_calculator_units_label"));
-    ((JLabel)caloriesPanel.getComponent(0)).setText(
-        strings.getString("calorie_calculator_calories_label"));
-    
-    // Update units in the combo box
-    unitsComboBox.removeAllItems();
-    unitsComboBox.addItem("");
-    unitsComboBox.addItem(strings.getString("unit_pinches"));
-    unitsComboBox.addItem(strings.getString("unit_teaspoons"));
-    unitsComboBox.addItem(strings.getString("unit_tablespoons"));
-    unitsComboBox.addItem(strings.getString("unit_fluid_ounces"));
-    unitsComboBox.addItem(strings.getString("unit_cups"));
-    unitsComboBox.addItem(strings.getString("unit_pints"));
-    unitsComboBox.addItem(strings.getString("unit_quarts"));
-    unitsComboBox.addItem(strings.getString("unit_gallons"));
-    unitsComboBox.addItem(strings.getString("unit_milliliters"));
-    unitsComboBox.addItem(strings.getString("unit_drams"));
-    unitsComboBox.addItem(strings.getString("unit_grams"));
-    unitsComboBox.addItem(strings.getString("unit_ounces"));
-    unitsComboBox.addItem(strings.getString("unit_pounds"));
-    
-    // Refresh the layout
-    revalidate();
-    repaint();
+      setTitle(strings.getString("calorie_calculator_title"));
+      
+      calculateButton.setToolTipText(strings.getString("calorie_calculator_calculate_tooltip"));
+      resetButton.setToolTipText(strings.getString("calorie_calculator_reset_tooltip"));
+      
+      // Update labels
+      ((JLabel)inputPanel.getComponent(0)).setText(
+          strings.getString("calorie_calculator_ingredient_label"));
+      ((JLabel)inputPanel.getComponent(2)).setText(
+          strings.getString("calorie_calculator_amount_label"));
+      ((JLabel)inputPanel.getComponent(4)).setText(
+          strings.getString("calorie_calculator_units_label"));
+      ((JLabel)caloriesPanel.getComponent(0)).setText(
+          strings.getString("calorie_calculator_calories_label"));
+      
+      // Update units in the combo box
+      unitsComboBox.removeAllItems();
+      String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
+      for (String unit : units) {
+          unitsComboBox.addItem(unit);
+      }
+      
+      // Refresh the layout
+      revalidate();
+      repaint();
   }
   
   private void loadStrings(final Locale locale) 
@@ -131,10 +122,10 @@ public class CalorieCalculatorWindow extends JFrame
     caloriesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
   }
 
-  private void addComponentsToPanels() 
+  private void addComponentsToPanels(UnitSystemPreferences.UnitSystem unitSystem) 
   {
     addIconsToPanel();
-    addInputComponents();
+    addInputComponents(unitSystem);
     addCaloriesComponents();
   }
 
@@ -147,6 +138,13 @@ public class CalorieCalculatorWindow extends JFrame
     iconPanel.add(calculateButton);
     iconPanel.add(resetButton);
   }
+  
+  public void updateUnits() {
+    String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
+    unitsComboBox.setModel(new DefaultComboBoxModel<>(units));
+    // Any other necessary updates
+}
+  
 
   private JButton createIconButton(final String imagePath, 
       final int width, final int height, final String toolTipKey) 
@@ -167,65 +165,35 @@ public class CalorieCalculatorWindow extends JFrame
     return button;
   }
 
-  private void addInputComponents() 
-  {
-    try 
-    {
-      // load in ingredients automatically
-      Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
-
-      List<Ingredient> ingredientsList = Ingredient.getIngredients();
-      ingredientsList.sort(Comparator.comparing(Ingredient::getName));
-      
-      inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
-      
-      String[] ingredientChoices = new String[ingredientsList.size() + 1];
-      ingredientChoices[0] = ""; // Default empty item
-
-      int count = 1;
-      for (Ingredient currIngredient : ingredientsList) 
-      {
-        ingredientChoices[count] = currIngredient.getName(); // Use English name directly
+  private void addInputComponents(UnitSystemPreferences.UnitSystem unitSystem) {
+    inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
+    
+    List<Ingredient> ingredientsList = Ingredient.getIngredients();
+    String[] ingredientChoices = new String[ingredientsList.size() + 1];
+    ingredientChoices[0] = "";
+    
+    int count = 1;
+    for (Ingredient currIngredient : ingredientsList) {
+        ingredientChoices[count] = currIngredient.getName();
         count++;
-      }
-
-      ingredientComboBox = new JComboBox<>(ingredientChoices);
-      inputPanel.add(ingredientComboBox);
-
-      inputPanel.add(new JLabel(strings.getString("calorie_calculator_amount_label")));
-      
-      amountField = new JTextField(5);
-      inputPanel.add(amountField);
-
-      inputPanel.add(new JLabel(strings.getString("calorie_calculator_units_label")));
-      
-      unitsComboBox = new JComboBox<>(new String[]{
-          "", 
-          strings.getString("unit_pinches"),
-          strings.getString("unit_teaspoons"),
-          strings.getString("unit_tablespoons"),
-          strings.getString("unit_fluid_ounces"),
-          strings.getString("unit_cups"),
-          strings.getString("unit_pints"),
-          strings.getString("unit_quarts"),
-          strings.getString("unit_gallons"),
-          strings.getString("unit_milliliters"),
-          strings.getString("unit_drams"),
-          strings.getString("unit_grams"),
-          strings.getString("unit_ounces"),
-          strings.getString("unit_pounds")
-      });
-      
-      inputPanel.add(unitsComboBox);
-      
-      
-    }
-    catch(IOException | ClassNotFoundException ex) 
-    {
-      System.out.println("Couldnt load ingredients");
     }
     
-  }
+    ingredientComboBox = new JComboBox<>(ingredientChoices);
+    inputPanel.add(ingredientComboBox);
+
+    inputPanel.add(new JLabel(strings.getString("calorie_calculator_amount_label")));
+    
+    amountField = new JTextField(5);
+    inputPanel.add(amountField);
+
+    inputPanel.add(new JLabel(strings.getString("calorie_calculator_units_label")));
+    
+    String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
+    unitsComboBox = new JComboBox<>(units);
+    inputPanel.add(unitsComboBox);
+    
+    inputPanel.add(unitsComboBox);
+}
 
   private void addCaloriesComponents() 
   {
@@ -316,7 +284,8 @@ public class CalorieCalculatorWindow extends JFrame
       return MassVolumeConverter.Unit.TABLESPOONS;
     if (localizedUnit.equals(strings.getString("unit_fluid_ounces"))) 
       return MassVolumeConverter.Unit.FLUID_OUNCES;
-    if (localizedUnit.equals(strings.getString("unit_cups"))) return MassVolumeConverter.Unit.CUPS;
+    if (localizedUnit.equals(strings.getString("unit_cups"))) 
+      return MassVolumeConverter.Unit.CUPS;
     if (localizedUnit.equals(strings.getString("unit_pints"))) 
       return MassVolumeConverter.Unit.PINTS;
     if (localizedUnit.equals(strings.getString("unit_quarts"))) 
@@ -403,12 +372,12 @@ public class CalorieCalculatorWindow extends JFrame
   }
 
   public static void main(final String[] args) {
-    SwingUtilities.invokeLater(() -> 
-    {
-      Locale locale = Locale.getDefault(); // change language
-      CalorieCalculatorWindow window = new CalorieCalculatorWindow(
-          locale); // Pass locale to constructor
-      window.setVisible(true);
+    SwingUtilities.invokeLater(() -> {
+        Locale locale = Locale.getDefault(); // Use system default or specified locale
+        UnitSystemPreferences.UnitSystem unitSystem = UnitSystemPreferences.getCurrentUnitSystem(); // Get current unit system
+        
+        CalorieCalculatorWindow window = new CalorieCalculatorWindow(locale, unitSystem); // Pass both parameters
+        window.setVisible(true);
     });
-  }
+}
 }
