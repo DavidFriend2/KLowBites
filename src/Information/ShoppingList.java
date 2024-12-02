@@ -84,7 +84,7 @@ public class ShoppingList
   {
     Recipe converted = recipeToChange;
 
-    double convert = this.numofpeople / converted.getServes();
+    double convert = (this.numofpeople) * 1.0 / converted.getServes();
 
     // change the amount of ingredients based on the number of people
     for (RecipeIngredient ri : converted.getIngredients())
@@ -104,7 +104,6 @@ public class ShoppingList
     // Check if both from and to are mass units
     if (isMass(from) && isMass(to))
     {
-      // Perform mass to mass conversion using the MassUnitConverter
       return MassUnitConverter.convert(value, from, to);
     }
 
@@ -121,11 +120,9 @@ public class ShoppingList
    * Get unit from string method
    */
   private MassVolumeConverter.Unit getUnitFromString(String unitString) {
-    // Normalize input: trim and convert to uppercase for standard comparison
-    String normalizedUnitString = unitString.trim().toLowerCase();
+    String unit = unitString.trim().toLowerCase();
 
-    // Map user-friendly strings to enum constants
-    switch (normalizedUnitString) {
+    switch (unit) {
         case "cup":
         case "cups":
             return MassVolumeConverter.Unit.CUPS;
@@ -138,9 +135,9 @@ public class ShoppingList
         case "pound":
         case "pounds":
             return MassVolumeConverter.Unit.POUNDS;
-        case "liter":
-        case "liters":
-            return MassVolumeConverter.Unit.MILLILITERS;  // Mapping liters to milliliters as an example
+        case "milliliter":
+        case "milliliters":
+            return MassVolumeConverter.Unit.MILLILITERS; 
         case "teaspoon":
         case "teaspoons":
             return MassVolumeConverter.Unit.TEASPOONS;

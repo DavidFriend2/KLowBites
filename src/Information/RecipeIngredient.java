@@ -47,7 +47,7 @@ public class RecipeIngredient implements Serializable
   @Override
   public String toString()
   {
-    return amount + " " + this.unit + " " + this.name.toLowerCase();
+    return String.format("%.3f %s %s", this.amount, this.unit, this.name.toLowerCase());
   }
   
   //Setters
