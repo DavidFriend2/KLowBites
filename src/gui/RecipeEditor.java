@@ -136,10 +136,8 @@ public class RecipeEditor extends JFrame {
     JTextField ingAmountInput = new JTextField(3);
     JLabel ingUnits = new JLabel(strings.getString("label_units"));
     JComboBox<String> ingUnitCombo = new JComboBox<String>();
-    ingUnitCombo.addItem("");
-    for (MassVolumeConverter.Unit unit : MassVolumeConverter.getUnits()) 
-    {
-      ingUnitCombo.addItem(unit.name());
+    for (String unit : UnitSystemPreferences.getUnitsForCurrentSystem(strings)) {
+        ingUnitCombo.addItem(unit);
     }
     JButton ingAdd = new JButton(strings.getString("button_add"));
 
@@ -648,7 +646,7 @@ public class RecipeEditor extends JFrame {
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> 
     {
-      Locale locale = Locale.ITALIAN; // to change language (:
+      Locale locale = Locale.getDefault(); // to change language (:
       new RecipeEditor(locale).setVisible(true);
     });
   }
