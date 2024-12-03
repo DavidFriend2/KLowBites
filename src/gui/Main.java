@@ -34,6 +34,7 @@ public class Main extends JFrame
   // Constructor that takes a Locale parameter for internationalization
   public Main(Locale locale) {
     loadStrings(locale);
+    setHtmlPath(locale);
     System.out.println("ResourceBundle loaded: " + (strings != null));
     if (strings != null) {
         initializeWindow();
@@ -200,10 +201,8 @@ public class Main extends JFrame
     // Call methods to create each menu and add them to the menu bar
     createFileMenu(menuBar);
     createEditMenu(menuBar);
-    createViewMenu(menuBar);
     createToolsMenu(menuBar);
     createSearchMenu(menuBar);
-    createPreferencesMenu(menuBar); // New menu for preferences
     createHelpMenu(menuBar);
   }
 
@@ -283,27 +282,6 @@ public class Main extends JFrame
     });
   }
 
-  // Create the "View" menu
-  private void createViewMenu(final JMenuBar menuBar)
-  {
-    // Create a new JMenu for the View menu, with an internationalized label
-    JMenu viewMenu = new JMenu(strings.getString("menu_view"));
-
-    // Add the View menu to the menu bar
-    menuBar.add(viewMenu);
-
-    // Create a menu item for viewing the recipe process
-    JMenuItem viewProcessItem = new JMenuItem(strings.getString("menu_item_process"));
-    viewMenu.add(viewProcessItem);
-
-    // Add an action listener to open the recipe process viewer when this item is clicked
-    viewProcessItem.addActionListener(e -> 
-    {
-      RecipeProcessViewer processViewer = new RecipeProcessViewer(
-          Recipe.getRecipes().get(0), currentLocale);
-      processViewer.setVisible(true);
-    });
-  }
 
   // Add the "Tools" menu to our menu bar
   private void createToolsMenu(final JMenuBar menuBar)
@@ -328,7 +306,7 @@ public class Main extends JFrame
       if (converterWindow == null || !converterWindow.isDisplayable())
       {
         // Create a new converter window and make it visible
-        converterWindow = new UnitConverterWindow(currentLocale);
+        converterWindow = new UnitConverterWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem());
         converterWindow.setVisible(true);
       }
       else
@@ -388,42 +366,6 @@ public class Main extends JFrame
     });
   }
 
-  //Create the Preferences menu for language selection
-  @SuppressWarnings("deprecation")
-  private void createPreferencesMenu(final JMenuBar menuBar)
-  {
-    // Create a new menu called "Preferences" using internationalized string
-    JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
-    menuBar.add(preferencesMenu);
-
-    // Create a submenu for language selection using internationalized string
-    JMenu languageMenu = new JMenu(strings.getString("menu_languages"));
-    preferencesMenu.add(languageMenu);
-
-    // Create menu items for each supported language using internationalized strings
-    JMenuItem englishItem = new JMenuItem(strings.getString("language_english"));
-    JMenuItem italianItem = new JMenuItem(strings.getString("language_italian"));
-    JMenuItem spanishItem = new JMenuItem(strings.getString("language_spanish"));
-
-    // Add language items to the language menu
-    languageMenu.add(englishItem);
-    languageMenu.add(italianItem);
-    languageMenu.add(spanishItem);
-
-    // Add action listeners to change the language when a menu item is clicked
-    englishItem.addActionListener(e -> changeLanguage(new Locale("en", "US")));
-    italianItem.addActionListener(e -> changeLanguage(Locale.ITALIAN));
-    spanishItem.addActionListener(e -> changeLanguage(new Locale("es", "ES")));
-  }
-  // Method to change the application's language
-  private void changeLanguage(final Locale newLocale)
-  {
-    currentLocale = newLocale;
-    loadStrings(currentLocale); // Load new language strings
-    setHtmlPath(currentLocale); // Set the path for language-specific HTML files
-    refreshUI(); // Update the UI with the new language
-  }
-
   // Refresh the entire UI after a language change
   private void refreshUI()
   {
@@ -437,7 +379,7 @@ public class Main extends JFrame
     if (converterWindow != null && converterWindow.isDisplayable())
     {
       converterWindow.dispose(); // Close the old window
-      converterWindow = new UnitConverterWindow(currentLocale); // Create a new one with updated
+      converterWindow = new UnitConverterWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem()); // Create a new one with updated
                                                                 // language
       converterWindow.setVisible(true);
     }

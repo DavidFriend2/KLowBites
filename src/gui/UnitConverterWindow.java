@@ -33,16 +33,15 @@ public class UnitConverterWindow extends JFrame
   private ResourceBundle strings;
   private Locale currentLocale;
   
-  public UnitConverterWindow(final Locale locale) 
-  {
+  public UnitConverterWindow(final Locale locale, UnitSystemPreferences.UnitSystem unitSystem) {
     this.currentLocale = locale;
     loadStrings(locale);
     initializeWindow();
     createPanels();
-    addComponents();
+    addComponents(unitSystem);
     createActionDependentComponents();
     finish();
-  }
+}
   
   private void loadStrings(final Locale locale) 
   {
@@ -77,12 +76,11 @@ public class UnitConverterWindow extends JFrame
     temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
   }
   
-  private void addComponents() 
-  {
-    addFromToComponents();
+  private void addComponents(UnitSystemPreferences.UnitSystem unitSystem) {
+    addFromToComponents(unitSystem);
     addIngredientComponents();
     addFromAmountComponents();
-  }
+}
   
   private void createActionDependentComponents() 
   {
@@ -98,33 +96,25 @@ public class UnitConverterWindow extends JFrame
   }
   
   public void updateUnits(UnitSystemPreferences.UnitSystem unitSystem) {
-    unitsComboBox.removeAllItems();
-    if (unitSystem == UnitSystemPreferences.UnitSystem.METRIC) {
-        unitsComboBox.addItem(strings.getString("unit_milliliters"));
-        unitsComboBox.addItem(strings.getString("unit_grams"));
-        // Add other metric units
-    } else {
-        unitsComboBox.addItem(strings.getString("unit_cups"));
-        unitsComboBox.addItem(strings.getString("unit_ounces"));
-        // Add other imperial units
-    }
+    String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
+    updateComboBox(fromDrop, units);
+    updateComboBox(toDrop, units);
     revalidate();
     repaint();
 }
   
-  private void addFromToComponents() 
-  {
+  private void addFromToComponents(UnitSystemPreferences.UnitSystem unitSystem) {
     JLabel fromLabel = new JLabel(strings.getString("from_units_label"));
     from.add(fromLabel);
-    fromDrop = new JComboBox<>(getLocalizedUnits());
+    fromDrop = new JComboBox<>(UnitSystemPreferences.getUnitsForCurrentSystem(strings));
     from.add(fromDrop);
     
     JLabel toLabel = new JLabel(strings.getString("to_units_label"));
     to.add(toLabel);
-    toDrop = new JComboBox<>(getLocalizedUnits());
+    toDrop = new JComboBox<>(UnitSystemPreferences.getUnitsForCurrentSystem(strings));
     to.add(toDrop);
     from.add(to);
-  }
+}
   
   private String[] getLocalizedUnits() 
   {
@@ -258,6 +248,8 @@ public class UnitConverterWindow extends JFrame
         getActionListeners()[0]).updateLocale(newLocale);
     SwingUtilities.updateComponentTreeUI(this);
   }
+  
+  
 
   private void updateComponentTexts() 
   {
@@ -268,6 +260,10 @@ public class UnitConverterWindow extends JFrame
     ((JLabel)ingredient.getComponent(0)).setText(strings.getString("ingredient_label"));
     ((JLabel)fromAmount.getComponent(0)).setText(strings.getString("from_amount_label"));
     toAmountLabel.setText(strings.getString("to_amount_label") + " ______________");
+    
+    String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
+    updateComboBox(fromDrop, units);
+    updateComboBox(toDrop, units);
     
     // Update comboboxes
     updateComboBox(fromDrop, getLocalizedUnits());
@@ -295,13 +291,12 @@ public class UnitConverterWindow extends JFrame
     comboBox.setSelectedItem(selectedItem);
   }
   
-  public static void main(final String[] args)
-  {
-    SwingUtilities.invokeLater(() -> 
-    {
-      Locale locale = Locale.getDefault(); // Or any other Locale
-      UnitConverterWindow window = new UnitConverterWindow(locale);
-      window.setVisible(true);
+  public static void main(final String[] args) {
+    SwingUtilities.invokeLater(() -> {
+        Locale locale = Locale.getDefault();
+        UnitSystemPreferences.UnitSystem unitSystem = UnitSystemPreferences.getCurrentUnitSystem();
+        UnitConverterWindow window = new UnitConverterWindow(locale, unitSystem);
+        window.setVisible(true);
     });
-  }
+}
 }
