@@ -16,9 +16,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import Information.Meal;
 import Information.Recipe;
+import gui.EditorListeners.ChangeTracker;
 
 /**
  * Meal editor is saved as a Jframe.
@@ -39,6 +42,12 @@ public class MealEditor extends JFrame
   private Map<JPanel, RecipeEditor> recipeEditorPanels = new HashMap<>();
   private List<RecipeEditor> recipeEditors = new ArrayList<>();
   private ResourceBundle strings;
+  private JButton save;
+  private JButton saveAs;
+  private JButton open;
+  private OpenListener ol;
+  private SaveAsListener sal;
+  private JTextField textBox;
   
   /**
    * default constructor for the window.
@@ -74,7 +83,8 @@ public class MealEditor extends JFrame
 
     // text box panel
     JPanel textPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JTextField textBox = new JTextField(20);
+    textBox = new JTextField(20);
+    textBox.getDocument().addDocumentListener(new TextFieldChanger());
     JLabel textLabel = new JLabel(strings.getString("label_name"));
     textBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     textPanel.add(textLabel);
@@ -117,20 +127,23 @@ public class MealEditor extends JFrame
     //Initialize buttons listeners
     JButton newB = (JButton) imagePanel.getComponent(0);
     newB.addActionListener(new NewListener());
-    JButton open = (JButton) imagePanel.getComponent(1);
-    OpenListener ol = new OpenListener(scroll, this, recipeBox, textBox, open);
+    open = (JButton) imagePanel.getComponent(1);
+    ol = new OpenListener(scroll, this, recipeBox, textBox, open);
     open.addActionListener(ol);
-    JButton save = (JButton) imagePanel.getComponent(2);
-    save.addActionListener(new SaveListener(textBox, ol));
-    JButton saveAs = (JButton) imagePanel.getComponent(3);
-    saveAs.addActionListener(new SaveAsListener(textBox));
+    save = (JButton) imagePanel.getComponent(2);
+    save.setEnabled(false);
+    sal = new SaveAsListener(textBox);
+    saveAs = (JButton) imagePanel.getComponent(3);
+    saveAs.addActionListener(sal);
+    saveAs.setEnabled(false);
     close = (JButton) imagePanel.getComponent(4);
     close.addActionListener(new CloseListener());
+    save.addActionListener(new SaveListener(textBox, ol, sal));
         
     //initialize delete button listener
     DeleteListener dl = new DeleteListener(recipeBox, recipeBoxBottom, scroll, this);
     delete.addActionListener(dl);
-        
+            
     //add everything
     add(mainPanel);
   }
@@ -192,6 +205,13 @@ public class MealEditor extends JFrame
           frame.setSize(1000, 825);
           recipeEditorPanels.put(j, re);
           recipeEditors.add(re);
+          List<JComponent> comps = re.getComps();
+          comps.add(textBox);
+          if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
+            new ChangeTracker(comps, saveAs);
+          } else {
+            new ChangeTracker(comps, saveAs, save);
+          }
         }
       } else 
       {
@@ -216,6 +236,13 @@ public class MealEditor extends JFrame
           recipeEditorPanels.put(j, re);
           recipeEditors.add(re);
           frame.setSize(1000, 825);
+          List<JComponent> comps = re.getComps();
+          comps.add(textBox);
+          if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
+            new ChangeTracker(comps, saveAs);
+          } else {
+            new ChangeTracker(comps, saveAs, save);
+          }
         }
       }
     }
@@ -240,12 +267,14 @@ public class MealEditor extends JFrame
   {
     
     MealEditor.OpenListener openListener;
+    MealEditor.SaveAsListener saveAsListener;
     JTextField textBox;
 
-    public SaveListener(final JTextField textBox, final MealEditor.OpenListener openListener) 
+    public SaveListener(final JTextField textBox, final MealEditor.OpenListener openListener, MealEditor.SaveAsListener saveAsListener) 
     {
       this.textBox = textBox;
       this.openListener = openListener;
+      this.saveAsListener = saveAsListener;
     }
     
     @Override
@@ -253,7 +282,12 @@ public class MealEditor extends JFrame
     {
       try 
       {
-        String fileName = openListener.getCurrentFileName();
+        String fileName;
+        if (openListener.getCurrentFileName() == null) {
+          fileName = saveAsListener.getCurrentFileName();
+        } else {
+          fileName = openListener.getCurrentFileName();
+        }
         List<Recipe> recList = new ArrayList<>();
         for (RecipeEditor re: recipeEditors) 
         {
@@ -269,7 +303,18 @@ public class MealEditor extends JFrame
         
         // Save recipe to its file
         updatedMeal.saveMealToFile(fileName);
-        
+        save.setEnabled(false);
+        if (recipeEditors.size() > 0) {
+          for (RecipeEditor re : recipeEditors) {
+            List<JComponent> comps = re.getComps();
+            comps.add(textBox);
+            new ChangeTracker(comps, save, saveAs);
+          }
+        } else {
+          List<JComponent> comps = new ArrayList<>();
+          comps.add(textBox);
+          new ChangeTracker(comps, save, saveAs);
+        }
       } 
       catch(IOException ex) 
       {
@@ -311,6 +356,7 @@ public class MealEditor extends JFrame
   {
     
     JTextField textBox;
+    String fileName;
     
     public SaveAsListener(final JTextField textBox) 
     {
@@ -336,12 +382,12 @@ public class MealEditor extends JFrame
       
       //Allow user to type in filename
       JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle("Save Recipe As");
+      fileChooser.setDialogTitle("Save Meal As");
       int userSelection = fileChooser.showSaveDialog(null);
       
       if (userSelection == JFileChooser.APPROVE_OPTION) 
       {
-        String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+        fileName = fileChooser.getSelectedFile().getAbsolutePath();
         try 
         {
             // Create an updated recipe and save it to the chosen file name
@@ -352,6 +398,17 @@ public class MealEditor extends JFrame
           }
           Meal newMeal = new Meal(textBox.getText(), recList);
           newMeal.saveMealToFile(fileName);
+          if (recipeEditors.size() > 0) {
+            for (RecipeEditor re : recipeEditors) {
+              List<JComponent> comps = re.getComps();
+              comps.add(textBox);
+              new ChangeTracker(comps, save, saveAs);
+            }
+          } else {
+            List<JComponent> comps = new ArrayList<>();
+            comps.add(textBox);
+            new ChangeTracker(comps, save, saveAs);
+          }
         } 
         catch (IOException ex) 
         {
@@ -360,6 +417,11 @@ public class MealEditor extends JFrame
       }
       
     }  
+    
+    public String getCurrentFileName() 
+    {
+      return fileName;
+    }
     
   }
 
@@ -424,6 +486,11 @@ public class MealEditor extends JFrame
           //serves.setText(String.valueOf(loaded.getServes()));
           name.setText(loaded.getName());
           int count = 0;
+          if (loaded.getRecipes().size() == 0) {
+            List<JComponent> comps = new ArrayList<>();
+            comps.add(textBox);
+            new ChangeTracker(comps, save, saveAs);
+          }
           for (Recipe r : loaded.getRecipes()) 
           {
             RecipeEditor re = new RecipeEditor(currentLocale);
@@ -483,8 +550,12 @@ public class MealEditor extends JFrame
               recipeEditors.add(re);
             }
             button.setEnabled(false);
+            List<JComponent> comps = re.getComps();
+            comps.add(textBox);
+            new ChangeTracker(comps, save, saveAs);
           }
-        }     
+          open.setEnabled(false);
+        }    
         catch (ClassNotFoundException e1) 
         {
           // TODO Auto-generated catch block
@@ -552,6 +623,27 @@ public class MealEditor extends JFrame
       }
     }
     
+  }
+  public class TextFieldChanger implements DocumentListener
+  {
+
+    @Override
+    public void insertUpdate(DocumentEvent e)
+    {
+      saveAs.setEnabled(true);
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e)
+    {
+      saveAs.setEnabled(true);
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e)
+    {
+      saveAs.setEnabled(true);
+    }
   }
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> 

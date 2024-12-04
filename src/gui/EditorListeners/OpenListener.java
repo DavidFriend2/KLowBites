@@ -8,7 +8,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -41,7 +43,10 @@ public class OpenListener implements ActionListener
   DefaultListModel<String> dlm;
   DefaultListModel<String> dlm2;
   DefaultListModel<String> dlm3;
-  private ResourceBundle strings;
+  ResourceBundle strings;
+  JButton openButton;
+  JButton saveButton;
+  List<JComponent> components;
   
   public OpenListener(final JTextField name, final JTextField serves, 
       final JTextField ingNameInput, final JTextField ingDetailsInput, 
@@ -50,7 +55,7 @@ public class OpenListener implements ActionListener
       final JComboBox stepUtensilCombo, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
       final DefaultListModel<String> dlm, final DefaultListModel<String> dlm2, 
-      final DefaultListModel<String> dlm3, Locale locale) 
+      final DefaultListModel<String> dlm3, Locale locale, JButton openButton, JButton saveButton, List<JComponent> components) 
   {
     this.name = name;
     this.serves = serves;
@@ -69,6 +74,9 @@ public class OpenListener implements ActionListener
     this.dlm = dlm;
     this.dlm2 = dlm2;
     this.dlm3 = dlm3;
+    this.openButton = openButton;
+    this.saveButton = saveButton;
+    this.components = components;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
   
@@ -159,6 +167,8 @@ public class OpenListener implements ActionListener
         ingList.setModel(dlm);
         stepList.setModel(dlm3);
         utensilList.setModel(dlm2);
+        openButton.setEnabled(false);
+        new ChangeTracker(components, saveButton);
       } catch (ClassNotFoundException e1) 
       {
         // TODO Auto-generated catch block

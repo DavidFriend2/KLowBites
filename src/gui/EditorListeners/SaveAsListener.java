@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -24,16 +26,21 @@ public class SaveAsListener implements ActionListener
   private List<Step> fullStepList;
   private List<Utensil> fullUtensilList;
   private ResourceBundle strings;
+  private String fileName;
+  private List<JComponent> components;
+  private JButton saveButton;
   
   public SaveAsListener(final JTextField nameText, final JTextField servesText, 
       final List<RecipeIngredient> fullIngredientList, 
-      final List<Utensil> fullUtensilList, final List<Step> fullStepList, Locale locale) 
+      final List<Utensil> fullUtensilList, final List<Step> fullStepList, List<JComponent> components, JButton saveButton, Locale locale) 
   {
     this.name = nameText;
     this.serves = servesText;
     this.fullIngredientList = fullIngredientList;
     this.fullStepList = fullStepList;
     this.fullUtensilList = fullUtensilList;
+    this.components = components;
+    this.saveButton = saveButton;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
   
@@ -57,19 +64,35 @@ public class SaveAsListener implements ActionListener
     
     if (userSelection == JFileChooser.APPROVE_OPTION) 
     {
-      String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+      fileName = fileChooser.getSelectedFile().getAbsolutePath();
       
       try 
       {
         // Create an updated recipe and save it to the chosen file name
-        Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), 
-            fullIngredientList, fullUtensilList, fullStepList);
-        newRecipe.saveRecipeToFile(fileName);
+        boolean check = true;
+        for (char c : serves.getText().toCharArray()) {
+          if (!Character.isDigit(c)) {
+            check = false;
+          }
+        }
+        if (serves.getText().isEmpty() || !check) {
+          Recipe newRecipe = new Recipe(name.getText(), 0, 
+              fullIngredientList, fullUtensilList, fullStepList);
+          newRecipe.saveRecipeToFile(fileName);
+        } else {
+          Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), 
+              fullIngredientList, fullUtensilList, fullStepList);
+          newRecipe.saveRecipeToFile(fileName);
+        }
+        new ChangeTracker(components, saveButton);
       } 
       catch (IOException ex) 
       {
         ex.printStackTrace();
       }
     }
-  }  
+  } 
+  public String getFilename() {
+    return fileName;
+  }
 }
