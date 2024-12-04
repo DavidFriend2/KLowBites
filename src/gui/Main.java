@@ -396,45 +396,6 @@ private String getColorName(Color color) {
     });
   }
 
-  // Refresh the entire UI after a language change
-  private void refreshUI()
-  {
-    // Update the window title
-    setTitle(strings.getString("main_window_title"));
-
-    // Recreate the menu bar with new language
-    updateMenuBar();
-
-    // Refresh child windows if they're open
-    if (converterWindow != null && converterWindow.isDisplayable())
-    {
-      converterWindow.dispose(); // Close the old window
-      converterWindow = new UnitConverterWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem()); // Create a new one with updated
-                                                                // language
-      converterWindow.setVisible(true);
-    }
-    if (calorieWindow != null && calorieWindow.isDisplayable())
-    {
-      calorieWindow.dispose();
-      calorieWindow = new CalorieCalculatorWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem());
-      calorieWindow.setVisible(true);
-    }
-
-    // Repaint the main window to reflect changes
-    revalidate();
-    repaint();
-  }
-
-  // Update the menu bar with the new language
-  private void updateMenuBar()
-  {
-    JMenuBar menuBar = getJMenuBar();
-    menuBar.removeAll(); // Remove all existing menus
-    createMenuBar(); // Recreate the menu bar with new language
-    revalidate();
-    repaint();
-  }
-
   // Create the main panel of the application
   private void createMainPanel()
   {
