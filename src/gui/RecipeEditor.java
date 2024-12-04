@@ -1,7 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
-
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -17,6 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -47,8 +48,11 @@ public class RecipeEditor extends JFrame {
   private OpenListener openListener;
   private JButton openButton;
   private JButton closeButton;
+  private JButton saveButton;
   private ResourceBundle strings;
+  
   private Locale currentLocale;
+  private List<JComponent> components;
   
   public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
   public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
@@ -60,6 +64,7 @@ public class RecipeEditor extends JFrame {
   
   public RecipeEditor(final Locale locale) {
     this.currentLocale = locale;
+    this.components = new ArrayList<>();
     strings = ResourceBundle.getBundle("resources.Strings", locale); // Corrected line
     setTitle(strings.getString("recipe_editor_title"));
     setSize(825, 775);
@@ -77,8 +82,10 @@ public class RecipeEditor extends JFrame {
     JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel nameLabel = new JLabel(strings.getString("label_name"));
     JTextField nameText = new JTextField(25);
+    components.add(nameText);
     JLabel serves = new JLabel(strings.getString("label_serves"));
     JTextField servesText = new JTextField(10);
+    components.add(servesText);
     namePanel.add(nameLabel);
     namePanel.add(nameText);
     namePanel.add(serves);
@@ -94,8 +101,10 @@ public class RecipeEditor extends JFrame {
     JPanel utensilInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel utensilName = new JLabel(strings.getString("label_name"));
     JTextField utensilNameText = new JTextField(20);
+    components.add(utensilNameText);
     JLabel details = new JLabel(strings.getString("label_details"));
     JTextField detailsText = new JTextField(15);
+    components.add(detailsText);
     JButton addUtensil = new JButton(strings.getString("button_add"));
     
     utensilInputs.add(utensilName);
@@ -130,12 +139,16 @@ public class RecipeEditor extends JFrame {
     JPanel ingInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel ingName = new JLabel(strings.getString("label_name"));
     JTextField ingNameInput = new JTextField(8);
+    components.add(ingNameInput);
     JLabel ingDetails = new JLabel(strings.getString("label_details"));
     JTextField ingDetailsInput = new JTextField(6);
+    components.add(ingDetailsInput);
     JLabel ingAmount = new JLabel(strings.getString("label_amount"));
     JTextField ingAmountInput = new JTextField(3);
+    components.add(ingAmountInput);
     JLabel ingUnits = new JLabel(strings.getString("label_units"));
     JComboBox<String> ingUnitCombo = new JComboBox<String>();
+    components.add(ingUnitCombo);
     for (String unit : UnitSystemPreferences.getUnitsForCurrentSystem(strings)) {
         ingUnitCombo.addItem(unit);
     }
@@ -176,6 +189,7 @@ public class RecipeEditor extends JFrame {
     JPanel stepInputs = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel stepAction = new JLabel(strings.getString("label_action"));
     JComboBox<String> stepActionCombo = new JComboBox<String>();
+    components.add(stepActionCombo);
     stepActionCombo.addItem("");
     for (String s : Step.getActions()) 
     {
@@ -183,13 +197,17 @@ public class RecipeEditor extends JFrame {
     }
     JLabel stepOn = new JLabel(strings.getString("label_on"));
     JComboBox<String> stepOnCombo = new JComboBox<>();
+    components.add(stepOnCombo);
 
     JLabel stepUtensil = new JLabel(strings.getString("label_utensil"));
     JComboBox<String> stepUtensilCombo = new JComboBox<String>();
+    components.add(stepUtensilCombo);
     JLabel stepDetails = new JLabel(strings.getString("label_details"));
     JLabel time = new JLabel(strings.getString("label_time"));
     JTextField timeInput = new JTextField(3);
+    components.add(timeInput);
     JTextField stepDetailsText = new JTextField(5);
+    components.add(stepDetailsText);
     JButton stepAdd = new JButton(strings.getString("button_add"));
     AddStepListener stepAddListen = new AddStepListener(stepActionCombo,
         stepOnCombo, stepUtensilCombo, stepDetailsText, timeInput);
@@ -251,22 +269,15 @@ public class RecipeEditor extends JFrame {
     openButton = new JButton(new ImageIcon(openImg));
     openButton.setPreferredSize(new Dimension(50, 50));
     openButton.setToolTipText(strings.getString("tooltip_open"));
-    openListener = new OpenListener(nameText, servesText, ingNameInput,
-        ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
-        utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
-        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale);
-    openButton.addActionListener(openListener);
     imagePanel.add(openButton);
 
     //initialize save button ----------------------------------------------
     ImageIcon saveIcon = createImageIcon("/img/save.png");
     Image saveImg = saveIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    JButton saveButton = new JButton(new ImageIcon(saveImg));
+    saveButton = new JButton(new ImageIcon(saveImg));
     saveButton.setPreferredSize(new Dimension(50, 50));
     saveButton.setToolTipText(strings.getString("tooltip_save"));
-    saveListener = new SaveListener(openListener, nameText, 
-        servesText, fullIngredientList, fullStepList, fullUtensilList);
-    saveButton.addActionListener(saveListener);
+    saveButton.setEnabled(false);
     imagePanel.add(saveButton);
 
     //initialize save as button ----------------------------------------------
@@ -275,8 +286,9 @@ public class RecipeEditor extends JFrame {
     JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
     saveAsButton.setPreferredSize(new Dimension(50, 50));
     saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
+    saveAsButton.setEnabled(false);
     SaveAsListener saveAsListener = new SaveAsListener(nameText, 
-        servesText, fullIngredientList, fullUtensilList, fullStepList, currentLocale);
+        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton, currentLocale);
     saveAsButton.addActionListener(saveAsListener);
     imagePanel.add(saveAsButton);
       
@@ -289,6 +301,18 @@ public class RecipeEditor extends JFrame {
     closeButton.addActionListener(closeListener);
     imagePanel.add(closeButton);
 
+    openListener = new OpenListener(nameText, servesText, ingNameInput,
+        ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
+        utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
+        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale, openButton, saveButton, components);
+    openButton.addActionListener(openListener);
+    
+    saveListener = new SaveListener(openListener, saveAsListener, nameText, 
+        servesText, fullIngredientList, fullStepList, fullUtensilList, saveButton, components);
+    saveButton.addActionListener(saveListener);
+    
+    new ChangeTracker(components, saveAsButton);
+    
     mainPanel.add(imagePanel);
     mainPanel.add(namePanel);
     mainPanel.add(utensilPanel);
@@ -319,6 +343,9 @@ public class RecipeEditor extends JFrame {
   protected OpenListener getOpenListener() 
   {
     return openListener;
+  }
+  protected List<JComponent> getComps() {
+    return components;
   }
 
   public ImageIcon createImageIcon(final String path) 
@@ -633,7 +660,7 @@ public class RecipeEditor extends JFrame {
       }
     }
   }
-
+  
   private class CloseListener implements ActionListener 
   {
     @Override

@@ -5,33 +5,43 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 import Information.Recipe;
 import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
+import gui.RecipeEditor;
 
 public class SaveListener implements ActionListener 
 {
   
   OpenListener openListener;
+  SaveAsListener saveAsListener;
   JTextField name;
   JTextField serves;
   List<RecipeIngredient> fullIngredientList;
   List<Step> fullStepList;
   List<Utensil> fullUtensilList;
+  JButton saveButton;
+  List<JComponent> components;
 
-  public SaveListener(final OpenListener openListener, final JTextField name, 
+  public SaveListener(final OpenListener openListener, SaveAsListener saveAsListener, final JTextField name, 
       final JTextField serves, final List<RecipeIngredient> fullIngredientList, 
-      final List<Step> fullStepList, final List<Utensil> fullUtensilList)
+      final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
+      JButton saveButton, List<JComponent> components)
   {
     this.openListener = openListener;
+    this.saveAsListener = saveAsListener;
     this.name = name;
     this.serves = serves;
     this.fullIngredientList = fullIngredientList;
     this.fullStepList = fullStepList;
     this.fullUtensilList = fullUtensilList;
+    this.saveButton = saveButton;
+    this.components = components;
   }
   
   @Override
@@ -39,9 +49,26 @@ public class SaveListener implements ActionListener
   {
     try 
     {
-      String fileName = openListener.getCurrentFileName();
-      Recipe updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.
-          getText()), fullIngredientList, fullUtensilList, fullStepList);
+      String fileName;
+      if (openListener.getCurrentFileName() == null) {
+        fileName = saveAsListener.getFilename();
+      } else {
+        fileName = openListener.getCurrentFileName();
+      }
+      
+      boolean check = true;
+      for (char c : serves.getText().toCharArray()) {
+        if (!Character.isDigit(c)) {
+          check = false;
+        }
+      }
+      Recipe updatedRecipe;
+      if (serves.getText().isEmpty() || !check) {
+        updatedRecipe = new Recipe(name.getText(), 0, fullIngredientList, fullUtensilList, fullStepList);
+      } else {
+        updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.
+            getText()), fullIngredientList, fullUtensilList, fullStepList);
+      }
       
       // If new Recipe
       if (fileName == null)
@@ -51,7 +78,8 @@ public class SaveListener implements ActionListener
       
       // Save recipe to its file
       updatedRecipe.saveRecipeToFile(fileName);
-      
+      saveButton.setEnabled(false);
+      new ChangeTracker(components, saveButton);
     } catch(IOException ex) 
     {
       ex.printStackTrace();
