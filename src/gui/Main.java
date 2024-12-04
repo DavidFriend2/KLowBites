@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -37,44 +38,75 @@ public class Main extends JFrame
     setHtmlPath(locale);
     System.out.println("ResourceBundle loaded: " + (strings != null));
     if (strings != null) {
-        initializeWindow();
         loadConfig();
+        initializeWindow();
         initializeLogo();
         createMenuBar();
         createMainPanel();
+        
+        // Add shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(this::saveConfig));
     } else {
         System.err.println("Cannot initialize window due to missing ResourceBundle");
     }
 }
 
   // Method to load configuration properties from a file
-  private void loadConfig()
-  {
-    try
-    {
-      Properties config = new Properties();
-      // Attempt to load the configuration file from resources
-      InputStream input = getClass().getResourceAsStream("/resources/config.properties");
-      if (input != null)
-      {
-        config.load(input);
-        // Get logo path, defaulting to "/img/logo.png" if not specified
-        logoPath = config.getProperty("logo_path", "/img/logo.png");
+  private void loadConfig() {
+    try {
+        Properties config = new Properties();
+        InputStream input = getClass().getResourceAsStream("/resources/config.properties");
+        if (input != null) {
+            config.load(input);
+            logoPath = config.getProperty("logo_path", "/img/logo.png");
+            String colorName = config.getProperty("background_color", "WHITE");
+            backgroundColor = getColorFromString(colorName);
+            
+            // Load unit system preference
+            String unitSystem = config.getProperty("unit_system", "METRIC");
+            UnitSystemPreferences.setCurrentUnitSystem(UnitSystemPreferences.UnitSystem.valueOf(unitSystem));
+        } else {
+            System.err.println("Could not find config.properties");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+  
+  private void saveConfig() {
+    try {
+        Properties config = new Properties();
+        config.setProperty("logo_path", logoPath);
+        config.setProperty("background_color", getColorName(backgroundColor));
+        config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
 
-        // Load background color from config, defaulting to "WHITE" if not specified
-        String colorName = config.getProperty("background_color", "WHITE");
-        backgroundColor = getColorFromString(colorName);
-      }
-      else
-      {
-        System.err.println("Could not find config.properties");
-      }
+        File configFile = new File(getClass().getResource("/resources/config.properties").toURI());
+        try (OutputStream output = Files.newOutputStream(configFile.toPath())) {
+            config.store(output, "Application Configuration");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-  }
+}
+
+private String getColorName(Color color) {
+    if (color.equals(Color.BLACK)) return "BLACK";
+    if (color.equals(Color.BLUE)) return "BLUE";
+    if (color.equals(Color.CYAN)) return "CYAN";
+    if (color.equals(Color.DARK_GRAY)) return "DARK_GRAY";
+    if (color.equals(Color.GRAY)) return "GRAY";
+    if (color.equals(Color.GREEN)) return "GREEN";
+    if (color.equals(Color.LIGHT_GRAY)) return "LIGHT_GRAY";
+    if (color.equals(Color.MAGENTA)) return "MAGENTA";
+    if (color.equals(Color.ORANGE)) return "ORANGE";
+    if (color.equals(Color.PINK)) return "PINK";
+    if (color.equals(Color.RED)) return "RED";
+    if (color.equals(Color.WHITE)) return "WHITE";
+    if (color.equals(Color.YELLOW)) return "YELLOW";
+    return "WHITE";
+}
+  
+  
 
   // Helper method to convert a color name string to a Color object
   private Color getColorFromString(final String colorName)
@@ -238,16 +270,14 @@ public class Main extends JFrame
   
   private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem) {
     UnitSystemPreferences.setCurrentUnitSystem(unitSystem);
-    
     if (converterWindow != null && converterWindow.isDisplayable()) {
         converterWindow.updateUnits(unitSystem);
     }
-    
     if (calorieWindow != null && calorieWindow.isDisplayable()) {
         calorieWindow.updateUnits();
     }
-    
-    SwingUtilities.updateComponentTreeUI(this); // Refresh UI if needed
+    SwingUtilities.updateComponentTreeUI(this);
+    saveConfig();
 }
 
   // Create the "Edit" menu

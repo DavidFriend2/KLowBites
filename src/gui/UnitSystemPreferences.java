@@ -34,7 +34,7 @@ public class UnitSystemPreferences {
                 strings.getString("unit_pinches"),
                 strings.getString("unit_teaspoons"),
                 strings.getString("unit_tablespoons")
-                // Add other metric units here
+                // other metric units can slide here (:
             };
         } else {
             return new String[]{"", 
@@ -46,7 +46,7 @@ public class UnitSystemPreferences {
                 strings.getString("unit_gallons"),
                 strings.getString("unit_pounds"),
                 strings.getString("unit_drams")
-                // Add other imperial units here
+                // other imperial units can slide here (:
             };
         }
     }
