@@ -301,7 +301,7 @@ public class RecipeSearcher extends JFrame
     Recipe selectedRecipe = (Recipe) recipeDropdown.getSelectedItem();
     if (selectedRecipe != null)
     {
-      new RecipeProcessViewer(selectedRecipe).setVisible(true);
+      //new RecipeProcessViewer(selectedRecipe).setVisible(true);
     }
   };
 

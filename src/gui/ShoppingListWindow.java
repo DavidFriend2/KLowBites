@@ -1,22 +1,33 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -25,15 +36,18 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Information.*;
+import UnitConversion.MassVolumeConverter;
 
-public class ShoppingListWindow extends JFrame
+public class ShoppingListWindow extends JFrame implements Printable
 {
 
   private static final long serialVersionUID = 1L;
+  private static final String PRINT_ICON_PATH = "/img/print.png";
   private JList<RecipeIngredient> shoppingJlist;
   private JTextField people;
   private Meal loadedMeal;
   private Recipe loadedRecipe;
+  private String fileOpened;
 
   public ShoppingListWindow()
   {
@@ -47,52 +61,81 @@ public class ShoppingListWindow extends JFrame
     // Main Panel
     JPanel mainPanel = new JPanel(new BorderLayout());
 
+    // Print Panel =
+    JPanel printPanel = new JPanel(new BorderLayout());
+    JButton printButton = createButton(PRINT_ICON_PATH, 50, 50, "print button");
+    printButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+          printRecipe();
+      }
+    });
+    printPanel.add(printButton, BorderLayout.WEST);
+
     // Directory chooser Panel
     JPanel chooserPanel = new JPanel();
     // JLabel chooserLabel = new JLabel(strings.getString("choose_directory_label"));
-    JLabel chooserLabel = new JLabel("choose meal or recipe");
     // Internationalized label
     // JButton chooseDirectoryButton = new JButton(strings.getString("choose_button"));
-    JButton chooseDirectoryButton = new JButton(("choose"));
+    JButton chooseDirectoryButton = new JButton("Choose Meal or Recipe");
     // Internationalized button
     chooseDirectoryButton.addActionListener(openMealorRecipe);
-    chooserPanel.add(chooserLabel);
     chooserPanel.add(chooseDirectoryButton);
-    
+
     // people panel
     JPanel peoplePanel = new JPanel();
     people = new JTextField(4);
     peoplePanel.add(new JLabel("Number of People: "));
     peoplePanel.add(people);
-    
+    JButton updatePeople = new JButton("Enter");
+    updatePeople.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        System.out.print("Button clicked");
+        peopleUpdated();
+      }
+    });
+    peoplePanel.add(updatePeople);
+
     // Top panel
     JPanel topPanel = new JPanel(new BorderLayout());
-    topPanel.add(peoplePanel, BorderLayout.NORTH);
+    topPanel.add(printPanel, BorderLayout.NORTH);
     topPanel.add(chooserPanel, BorderLayout.CENTER);
+    topPanel.add(peoplePanel, BorderLayout.SOUTH);
 
-    
-//    JButton updateButton = new JButton("Update Shopping List");
-//    updateButton.addActionListener(new ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            System.out.print("Button clicked");
-//            peopleUpdated();
-//        }
-//    });
-    
-    //peoplePanel.add(updateButton);
-    
     // Shopping list panel
     // display ingredients **** needs to be done;
     JPanel shoppingListPanel = new JPanel(new BorderLayout());
-    shoppingListPanel.add(new JLabel("Shopping List:"), BorderLayout.NORTH);
+    JLabel shoppingLabel = new JLabel("Shopping List:");
+    shoppingLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
+    shoppingListPanel.add(shoppingLabel, BorderLayout.NORTH);
     shoppingJlist = new JList<>(new DefaultListModel<>());
     shoppingJlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    shoppingJlist.setFont(new Font("Arial", Font.PLAIN, 18));
+    shoppingJlist.addMouseListener(new java.awt.event.MouseAdapter()
+    {
+      public void mouseClicked(java.awt.event.MouseEvent evt)
+      {
+        if (evt.getClickCount() == 2)
+        { // Double-click event
+          int index = shoppingJlist.locationToIndex(evt.getPoint());
+          if (index >= 0)
+          {
+            RecipeIngredient selectedIngredient = shoppingJlist.getModel().getElementAt(index);
+            unitEditor(selectedIngredient, index);
+          }
+        }
+      }
+    });
+
+    shoppingJlist.setFont(new Font("Times New Roman", Font.PLAIN, 18));
     shoppingListPanel.add(new JScrollPane(shoppingJlist), BorderLayout.CENTER);
+    JLabel guide = new JLabel("**select ingredient to change unit**");
+    guide.setFont(new Font("Times new Roman", Font.HANGING_BASELINE, 12));
+    shoppingListPanel.add(guide, BorderLayout.SOUTH);
 
     // main panel
-    //mainPanel.add(peoplePanel, BorderLayout.NORTH);
     mainPanel.add(topPanel, BorderLayout.NORTH);
     mainPanel.add(shoppingListPanel, BorderLayout.CENTER);
 
@@ -114,17 +157,16 @@ public class ShoppingListWindow extends JFrame
       {
         // check if its a meal or recipe
         String file = chooser.getSelectedFile().getAbsolutePath();
+        fileOpened = file;
         if (file.endsWith(".rcp"))
         {
           loadedRecipe = Recipe.loadRecipeFromFile(file);
           updateShoppingList(new ShoppingList(loadedRecipe, getPeopleCount()));
-          //peopleUpdated();
         }
         else if (file.endsWith(".mel"))
         {
           loadedMeal = Meal.loadMealFromFile(file);
           updateShoppingList(new ShoppingList(loadedMeal, getPeopleCount()));
-          //peopleUpdated();
         }
 
       }
@@ -135,22 +177,33 @@ public class ShoppingListWindow extends JFrame
     }
   };
 
-//  private void peopleUpdated()
-//  {
-//    int peopleCount = getPeopleCount();
-//    
-//    if (loadedRecipe != null)
-//    {
-//      updateShoppingList(new ShoppingList(loadedRecipe, peopleCount));
-//    }
-//    else if (loadedMeal != null)
-//    {
-//      updateShoppingList(new ShoppingList(loadedMeal, peopleCount));
-//    }
-//  }
+  private void peopleUpdated()
+  {
+    int peopleCount = getPeopleCount();
+
+    try
+    {
+      if (loadedRecipe != null)
+      {
+        loadedRecipe = Recipe.loadRecipeFromFile(fileOpened);
+        updateShoppingList(new ShoppingList(loadedRecipe, peopleCount));
+      }
+      else if (loadedMeal != null)
+      {
+        loadedMeal = Meal.loadMealFromFile(fileOpened);
+        updateShoppingList(new ShoppingList(loadedMeal, peopleCount));
+      }
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+
+  }
 
   private void updateShoppingList(ShoppingList shoppingList)
   {
+
     DefaultListModel<RecipeIngredient> model = (DefaultListModel<RecipeIngredient>) shoppingJlist
         .getModel();
     model.clear();
@@ -168,9 +221,88 @@ public class ShoppingListWindow extends JFrame
     }
     catch (NumberFormatException e)
     {
-      return 1; // Default to 1 if the input is invalid
+      return 0; // Default to 1 if the input is invalid
     }
   }
+
+  // Pop up to change the unit of an ingredient
+  private void unitEditor(RecipeIngredient ingredient, int index)
+  {
+    // Units dropdown
+    String[] availableUnits = {"cups", "grams", "ounces", "pounds", "mililiters", "teaspoons",
+        "tablespoons", "pinches", "pints", "quarts", "galons", "fluid ounces"}; // Add relevant
+                                                                                // units here
+    JComboBox<String> unitDropdown = new JComboBox<>(availableUnits);
+    unitDropdown.setSelectedItem(ingredient.getUnit()); // Preselect the current unit if available
+
+    // Show dialog
+    int result = JOptionPane.showConfirmDialog(this, unitDropdown,
+        "Edit Unit for: " + ingredient.getName(), JOptionPane.OK_CANCEL_OPTION);
+
+    if (result == JOptionPane.OK_OPTION)
+    {
+      String newUnit = (String) unitDropdown.getSelectedItem();
+
+      Ingredient ingr = Ingredient.getIngredientbyName(ingredient.getName());
+      MassVolumeConverter.Unit fromUnit = ShoppingList.getUnitFromString(ingredient.getUnit());
+      MassVolumeConverter.Unit toUnit = ShoppingList.getUnitFromString(newUnit);
+
+      double converted = ShoppingList.convert(ingredient.getAmount(), fromUnit, toUnit, ingr);
+      ingredient.setAmount(converted);
+      ingredient.setUnit(newUnit);
+
+      // Update the display in the JList
+      ((DefaultListModel<RecipeIngredient>) shoppingJlist.getModel()).set(index, ingredient);
+    }
+  }
+
+  private JButton createButton(String imagePath, int width, int height, String toolTipText)
+  {
+    ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
+
+    JButton button = new JButton();
+
+    if (icon != null)
+    {
+      Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+      button.setIcon(new ImageIcon(img));
+    }
+
+    button.setToolTipText(toolTipText);
+    button.setPreferredSize(new Dimension(width, height));
+    return button;
+  }
+
+  // print stuff
+  private void printRecipe() {
+    PrinterJob job = PrinterJob.getPrinterJob();
+    job.setPrintable(this);
+
+    if (job.printDialog()) {
+        try {
+            job.print();
+        } catch (PrinterException e) {
+            JOptionPane.showMessageDialog(this, "error", "error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+  
+  
+  @Override
+  public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+      if (pageIndex > 0) {
+          return NO_SUCH_PAGE; // Only one page for simplicity
+      }
+
+      Graphics g2d = (Graphics) graphics;
+      g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+      // Render the shopping list panel
+      shoppingJlist.paint(g2d);
+
+      return PAGE_EXISTS;
+  }
+
 
   // Main to display the searcher
   public static void main(final String[] args)
@@ -185,5 +317,6 @@ public class ShoppingListWindow extends JFrame
       shoppinglist.setVisible(true);
     });
   }
+
 
 }

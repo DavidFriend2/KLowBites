@@ -82,7 +82,8 @@ public class ShoppingList
 
   private Recipe changeIngredientAmount(Recipe recipeToChange)
   {
-    Recipe converted = recipeToChange;
+    Recipe converted = new Recipe(recipeToChange.getName(), recipeToChange.getServes(), recipeToChange.getIngredients(), 
+        recipeToChange.getUtenils(), recipeToChange.getSteps());
 
     double convert = (this.numofpeople) * 1.0 / converted.getServes();
 
@@ -98,7 +99,7 @@ public class ShoppingList
   /*
    * Converts amount based on unit
    */
-  public double convert(double value, MassVolumeConverter.Unit from, MassVolumeConverter.Unit to,
+  public static double convert(double value, MassVolumeConverter.Unit from, MassVolumeConverter.Unit to,
       Ingredient ingredient)
   {
     // Check if both from and to are mass units
@@ -119,7 +120,7 @@ public class ShoppingList
   /*
    * Get unit from string method
    */
-  private MassVolumeConverter.Unit getUnitFromString(String unitString) {
+  public static MassVolumeConverter.Unit getUnitFromString(String unitString) {
     String unit = unitString.trim().toLowerCase();
 
     switch (unit) {
@@ -165,7 +166,7 @@ public class ShoppingList
 }
 
   // Helper method to check if unit is mass
-  private boolean isMass(MassVolumeConverter.Unit unit)
+  private static boolean isMass(MassVolumeConverter.Unit unit)
   {
     for (MassVolumeConverter.Unit massUnit : MassVolumeConverter.getWeights())
     {
@@ -178,7 +179,7 @@ public class ShoppingList
   }
 
   // Helper method to check if unit is volume
-  private boolean isVolume(MassVolumeConverter.Unit unit)
+  private static boolean isVolume(MassVolumeConverter.Unit unit)
   {
     // If it's not mass, it's volume
     return !isMass(unit);
