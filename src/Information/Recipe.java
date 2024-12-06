@@ -9,6 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Recipe class
+ * 
+ * @author ryan mendez
+ */
 public class Recipe implements Serializable
 {
   private static final long serialVersionUID = 1L;
@@ -19,6 +24,15 @@ public class Recipe implements Serializable
   private List<Utensil> utensils;
   private List<Step> steps;
     
+  /**
+   * Recipe constructor
+   *  
+   * @param name
+   * @param serves
+   * @param ingredients
+   * @param utensils
+   * @param steps
+   */
   public Recipe(final String name, final int serves,
      final List<RecipeIngredient> ingredients, 
      final List<Utensil> utensils, final List<Step> steps)
@@ -30,48 +44,88 @@ public class Recipe implements Serializable
     this.steps = steps;
   }
  
+  /**
+   * Get name method
+   * 
+   * @return name of recipe
+   */
   public String getName()
   {
     return this.name;
   }
   
-  
+  /**
+   * Get serves method
+   * 
+   * @return amount of people the recipe serves
+   */
   public int getServes()
   {
     return this.serves;
   }
    
+  /**
+   * Get Ingredients method
+   * 
+   * @return Ingredients in recipe
+   */
   public List<RecipeIngredient> getIngredients()
   {
     return this.ingredients;
   }
    
+  /**
+   * Get utensils metod
+   * 
+   * @return utensils in recipe
+   */
   public List<Utensil> getUtenils()
   {
     return this.utensils;
   }
    
+  /**
+   * Get Recipe method
+   * 
+   * @return list of recipes
+   */
   public static List<Recipe> getRecipes()
   {
     return recipes;
   }
    
+  /**
+   * Get steps method
+   * 
+   * @return steps in the recipe
+   */
   public List<Step> getSteps()
   {
     return this.steps;
   }
    
+  /**
+   * Add recipe method
+   * 
+   * @param recipe
+   */
   public static void addRecipe(final Recipe recipe)
   {
     recipes.add(recipe);
   }
    
+  /**
+   * String method
+   */
   @Override
   public String toString()
   {
     return this.name;
   }
    
+  /**
+   * Load recipes method
+   */
   @SuppressWarnings("unchecked")
   public static void loadRecipes(final String file) throws IOException, ClassNotFoundException
   {
@@ -81,6 +135,11 @@ public class Recipe implements Serializable
     }
   }
    
+  /**
+   * Saves recipes 
+   * @param file
+   * @throws IOException
+   */
   public static void saveRecipes(final String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
@@ -89,11 +148,22 @@ public class Recipe implements Serializable
     }
   }
    
+  /**
+   * Get file name helper method
+   * 
+   * @return file name
+   */
   public String getFileName()
   {
     return "recipes/" +  this.name.replaceAll(" ", "_") + ".rcp";
   }
    
+  /**
+   * Save recipe to a file method
+   * 
+   * @param file
+   * @throws IOException
+   */
   public void saveRecipeToFile(final String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
@@ -102,6 +172,13 @@ public class Recipe implements Serializable
     }
   }
    
+  /**
+   * Load recipe from file method
+   * @param file
+   * @return
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   public static Recipe loadRecipeFromFile(final String file) 
       throws IOException, ClassNotFoundException
   {
