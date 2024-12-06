@@ -197,10 +197,12 @@ public class RecipeEditor extends JFrame {
     }
     JLabel stepOn = new JLabel(strings.getString("label_on"));
     JComboBox<String> stepOnCombo = new JComboBox<>();
+    stepOnCombo.addItem("");
     components.add(stepOnCombo);
 
     JLabel stepUtensil = new JLabel(strings.getString("label_utensil"));
     JComboBox<String> stepUtensilCombo = new JComboBox<String>();
+    stepUtensilCombo.addItem("");
     components.add(stepUtensilCombo);
     JLabel stepDetails = new JLabel(strings.getString("label_details"));
     JLabel time = new JLabel(strings.getString("label_time"));
@@ -368,6 +370,7 @@ public class RecipeEditor extends JFrame {
     public void actionPerformed(final ActionEvent e) 
     {
       RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
+      re.getCloseButton().setEnabled(false);
       re.setVisible(true);
     }
   }
@@ -457,6 +460,10 @@ public class RecipeEditor extends JFrame {
               + " " + ingName.getText());
         }
         stepOnCombo.addItem(ingName.getText());
+        ingName.setText("");
+        ingDetail.setText("");
+        ingAmount.setText("");
+        ingUnit.setSelectedItem("");
       } catch (IOException | ClassNotFoundException ex) 
       {
         JOptionPane.showMessageDialog(null,
@@ -522,6 +529,11 @@ public class RecipeEditor extends JFrame {
           stepDetails.getText(),
           Double.parseDouble(time.getText())
       ));
+      stepDetails.setText("");
+      time.setText("");
+      stepAction.setSelectedItem("");
+      stepOn.setSelectedItem("");
+      stepUtensil.setSelectedItem("");
     }
   }
   
@@ -556,7 +568,8 @@ public class RecipeEditor extends JFrame {
       fullUtensilList.add(new Utensil(utensilName.getText(),
           details.getText()));
       stepUtensilCombo.addItem(utensilName.getText());
-      
+      utensilName.setText("");
+      details.setText("");
     }
     
   }
