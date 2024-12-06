@@ -9,6 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Ingredient Class
+ * 
+ * @author Ryan Mendez
+ */
 public class Ingredient implements Serializable, Comparable<Ingredient>
 {
   
