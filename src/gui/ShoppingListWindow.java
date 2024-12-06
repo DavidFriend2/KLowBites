@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Information.*;
@@ -48,12 +49,13 @@ public class ShoppingListWindow extends JFrame implements Printable
   private Meal loadedMeal;
   private Recipe loadedRecipe;
   private String fileOpened;
+  private ResourceBundle strings;
 
-  public ShoppingListWindow()
+  public ShoppingListWindow(Locale locale)
   {
-    // strings = ResourceBundle.getBundle("resources.Strings", locale); // Load the resource bundle
+    strings = ResourceBundle.getBundle("resources.Strings", locale);
     // based on locale
-    setTitle("Shopping List");
+    setTitle(strings.getString("shopping_list_title"));
     setSize(500, 750);
     setResizable(false);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -77,7 +79,7 @@ public class ShoppingListWindow extends JFrame implements Printable
     // JLabel chooserLabel = new JLabel(strings.getString("choose_directory_label"));
     // Internationalized label
     // JButton chooseDirectoryButton = new JButton(strings.getString("choose_button"));
-    JButton chooseDirectoryButton = new JButton("Choose Meal or Recipe");
+    JButton chooseDirectoryButton = new JButton(strings.getString("choose_meal_or_recipe"));
     // Internationalized button
     chooseDirectoryButton.addActionListener(openMealorRecipe);
     chooserPanel.add(chooseDirectoryButton);
@@ -85,9 +87,9 @@ public class ShoppingListWindow extends JFrame implements Printable
     // people panel
     JPanel peoplePanel = new JPanel();
     people = new JTextField(4);
-    peoplePanel.add(new JLabel("Number of People: "));
+    peoplePanel.add(new JLabel(strings.getString("number_of_people")));
     peoplePanel.add(people);
-    JButton updatePeople = new JButton("Enter");
+    JButton updatePeople = new JButton(strings.getString("enter"));
     updatePeople.addActionListener(new ActionListener()
     {
       @Override
@@ -108,7 +110,7 @@ public class ShoppingListWindow extends JFrame implements Printable
     // Shopping list panel
     // display ingredients **** needs to be done;
     JPanel shoppingListPanel = new JPanel(new BorderLayout());
-    JLabel shoppingLabel = new JLabel("Shopping List:");
+    JLabel shoppingLabel = new JLabel(strings.getString("shopping_list_label"));
     shoppingLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
     shoppingListPanel.add(shoppingLabel, BorderLayout.NORTH);
     shoppingJlist = new JList<>(new DefaultListModel<>());
@@ -131,7 +133,7 @@ public class ShoppingListWindow extends JFrame implements Printable
 
     shoppingJlist.setFont(new Font("Times New Roman", Font.PLAIN, 18));
     shoppingListPanel.add(new JScrollPane(shoppingJlist), BorderLayout.CENTER);
-    JLabel guide = new JLabel("**select ingredient to change unit**");
+    JLabel guide = new JLabel(strings.getString("select_ingredient_guide"));
     guide.setFont(new Font("Times new Roman", Font.HANGING_BASELINE, 12));
     shoppingListPanel.add(guide, BorderLayout.SOUTH);
 
@@ -144,9 +146,23 @@ public class ShoppingListWindow extends JFrame implements Printable
 
   // Opens a meal or recipe
   private ActionListener openMealorRecipe = e -> {
-
+    
+    UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add this line
+    UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
+    UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
+    UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+    UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
+    UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
+    UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
+    UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
+    UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+    UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
+    UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
+    UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
+    UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
+    
     JFileChooser chooser = new JFileChooser();
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Recip or Meal files", "rcp",
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Recipe or Meal files", "rcp",
         "mel");
     chooser.setFileFilter(filter);
     int returnVal = chooser.showOpenDialog(this);
@@ -226,35 +242,29 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   // Pop up to change the unit of an ingredient
-  private void unitEditor(RecipeIngredient ingredient, int index)
-  {
-    // Units dropdown
-    String[] availableUnits = {"cups", "grams", "ounces", "pounds", "mililiters", "teaspoons",
-        "tablespoons", "pinches", "pints", "quarts", "galons", "fluid ounces"}; // Add relevant
-                                                                                // units here
+  private void unitEditor(RecipeIngredient ingredient, int index) {
+    UnitSystemPreferences.UnitSystem currentSystem = UnitSystemPreferences.getCurrentUnitSystem();
+    String[] availableUnits = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
+
     JComboBox<String> unitDropdown = new JComboBox<>(availableUnits);
-    unitDropdown.setSelectedItem(ingredient.getUnit()); // Preselect the current unit if available
+    unitDropdown.setSelectedItem(ingredient.getUnit());
 
-    // Show dialog
     int result = JOptionPane.showConfirmDialog(this, unitDropdown,
-        "Edit Unit for: " + ingredient.getName(), JOptionPane.OK_CANCEL_OPTION);
+        strings.getString("edit_unit_for") + ingredient.getName(), JOptionPane.OK_CANCEL_OPTION);
 
-    if (result == JOptionPane.OK_OPTION)
-    {
-      String newUnit = (String) unitDropdown.getSelectedItem();
+    if (result == JOptionPane.OK_OPTION) {
+        String newUnit = (String) unitDropdown.getSelectedItem();
+        Ingredient ingr = Ingredient.getIngredientbyName(ingredient.getName());
+        MassVolumeConverter.Unit fromUnit = ShoppingList.getUnitFromString(ingredient.getUnit());
+        MassVolumeConverter.Unit toUnit = ShoppingList.getUnitFromString(newUnit);
 
-      Ingredient ingr = Ingredient.getIngredientbyName(ingredient.getName());
-      MassVolumeConverter.Unit fromUnit = ShoppingList.getUnitFromString(ingredient.getUnit());
-      MassVolumeConverter.Unit toUnit = ShoppingList.getUnitFromString(newUnit);
+        double converted = ShoppingList.convert(ingredient.getAmount(), fromUnit, toUnit, ingr);
+        ingredient.setAmount(converted);
+        ingredient.setUnit(newUnit);
 
-      double converted = ShoppingList.convert(ingredient.getAmount(), fromUnit, toUnit, ingr);
-      ingredient.setAmount(converted);
-      ingredient.setUnit(newUnit);
-
-      // Update the display in the JList
-      ((DefaultListModel<RecipeIngredient>) shoppingJlist.getModel()).set(index, ingredient);
+        ((DefaultListModel<RecipeIngredient>) shoppingJlist.getModel()).set(index, ingredient);
     }
-  }
+}
 
   private JButton createButton(String imagePath, int width, int height, String toolTipText)
   {
@@ -309,11 +319,11 @@ public class ShoppingListWindow extends JFrame implements Printable
   {
     SwingUtilities.invokeLater(() -> {
       // You can change this to the desired default locale
-      // Locale desiredLocale = Locale.getDefault();
+       Locale desiredLocale = Locale.getDefault();
 
       // Create a new MealSearcher instance with the desired locale
       // ShoppingListWindow mealSearcher = new ShoppingListWindow(desiredLocale);
-      ShoppingListWindow shoppinglist = new ShoppingListWindow();
+      ShoppingListWindow shoppinglist = new ShoppingListWindow(desiredLocale);
       shoppinglist.setVisible(true);
     });
   }

@@ -33,80 +33,109 @@ public class Main extends JFrame
   public static String htmlPath;
 
   // Constructor that takes a Locale parameter for internationalization
-  public Main(Locale locale) {
+  public Main(Locale locale)
+  {
     loadStrings(locale);
     setHtmlPath(locale);
     System.out.println("ResourceBundle loaded: " + (strings != null));
-    if (strings != null) {
-        loadConfig();
-        initializeWindow();
-        initializeLogo();
-        createMenuBar();
-        createMainPanel();
-        
-        // Add shutdown hook
-        Runtime.getRuntime().addShutdownHook(new Thread(this::saveConfig));
-    } else {
-        System.err.println("Cannot initialize window due to missing ResourceBundle");
+    if (strings != null)
+    {
+      loadConfig();
+      initializeWindow();
+      initializeLogo();
+      createMenuBar();
+      createMainPanel();
+
+      // Add shutdown hook
+      Runtime.getRuntime().addShutdownHook(new Thread(this::saveConfig));
     }
-}
+    else
+    {
+      System.err.println("Cannot initialize window due to missing ResourceBundle");
+    }
+  }
 
   // Method to load configuration properties from a file
-  private void loadConfig() {
-    try {
-        Properties config = new Properties();
-        InputStream input = getClass().getResourceAsStream("/resources/config.properties");
-        if (input != null) {
-            config.load(input);
-            logoPath = config.getProperty("logo_path", "/img/logo.png");
-            String colorName = config.getProperty("background_color", "WHITE");
-            backgroundColor = getColorFromString(colorName);
-            
-            // Load unit system preference
-            String unitSystem = config.getProperty("unit_system", "METRIC");
-            UnitSystemPreferences.setCurrentUnitSystem(UnitSystemPreferences.UnitSystem.valueOf(unitSystem));
-        } else {
-            System.err.println("Could not find config.properties");
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-  
-  private void saveConfig() {
-    try {
-        Properties config = new Properties();
-        config.setProperty("logo_path", logoPath);
-        config.setProperty("background_color", getColorName(backgroundColor));
-        config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
+  private void loadConfig()
+  {
+    try
+    {
+      Properties config = new Properties();
+      InputStream input = getClass().getResourceAsStream("/resources/config.properties");
+      if (input != null)
+      {
+        config.load(input);
+        logoPath = config.getProperty("logo_path", "/img/logo.png");
+        String colorName = config.getProperty("background_color", "WHITE");
+        backgroundColor = getColorFromString(colorName);
 
-        File configFile = new File(getClass().getResource("/resources/config.properties").toURI());
-        try (OutputStream output = Files.newOutputStream(configFile.toPath())) {
-            config.store(output, "Application Configuration");
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
+        // Load unit system preference
+        String unitSystem = config.getProperty("unit_system", "METRIC");
+        UnitSystemPreferences
+            .setCurrentUnitSystem(UnitSystemPreferences.UnitSystem.valueOf(unitSystem));
+      }
+      else
+      {
+        System.err.println("Could not find config.properties");
+      }
     }
-}
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
 
-private String getColorName(Color color) {
-    if (color.equals(Color.BLACK)) return "BLACK";
-    if (color.equals(Color.BLUE)) return "BLUE";
-    if (color.equals(Color.CYAN)) return "CYAN";
-    if (color.equals(Color.DARK_GRAY)) return "DARK_GRAY";
-    if (color.equals(Color.GRAY)) return "GRAY";
-    if (color.equals(Color.GREEN)) return "GREEN";
-    if (color.equals(Color.LIGHT_GRAY)) return "LIGHT_GRAY";
-    if (color.equals(Color.MAGENTA)) return "MAGENTA";
-    if (color.equals(Color.ORANGE)) return "ORANGE";
-    if (color.equals(Color.PINK)) return "PINK";
-    if (color.equals(Color.RED)) return "RED";
-    if (color.equals(Color.WHITE)) return "WHITE";
-    if (color.equals(Color.YELLOW)) return "YELLOW";
+  private void saveConfig()
+  {
+    try
+    {
+      Properties config = new Properties();
+      config.setProperty("logo_path", logoPath);
+      config.setProperty("background_color", getColorName(backgroundColor));
+      config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
+
+      File configFile = new File(getClass().getResource("/resources/config.properties").toURI());
+      try (OutputStream output = Files.newOutputStream(configFile.toPath()))
+      {
+        config.store(output, "Application Configuration");
+      }
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  private String getColorName(Color color)
+  {
+    if (color.equals(Color.BLACK))
+      return "BLACK";
+    if (color.equals(Color.BLUE))
+      return "BLUE";
+    if (color.equals(Color.CYAN))
+      return "CYAN";
+    if (color.equals(Color.DARK_GRAY))
+      return "DARK_GRAY";
+    if (color.equals(Color.GRAY))
+      return "GRAY";
+    if (color.equals(Color.GREEN))
+      return "GREEN";
+    if (color.equals(Color.LIGHT_GRAY))
+      return "LIGHT_GRAY";
+    if (color.equals(Color.MAGENTA))
+      return "MAGENTA";
+    if (color.equals(Color.ORANGE))
+      return "ORANGE";
+    if (color.equals(Color.PINK))
+      return "PINK";
+    if (color.equals(Color.RED))
+      return "RED";
+    if (color.equals(Color.WHITE))
+      return "WHITE";
+    if (color.equals(Color.YELLOW))
+      return "YELLOW";
     return "WHITE";
-}
-  
-  
+  }
 
   // Helper method to convert a color name string to a Color object
   private Color getColorFromString(final String colorName)
@@ -236,10 +265,12 @@ private String getColorName(Color color) {
     createToolsMenu(menuBar);
     createSearchMenu(menuBar);
     createHelpMenu(menuBar);
+    createViewMenu(menuBar);
   }
 
   // Create the "File" menu
-  private void createFileMenu(JMenuBar menuBar) {
+  private void createFileMenu(JMenuBar menuBar)
+  {
     JMenu fileMenu = new JMenu(strings.getString("menu_file"));
     menuBar.add(fileMenu);
 
@@ -251,8 +282,10 @@ private String getColorName(Color color) {
     JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
     fileMenu.add(preferencesMenu);
 
-    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(strings.getString("menu_metric_units"));
-    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(strings.getString("menu_imperial_units"));
+    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(
+        strings.getString("menu_metric_units"));
+    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(
+        strings.getString("menu_imperial_units"));
 
     ButtonGroup unitGroup = new ButtonGroup();
     unitGroup.add(metricItem);
@@ -266,19 +299,22 @@ private String getColorName(Color color) {
 
     metricItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.METRIC));
     imperialItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.IMPERIAL));
-}
-  
-  private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem) {
+  }
+
+  private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem)
+  {
     UnitSystemPreferences.setCurrentUnitSystem(unitSystem);
-    if (converterWindow != null && converterWindow.isDisplayable()) {
-        converterWindow.updateUnits(unitSystem);
+    if (converterWindow != null && converterWindow.isDisplayable())
+    {
+      converterWindow.updateUnits(unitSystem);
     }
-    if (calorieWindow != null && calorieWindow.isDisplayable()) {
-        calorieWindow.updateUnits();
+    if (calorieWindow != null && calorieWindow.isDisplayable())
+    {
+      calorieWindow.updateUnits();
     }
     SwingUtilities.updateComponentTreeUI(this);
     saveConfig();
-}
+  }
 
   // Create the "Edit" menu
   private void createEditMenu(final JMenuBar menuBar)
@@ -294,8 +330,7 @@ private String getColorName(Color color) {
     editMenu.add(recipeEditorItem);
 
     // Add an action listener to open the recipe editor when this item is clicked
-    recipeEditorItem.addActionListener(e -> 
-    {
+    recipeEditorItem.addActionListener(e -> {
       RecipeEditor recipeViewer = new RecipeEditor(currentLocale);
       recipeViewer.setVisible(true);
     });
@@ -305,13 +340,25 @@ private String getColorName(Color color) {
     editMenu.add(mealEditorItem);
 
     // Add an action listener to open the meal editor when this item is clicked
-    mealEditorItem.addActionListener(e -> 
-    {
+    mealEditorItem.addActionListener(e -> {
       MealEditor mealViewer = new MealEditor(currentLocale);
       mealViewer.setVisible(true);
     });
   }
+  
+  private void createViewMenu(final JMenuBar menuBar)
+  {
+    JMenu viewMenu = new JMenu(strings.getString("menu_view"));
+    menuBar.add(viewMenu);
 
+    JMenuItem shoppingListViewerItem = new JMenuItem(strings.getString("menu_item_shopping_list"));
+    viewMenu.add(shoppingListViewerItem);
+
+    shoppingListViewerItem.addActionListener(e -> {
+      ShoppingListWindow shoppingListViewer = new ShoppingListWindow(currentLocale);
+      shoppingListViewer.setVisible(true);
+    });
+  }
 
   // Add the "Tools" menu to our menu bar
   private void createToolsMenu(final JMenuBar menuBar)
@@ -330,13 +377,13 @@ private String getColorName(Color color) {
     toolsMenu.add(unitsConverterItem);
 
     // Add action listener for the Units Converter item
-    unitsConverterItem.addActionListener(e -> 
-    {
+    unitsConverterItem.addActionListener(e -> {
       // Check if the converter window doesn't exist or is not visible
       if (converterWindow == null || !converterWindow.isDisplayable())
       {
         // Create a new converter window and make it visible
-        converterWindow = new UnitConverterWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem());
+        converterWindow = new UnitConverterWindow(currentLocale,
+            UnitSystemPreferences.getCurrentUnitSystem());
         converterWindow.setVisible(true);
       }
       else
@@ -348,13 +395,13 @@ private String getColorName(Color color) {
     });
 
     // Add action listener for the Calories Calculator item
-    caloriesCalculatorItem.addActionListener(e -> 
-    {
+    caloriesCalculatorItem.addActionListener(e -> {
       // Check if the calorie window doesn't exist or is not visible
       if (calorieWindow == null || !calorieWindow.isDisplayable())
       {
         // Create a new calorie calculator window and make it visible
-        calorieWindow = new CalorieCalculatorWindow(currentLocale, UnitSystemPreferences.getCurrentUnitSystem());
+        calorieWindow = new CalorieCalculatorWindow(currentLocale,
+            UnitSystemPreferences.getCurrentUnitSystem());
         calorieWindow.setVisible(true);
       }
       else
@@ -377,8 +424,7 @@ private String getColorName(Color color) {
     JMenuItem recipeSearcher = new JMenuItem(strings.getString("search_recipe_searcher"));
     searchMenu.add(recipeSearcher);
     // Add action listener for Recipe Searcher
-    recipeSearcher.addActionListener(e -> 
-    {
+    recipeSearcher.addActionListener(e -> {
       // Create and display a new Recipe Searcher window
       RecipeSearcher rSearcher = new RecipeSearcher(currentLocale);
       rSearcher.setVisible(true);
@@ -388,8 +434,7 @@ private String getColorName(Color color) {
     JMenuItem mealSearcher = new JMenuItem(strings.getString("search_meal_searcher"));
     searchMenu.add(mealSearcher);
     // Add action listener for Meal Searcher
-    mealSearcher.addActionListener(e -> 
-    {
+    mealSearcher.addActionListener(e -> {
       // Create and display a new Meal Searcher window
       MealSearcher mSearcher = new MealSearcher(currentLocale);
       mSearcher.setVisible(true);
@@ -422,7 +467,7 @@ private String getColorName(Color color) {
 
     // Create and add an About menu item
     JMenuItem about = new JMenuItem(strings.getString("menu_item_about"));
-//    helpMenu.add(about);
+    // helpMenu.add(about);
 
     // Create and add a User Guide menu item
     JMenuItem userGuide = new JMenuItem(strings.getString("menu_item_user_guide"));
@@ -451,17 +496,17 @@ private String getColorName(Color color) {
   }
 
   // Open the HTML user guide in the default browser
-  private void openHtmlGuide() 
+  private void openHtmlGuide()
   {
-    try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath)) 
+    try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath))
     {
-      if (inputStream == null) 
+      if (inputStream == null)
       {
         System.err.println("Resource not found: " + htmlPath);
         return;
       }
 
-        // Create a temporary directory for the HTML and images
+      // Create a temporary directory for the HTML and images
       File tempDir = Files.createTempDirectory("tempHtml").toFile();
 
       // Copy the HTML file to the temporary directory
@@ -472,65 +517,51 @@ private String getColorName(Color color) {
       // Get the list of images in the 'gui' folder inside the JAR
       copyImagesFromGuiFolder(tempDir);
 
-        // Update HTML content if needed to ensure image paths are correct
-      String htmlContent = new String(Files.readAllBytes(tempHtmlFile.toPath()), 
+      // Update HTML content if needed to ensure image paths are correct
+      String htmlContent = new String(Files.readAllBytes(tempHtmlFile.toPath()),
           StandardCharsets.UTF_8);
-      htmlContent = htmlContent.replaceAll("src=\"../gui/", "src=\"gui/");  // Correct paths in HTML
+      htmlContent = htmlContent.replaceAll("src=\"../gui/", "src=\"gui/"); // Correct paths in HTML
       Files.write(tempHtmlFile.toPath(), htmlContent.getBytes(StandardCharsets.UTF_8));
 
       // Open the HTML file in the default browser
-      if (Desktop.isDesktopSupported()) 
+      if (Desktop.isDesktopSupported())
       {
         Desktop.getDesktop().browse(tempHtmlFile.toURI());
       }
 
       tempDir.deleteOnExit();
-    } 
-    catch (IOException e) 
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
     }
-	}
+  }
 
-	private void copyImagesFromGuiFolder(final File destinationDir) throws IOException 
-	{
-	    // Assuming images are in the "gui" folder inside the JAR
-    String[] imageFiles = {
-        "gui/mainEn.png",
-        "gui/recipeButtonsEn.png",
-        "gui/recipeUtensilEn.png",
-        "gui/recipeStepEn.png",
-        "gui/recipeIngredientEn.png",	        
-        "gui/buttonsEn.png",
-        "gui/mealSelectEn.png",
-        "gui/mealNameEn.png",
-        "gui/unitResultEn.png",
-        "gui/unitSelectEn.png",
-        "gui/buttonsLessEn.png",
-        "gui/buttonsMoreEn.png",
-        "gui/calorieResultEn.png",
-        "gui/calorieSelectEn.png",
-        "gui/searchRTopEn.png",
-        "gui/searchRBottomEn.png",
-        "gui/processStepEn.png",
-        "gui/processUtensil.png",
+  private void copyImagesFromGuiFolder(final File destinationDir) throws IOException
+  {
+    // Assuming images are in the "gui" folder inside the JAR
+    String[] imageFiles = {"gui/mainEn.png", "gui/recipeButtonsEn.png", "gui/recipeUtensilEn.png",
+        "gui/recipeStepEn.png", "gui/recipeIngredientEn.png", "gui/buttonsEn.png",
+        "gui/mealSelectEn.png", "gui/mealNameEn.png", "gui/unitResultEn.png",
+        "gui/unitSelectEn.png", "gui/buttonsLessEn.png", "gui/buttonsMoreEn.png",
+        "gui/calorieResultEn.png", "gui/calorieSelectEn.png", "gui/searchRTopEn.png",
+        "gui/searchRBottomEn.png", "gui/processStepEn.png", "gui/processUtensil.png",
         "gui/processButtonEn.png"
-        
+
     };
 
-    for (String imagePath : imageFiles) 
+    for (String imagePath : imageFiles)
     {
       copyResource(imagePath, destinationDir);
     }
-	}
+  }
 
-	private void copyResource(final String resourcePath, 
-	    final File destinationDir) throws IOException 
-	{
+  private void copyResource(final String resourcePath, final File destinationDir) throws IOException
+  {
     // Copy resource from JAR to the temporary directory
-    try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resourcePath)) 
+    try (InputStream resourceStream = Main.class.getResourceAsStream("/" + resourcePath))
     {
-      if (resourceStream == null) 
+      if (resourceStream == null)
       {
         System.err.println("Resource not found: " + resourcePath);
         return;
@@ -541,14 +572,13 @@ private String getColorName(Color color) {
       destFile.getParentFile().mkdirs();
       Files.copy(resourceStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
-	}
+  }
 
   // Main method to start the application
   public static void main(final String[] args)
   {
     // Use SwingUtilities.invokeLater to ensure thread safety in Swing applications
-    SwingUtilities.invokeLater(() -> 
-    {
+    SwingUtilities.invokeLater(() -> {
       // Get the default locale of the system (or set to any other desired locale)
       Locale desiredLocale = Locale.getDefault();
 

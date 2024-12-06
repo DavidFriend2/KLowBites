@@ -293,7 +293,7 @@ public class UnitConverterWindow extends JFrame
   
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ITALIAN;
         UnitSystemPreferences.UnitSystem unitSystem = UnitSystemPreferences.getCurrentUnitSystem();
         UnitConverterWindow window = new UnitConverterWindow(locale, unitSystem);
         window.setVisible(true);

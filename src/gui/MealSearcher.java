@@ -137,7 +137,7 @@ public class MealSearcher extends JFrame {
       public void actionPerformed(final ActionEvent e)
       {
           // Set localized strings for JFileChooser
-        UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add this line
+          UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add this line
           UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
           UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
           UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
