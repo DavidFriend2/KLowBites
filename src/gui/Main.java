@@ -262,44 +262,22 @@ public class Main extends JFrame
     // Call methods to create each menu and add them to the menu bar
     createFileMenu(menuBar);
     createEditMenu(menuBar);
-    createToolsMenu(menuBar);
     createSearchMenu(menuBar);
-    createHelpMenu(menuBar);
     createViewMenu(menuBar);
+    createToolsMenu(menuBar);
+    createConfigureMenu(menuBar);
+    createHelpMenu(menuBar);
   }
 
   // Create the "File" menu
-  private void createFileMenu(JMenuBar menuBar)
-  {
+  private void createFileMenu(JMenuBar menuBar) {
     JMenu fileMenu = new JMenu(strings.getString("menu_file"));
     menuBar.add(fileMenu);
 
     JMenuItem exitItem = new JMenuItem(strings.getString("menu_item_exit"));
     exitItem.addActionListener(e -> System.exit(0));
     fileMenu.add(exitItem);
-
-    // Add preferences submenu for unit selection
-    JMenu preferencesMenu = new JMenu(strings.getString("menu_preferences"));
-    fileMenu.add(preferencesMenu);
-
-    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(
-        strings.getString("menu_metric_units"));
-    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(
-        strings.getString("menu_imperial_units"));
-
-    ButtonGroup unitGroup = new ButtonGroup();
-    unitGroup.add(metricItem);
-    unitGroup.add(imperialItem);
-
-    preferencesMenu.add(metricItem);
-    preferencesMenu.add(imperialItem);
-
-    metricItem.setSelected(UnitSystemPreferences.isMetric());
-    imperialItem.setSelected(UnitSystemPreferences.isImperial());
-
-    metricItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.METRIC));
-    imperialItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.IMPERIAL));
-  }
+}
 
   private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem)
   {
@@ -440,6 +418,27 @@ public class Main extends JFrame
       mSearcher.setVisible(true);
     });
   }
+  
+  private void createConfigureMenu(JMenuBar menuBar) {
+    JMenu configureMenu = new JMenu(strings.getString("menu_configure"));
+    menuBar.add(configureMenu);
+
+    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(strings.getString("menu_metric_units"));
+    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(strings.getString("menu_imperial_units"));
+
+    ButtonGroup unitGroup = new ButtonGroup();
+    unitGroup.add(metricItem);
+    unitGroup.add(imperialItem);
+
+    configureMenu.add(metricItem);
+    configureMenu.add(imperialItem);
+
+    metricItem.setSelected(UnitSystemPreferences.isMetric());
+    imperialItem.setSelected(UnitSystemPreferences.isImperial());
+
+    metricItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.METRIC));
+    imperialItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.IMPERIAL));
+}
 
   // Create the main panel of the application
   private void createMainPanel()
