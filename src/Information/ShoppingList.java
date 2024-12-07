@@ -5,6 +5,11 @@ import java.util.List;
 
 import UnitConversion.*;
 
+/**
+ * Shopping List class
+ * 
+ * @author ryan mendez
+ */
 public class ShoppingList
 {
   private List<RecipeIngredient> shoppingList;
@@ -12,6 +17,12 @@ public class ShoppingList
   Recipe recipe;
   Meal meal;
 
+  /**
+   * Shopping List Constructor for a Recipe
+
+   * @param recipe to shop for
+   * @param numofpeople to shop for
+   */
   public ShoppingList(Recipe recipe, int numofpeople)
   {
     // Updated for amount of people
@@ -20,6 +31,12 @@ public class ShoppingList
     this.shoppingList = this.recipe.getIngredients();
   }
 
+  /**
+   * Shopping List Constructor for a Meal
+
+   * @param meal to shop for
+   * @param numofpeople to shop for
+   */
   public ShoppingList(Meal meal, int numofpeople)
   {
     this.numofpeople = numofpeople;
@@ -70,16 +87,34 @@ public class ShoppingList
 
   }
 
+  /**
+   * Get number of people method
+   * 
+   * @return the amount of people to shop for
+   */
   public int getNumPeople()
   {
     return this.numofpeople;
   }
 
+  /**
+   * Get Shopping List method
+   * 
+   * @return list of ingredients to shop for
+   */
   public List<RecipeIngredient> getShoppingList()
   {
     return this.shoppingList;
   }
 
+  /**
+   * Change Ingredient amount method
+   * 
+   * Updates the amount for each ingredient based on the amount of people to shop for
+   * 
+   * @param recipeToChange to update
+   * @return updated recipe
+   */
   private Recipe changeIngredientAmount(Recipe recipeToChange)
   {
     Recipe converted = new Recipe(recipeToChange.getName(), recipeToChange.getServes(), recipeToChange.getIngredients(), 
@@ -96,8 +131,16 @@ public class ShoppingList
     return converted;
   }
 
-  /*
-   * Converts amount based on unit
+  /**
+   * Convert method
+   * 
+   * Converts amount of an ingredient from one unit to another
+   * 
+   * @param value to convert
+   * @param from unit to convert from
+   * @param to unit to convert to
+   * @param ingredient to use in case density info is required
+   * @return the converted amount
    */
   public static double convert(double value, MassVolumeConverter.Unit from, MassVolumeConverter.Unit to,
       Ingredient ingredient)
@@ -117,8 +160,11 @@ public class ShoppingList
     return MassVolumeConverter.convert(value, from, to, ingredient);
   }
 
-  /*
-   * Get unit from string method
+  /**
+   * Get Unit from its string rep
+   * 
+   * @param unitString string rep of unit
+   * @return the actual unit
    */
   public static MassVolumeConverter.Unit getUnitFromString(String unitString) {
     String unit = unitString.trim().toLowerCase();
@@ -165,7 +211,13 @@ public class ShoppingList
     }
 }
 
-  // Helper method to check if unit is mass
+  /**
+   * Check if unit is mass 
+   * 
+   * @param unit to check
+   * 
+   * @return true if mass unit, false if not
+   */
   private static boolean isMass(MassVolumeConverter.Unit unit)
   {
     for (MassVolumeConverter.Unit massUnit : MassVolumeConverter.getWeights())
@@ -178,10 +230,15 @@ public class ShoppingList
     return false;
   }
 
-  // Helper method to check if unit is volume
+  /**
+   * Check if unit is volume 
+   * 
+   * @param unit to check
+   * 
+   * @return true if volume unit, false if not
+   */
   private static boolean isVolume(MassVolumeConverter.Unit unit)
   {
-    // If it's not mass, it's volume
     return !isMass(unit);
   }
 

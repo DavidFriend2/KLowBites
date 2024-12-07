@@ -9,10 +9,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Ingredient Class
+/**
+ * Ingredient class
  * 
- * @author Ryan Mendez
+ * @author ryan mendez
  */
 public class Ingredient implements Serializable, Comparable<Ingredient>
 {
@@ -23,6 +23,13 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   private int caloriesPer100g;
   private double gramsPerMl;
 
+  /**
+   * Ingredient Constructor
+   * 
+   * @param name of ingredient
+   * @param caloriesPer100g of ingredient
+   * @param gramsPerMl of ingredient
+   */
   public Ingredient(final String name, final int caloriesPer100g, final double gramsPerMl)
   {
     this.name = name;
@@ -31,37 +38,76 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
 
   }
 
+  /**
+   * Get name method
+   * 
+   * @return name of ingredient
+   */
   public String getName()
   {
     return name;
   }
 
+  /**
+   * Get Calories per 100 grams method
+   * 
+   * @return calories100g of ingredient
+   */
   public int getCaloriesPer100g()
   {
     return caloriesPer100g;
   }
 
+  /**
+   * Get grams per Ml method
+   * 
+   * @return grams per ml of ingredient
+   */
   public double getGramsPerM()
   {
     return gramsPerMl;
   }
   
+  /**
+   * Get ingredient list method
+   * 
+   * @return the saved list of ingredients
+   */
   public static List<Ingredient> getIngredients()
   {
     ingredients.sort(null);
     return ingredients;
   }
   
+  /**
+   * Set Ingredients list method
+   * 
+   * @param loaded list of ingredients to set as the saved list
+   */
   public static void setIngredients(final List<Ingredient> loaded)
   {
     ingredients = loaded;
   }
   
+  /**
+   * Compare to method
+   * 
+   * @param o ingredient to compare to
+   * 
+   * @return the result of the comparison
+   */
   public int compareTo(final Ingredient o)
   {
     return 0;
   }
   
+  /**
+   * Get Ingredient by its name method
+   * 
+   * @param name to search for
+   * 
+   * @return the Ingredient if found
+   */
   public static Ingredient getIngredientbyName(final String name)
   {
     for(Ingredient ingredient: ingredients)
@@ -74,17 +120,32 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     return null;
   }
   
+  /**
+   * To String method
+   */
   public String toString()
   {
     return this.name;
   }
   
-  
+  /**
+   * Add Ingredient method
+   * 
+   * @param ingredient to add to the saved list
+   */
   public static void addIngredient(final Ingredient ingredient)
   {
     ingredients.add(ingredient);
   }
   
+  /**
+   * Load Ingredients list method
+   * 
+   * @param file of list of Ingredient objects to open
+   * @return the loaded ingredients list
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   @SuppressWarnings("unchecked")
   public static List<Ingredient> loadIngredients(final String file) 
       throws IOException, ClassNotFoundException
@@ -95,6 +156,12 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     }
   }
   
+  /**
+   * Save Ingredients list method
+   * 
+   * @param file to save the ingredients list to
+   * @throws IOException
+   */
   public static void saveIngredients(final String file) throws IOException
   {
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
@@ -103,7 +170,9 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     }
   }
   
-  
+  /**
+   * Predefined ingredients list
+   */
   static 
   {
     ingredients.add(new Ingredient("Alcohol", 275, 0.79));

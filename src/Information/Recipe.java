@@ -189,7 +189,9 @@ public class Recipe implements Serializable
   }
  
  
- 
+  /**
+   * Predefined recipes
+   */
   static 
   {
    //Bananas Foster
