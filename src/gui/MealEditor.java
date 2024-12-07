@@ -138,6 +138,7 @@ public class MealEditor extends JFrame
     saveAs.setEnabled(false);
     close = (JButton) imagePanel.getComponent(4);
     close.addActionListener(new CloseListener());
+    close.setEnabled(false);
     save.addActionListener(new SaveListener(textBox, ol, sal));
         
     //initialize delete button listener
@@ -208,9 +209,9 @@ public class MealEditor extends JFrame
           List<JComponent> comps = re.getComps();
           comps.add(textBox);
           if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
-            new ChangeTracker(comps, saveAs);
+            new ChangeTracker(close, comps, saveAs);
           } else {
-            new ChangeTracker(comps, saveAs, save);
+            new ChangeTracker(close, comps, saveAs, save);
           }
         }
       } else 
@@ -239,9 +240,9 @@ public class MealEditor extends JFrame
           List<JComponent> comps = re.getComps();
           comps.add(textBox);
           if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
-            new ChangeTracker(comps, saveAs);
+            new ChangeTracker(close, comps, saveAs);
           } else {
-            new ChangeTracker(comps, saveAs, save);
+            new ChangeTracker(close, comps, saveAs, save);
           }
         }
       }
@@ -304,16 +305,17 @@ public class MealEditor extends JFrame
         // Save recipe to its file
         updatedMeal.saveMealToFile(fileName);
         save.setEnabled(false);
+        close.setEnabled(true);
         if (recipeEditors.size() > 0) {
           for (RecipeEditor re : recipeEditors) {
             List<JComponent> comps = re.getComps();
             comps.add(textBox);
-            new ChangeTracker(comps, save, saveAs);
+            new ChangeTracker(close, comps, save, saveAs);
           }
         } else {
           List<JComponent> comps = new ArrayList<>();
           comps.add(textBox);
-          new ChangeTracker(comps, save, saveAs);
+          new ChangeTracker(close, comps, save, saveAs);
         }
       } 
       catch(IOException ex) 
@@ -346,7 +348,10 @@ public class MealEditor extends JFrame
     @Override
     public void actionPerformed(final ActionEvent e) 
     {
-      System.exit(0);
+      MealEditor me = new MealEditor(currentLocale);
+      setVisible(false);
+      me.setVisible(true);
+      close.setEnabled(false);
     }
     
   }
@@ -402,13 +407,14 @@ public class MealEditor extends JFrame
             for (RecipeEditor re : recipeEditors) {
               List<JComponent> comps = re.getComps();
               comps.add(textBox);
-              new ChangeTracker(comps, save, saveAs);
+              new ChangeTracker(close, comps, save, saveAs);
             }
           } else {
             List<JComponent> comps = new ArrayList<>();
             comps.add(textBox);
-            new ChangeTracker(comps, save, saveAs);
+            new ChangeTracker(close, comps, save, saveAs);
           }
+          close.setEnabled(true);
         } 
         catch (IOException ex) 
         {
@@ -489,7 +495,7 @@ public class MealEditor extends JFrame
           if (loaded.getRecipes().size() == 0) {
             List<JComponent> comps = new ArrayList<>();
             comps.add(textBox);
-            new ChangeTracker(comps, save, saveAs);
+            new ChangeTracker(close, comps, save, saveAs);
           }
           for (Recipe r : loaded.getRecipes()) 
           {
@@ -552,9 +558,10 @@ public class MealEditor extends JFrame
             button.setEnabled(false);
             List<JComponent> comps = re.getComps();
             comps.add(textBox);
-            new ChangeTracker(comps, save, saveAs);
+            new ChangeTracker(close, comps, save, saveAs);
           }
           open.setEnabled(false);
+          close.setEnabled(true);
         }    
         catch (ClassNotFoundException e1) 
         {

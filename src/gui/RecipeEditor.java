@@ -50,7 +50,7 @@ public class RecipeEditor extends JFrame {
   private JButton closeButton;
   private JButton saveButton;
   private ResourceBundle strings;
-  
+  private String state;
   private Locale currentLocale;
   private List<JComponent> components;
   
@@ -70,7 +70,6 @@ public class RecipeEditor extends JFrame {
     setSize(825, 775);
     setResizable(false);
     setLocationRelativeTo(null);
-    //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
     // Create main content panel
     mainPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -244,10 +243,10 @@ public class RecipeEditor extends JFrame {
 
     //utensil listener
     AddUtensilListener utensilAddListen = new AddUtensilListener(utensilNameText,
-            detailsText, stepUtensilCombo);
+            detailsText, stepUtensilCombo, stepOnCombo);
     addUtensil.addActionListener(utensilAddListen);
     DeleteUtensilListener utensilDeleteListener = 
-        new DeleteUtensilListener(utensilsList, stepUtensilCombo);
+        new DeleteUtensilListener(utensilsList, stepUtensilCombo, stepOnCombo);
     utensilDelete.addActionListener(utensilDeleteListener);
     AddIngListener ingAddListen = new AddIngListener(ingNameInput,
             ingDetailsInput, ingAmountInput, ingUnitCombo, stepOnCombo);
@@ -290,7 +289,7 @@ public class RecipeEditor extends JFrame {
     saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
     saveAsButton.setEnabled(false);
     SaveAsListener saveAsListener = new SaveAsListener(nameText, 
-        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton, currentLocale);
+        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton, closeButton, currentLocale);
     saveAsButton.addActionListener(saveAsListener);
     imagePanel.add(saveAsButton);
       
@@ -299,6 +298,7 @@ public class RecipeEditor extends JFrame {
     closeButton = new JButton(new ImageIcon(closeImg));
     closeButton.setPreferredSize(new Dimension(50, 50));
     closeButton.setToolTipText(strings.getString("tooltip_close"));
+    closeButton.setEnabled(false);
     CloseListener closeListener = new CloseListener();
     closeButton.addActionListener(closeListener);
     imagePanel.add(closeButton);
@@ -306,14 +306,14 @@ public class RecipeEditor extends JFrame {
     openListener = new OpenListener(nameText, servesText, ingNameInput,
         ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
         utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
-        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale, openButton, saveButton, components);
+        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale, openButton, saveButton, closeButton, components);
     openButton.addActionListener(openListener);
     
     saveListener = new SaveListener(openListener, saveAsListener, nameText, 
-        servesText, fullIngredientList, fullStepList, fullUtensilList, saveButton, components);
+        servesText, fullIngredientList, fullStepList, fullUtensilList, saveButton, closeButton, components);
     saveButton.addActionListener(saveListener);
     
-    new ChangeTracker(components, saveAsButton);
+    new ChangeTracker(closeButton, components, saveAsButton);
     
     mainPanel.add(imagePanel);
     mainPanel.add(namePanel);
@@ -372,6 +372,7 @@ public class RecipeEditor extends JFrame {
       RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
       re.getCloseButton().setEnabled(false);
       re.setVisible(true);
+      state = "unchanged";
     }
   }
   
@@ -504,13 +505,29 @@ public class RecipeEditor extends JFrame {
     public void actionPerformed(final ActionEvent e) 
     {
         // Add info to the list
-      StringBuilder stepDescription = new StringBuilder();
-      stepDescription.append(stepAction.getSelectedItem().toString())
-                     .append(" the ")
-                     .append(stepOn.getSelectedItem().toString())
-                     .append(" using a ")
-                     .append(stepUtensil.getSelectedItem().toString())
-                     .append(". ");
+      boolean isUtensil = false;
+      for (Utensil ut : fullUtensilList) {
+        if (ut.getName().equals(stepOn.getSelectedItem().toString())) {
+          isUtensil = true;
+          break;
+        }
+      }
+      StringBuilder stepDescription;
+      if (isUtensil) {
+        stepDescription = new StringBuilder();
+        stepDescription.append(stepAction.getSelectedItem().toString())
+                       .append(" the ")
+                       .append("contents of the " + stepOn.getSelectedItem().toString())
+                       .append(" in the ")
+                       .append(stepUtensil.getSelectedItem().toString());
+      } else {
+        stepDescription = new StringBuilder();
+        stepDescription.append(stepAction.getSelectedItem().toString())
+                       .append(" the ")
+                       .append(stepOn.getSelectedItem().toString())
+                       .append(" in the ")
+                       .append(stepUtensil.getSelectedItem().toString());
+      }
 
       if (!stepDetails.getText().equals("")) 
       {
@@ -543,13 +560,15 @@ public class RecipeEditor extends JFrame {
     JTextField utensilName;
     JTextField details;
     JComboBox stepUtensilCombo;
+    JComboBox stepOn;
     
     public AddUtensilListener(final JTextField utensilName, 
-        final JTextField details, final JComboBox stepUtensilCombo) 
+        final JTextField details, final JComboBox stepUtensilCombo, final JComboBox stepOn) 
     {
       this.details = details;
       this.utensilName = utensilName;
       this.stepUtensilCombo = stepUtensilCombo;
+      this.stepOn = stepOn;
       
     }
     @SuppressWarnings("unchecked")
@@ -568,6 +587,7 @@ public class RecipeEditor extends JFrame {
       fullUtensilList.add(new Utensil(utensilName.getText(),
           details.getText()));
       stepUtensilCombo.addItem(utensilName.getText());
+      stepOn.addItem(utensilName.getText());
       utensilName.setText("");
       details.setText("");
     }
@@ -614,12 +634,14 @@ public class RecipeEditor extends JFrame {
   {
     JList<String> utensilList;
     JComboBox<String> stepUtensilCombo;
+    JComboBox stepOn;
 
     public DeleteUtensilListener(final JList<String> utensilList, 
-        final JComboBox<String> stepUtensilCombo) 
+        final JComboBox<String> stepUtensilCombo, JComboBox stepOn) 
     {
       this.utensilList = utensilList;
       this.stepUtensilCombo = stepUtensilCombo;
+      this.stepOn = stepOn;
     }
 
     @Override
@@ -628,6 +650,7 @@ public class RecipeEditor extends JFrame {
       int selectedIndex = utensilList.getSelectedIndex();
       if (selectedIndex != -1) 
       { // Ensure an item is selected
+        stepOn.removeItem(fullUtensilList.get(selectedIndex).getName());
         fullUtensilList.remove(selectedIndex);
         dlm2.removeElement(utensilList.getSelectedValue());
         stepUtensilCombo.removeAllItems();
@@ -679,10 +702,13 @@ public class RecipeEditor extends JFrame {
     @Override
     public void actionPerformed(final ActionEvent e) 
     {
-      System.exit(0);
+      RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
+      setVisible(false);
+      re.setVisible(true);
+      closeButton.setEnabled(false);
     }
   }
-    
+
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> 
     {

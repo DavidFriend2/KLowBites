@@ -46,6 +46,7 @@ public class OpenListener implements ActionListener
   ResourceBundle strings;
   JButton openButton;
   JButton saveButton;
+  JButton closeButton;
   List<JComponent> components;
   
   public OpenListener(final JTextField name, final JTextField serves, 
@@ -55,7 +56,8 @@ public class OpenListener implements ActionListener
       final JComboBox stepUtensilCombo, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
       final DefaultListModel<String> dlm, final DefaultListModel<String> dlm2, 
-      final DefaultListModel<String> dlm3, Locale locale, JButton openButton, JButton saveButton, List<JComponent> components) 
+      final DefaultListModel<String> dlm3, Locale locale, JButton openButton, 
+      JButton saveButton, JButton closeButton, List<JComponent> components) 
   {
     this.name = name;
     this.serves = serves;
@@ -76,6 +78,7 @@ public class OpenListener implements ActionListener
     this.dlm3 = dlm3;
     this.openButton = openButton;
     this.saveButton = saveButton;
+    this.closeButton = closeButton;
     this.components = components;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
@@ -144,22 +147,44 @@ public class OpenListener implements ActionListener
             dlm2.addElement(ut.getName());
             fullUtensilList.add(ut);
           }
+          stepOnCombo.addItem(ut.getName());
           stepUtensilCombo.addItem(ut.getName());
         }
         for (Step st : loaded.getSteps()) 
         {
+          boolean isUtensil = false;
+          for (Utensil ut : loaded.getUtenils()) {
+            System.out.println(st.getSourceUtensilOrIngredient());
+            if (ut.getName().toLowerCase().equals(st.getSourceUtensilOrIngredient())) {
+              isUtensil = true;
+              break;
+            }
+          }
           if (st.getDetails() == null || st.getDetails().equals("")) 
           {
-            dlm3.addElement(st.getAction() + " the " 
-                + st.getSourceUtensilOrIngredient() + " using a "
-                + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
+            if (isUtensil) {
+              dlm3.addElement(st.getAction() + " the contents of the " 
+                  + st.getSourceUtensilOrIngredient() + " in the "
+                  + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
+            } else {
+              dlm3.addElement(st.getAction() + " the " 
+                  + st.getSourceUtensilOrIngredient() + " in the "
+                  + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
+            }
           } 
           else 
           {
-            dlm3.addElement(st.getAction() + " the "
-                + st.getSourceUtensilOrIngredient() + " using a "
-                + st.getDestinationUtensil() + " " + st.getDetails() 
-                + ". Estimated Time: " + st.getTime() + " minutes");
+            if (isUtensil) {
+              dlm3.addElement(st.getAction() + " the contents of the "
+                  + st.getSourceUtensilOrIngredient() + " in the "
+                  + st.getDestinationUtensil() + " " + st.getDetails() 
+                  + ". Estimated Time: " + st.getTime() + " minutes");
+            } else {
+              dlm3.addElement(st.getAction() + " the "
+                  + st.getSourceUtensilOrIngredient() + " in the "
+                  + st.getDestinationUtensil() + " " + st.getDetails() 
+                  + ". Estimated Time: " + st.getTime() + " minutes");
+            }
           }
           
           fullStepList.add(st);
@@ -168,7 +193,8 @@ public class OpenListener implements ActionListener
         stepList.setModel(dlm3);
         utensilList.setModel(dlm2);
         openButton.setEnabled(false);
-        new ChangeTracker(components, saveButton);
+        closeButton.setEnabled(true);
+        new ChangeTracker(closeButton, components, saveButton);
       } catch (ClassNotFoundException e1) 
       {
         // TODO Auto-generated catch block

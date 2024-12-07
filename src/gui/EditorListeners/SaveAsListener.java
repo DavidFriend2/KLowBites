@@ -29,10 +29,12 @@ public class SaveAsListener implements ActionListener
   private String fileName;
   private List<JComponent> components;
   private JButton saveButton;
+  private JButton closeButton;
   
   public SaveAsListener(final JTextField nameText, final JTextField servesText, 
       final List<RecipeIngredient> fullIngredientList, 
-      final List<Utensil> fullUtensilList, final List<Step> fullStepList, List<JComponent> components, JButton saveButton, Locale locale) 
+      final List<Utensil> fullUtensilList, final List<Step> fullStepList, List<JComponent> components, 
+      JButton saveButton, JButton closeButton, Locale locale) 
   {
     this.name = nameText;
     this.serves = servesText;
@@ -41,6 +43,7 @@ public class SaveAsListener implements ActionListener
     this.fullUtensilList = fullUtensilList;
     this.components = components;
     this.saveButton = saveButton;
+    this.closeButton = closeButton;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
   
@@ -84,7 +87,8 @@ public class SaveAsListener implements ActionListener
               fullIngredientList, fullUtensilList, fullStepList);
           newRecipe.saveRecipeToFile(fileName);
         }
-        new ChangeTracker(components, saveButton);
+        new ChangeTracker(closeButton, components, saveButton);
+        closeButton.setEnabled(true);
       } 
       catch (IOException ex) 
       {

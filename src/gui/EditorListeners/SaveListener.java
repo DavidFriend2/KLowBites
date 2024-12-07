@@ -26,12 +26,13 @@ public class SaveListener implements ActionListener
   List<Step> fullStepList;
   List<Utensil> fullUtensilList;
   JButton saveButton;
+  JButton closeButton;
   List<JComponent> components;
 
   public SaveListener(final OpenListener openListener, SaveAsListener saveAsListener, final JTextField name, 
       final JTextField serves, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
-      JButton saveButton, List<JComponent> components)
+      JButton saveButton, JButton closeButton, List<JComponent> components)
   {
     this.openListener = openListener;
     this.saveAsListener = saveAsListener;
@@ -41,6 +42,7 @@ public class SaveListener implements ActionListener
     this.fullStepList = fullStepList;
     this.fullUtensilList = fullUtensilList;
     this.saveButton = saveButton;
+    this.closeButton = closeButton;
     this.components = components;
   }
   
@@ -79,7 +81,8 @@ public class SaveListener implements ActionListener
       // Save recipe to its file
       updatedRecipe.saveRecipeToFile(fileName);
       saveButton.setEnabled(false);
-      new ChangeTracker(components, saveButton);
+      closeButton.setEnabled(true);
+      new ChangeTracker(closeButton, components, saveButton);
     } catch(IOException ex) 
     {
       ex.printStackTrace();
