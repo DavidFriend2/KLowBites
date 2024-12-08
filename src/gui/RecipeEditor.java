@@ -712,7 +712,7 @@ public class RecipeEditor extends JFrame {
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> 
     {
-      Locale locale = Locale.getDefault(); // to change language (:
+      Locale locale = Locale.getDefault();
       new RecipeEditor(locale).setVisible(true);
     });
   }

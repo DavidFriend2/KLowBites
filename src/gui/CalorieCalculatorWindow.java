@@ -40,9 +40,16 @@ public class CalorieCalculatorWindow extends JFrame
   private JTextField amountField;
   private JComboBox<String> unitsComboBox;
   private JTextField caloriesField;
-
   private ResourceBundle strings;
 
+  /**
+   * Constructor to initialize everything in the window.
+   * 
+   * @param locale
+   *          language used
+   * @param unitSystem
+   *          to use correct units
+   */
   public CalorieCalculatorWindow(Locale locale, UnitSystemPreferences.UnitSystem unitSystem)
   {
     strings = ResourceBundle.getBundle("resources.Strings", locale);
@@ -54,6 +61,12 @@ public class CalorieCalculatorWindow extends JFrame
     setupActionListeners();
   }
 
+  /**
+   * Changes language of the window.
+   * 
+   * @param newLocale
+   *          the language
+   */
   public void updateLanguage(final Locale newLocale)
   {
     loadStrings(newLocale);
@@ -61,6 +74,10 @@ public class CalorieCalculatorWindow extends JFrame
     SwingUtilities.updateComponentTreeUI(this);
   }
 
+  /**
+   * Gets the correct strings based on language.
+   * 
+   */
   private void updateComponentTexts()
   {
     setTitle(strings.getString("calorie_calculator_title"));
@@ -91,6 +108,11 @@ public class CalorieCalculatorWindow extends JFrame
     repaint();
   }
 
+  /**
+   * Loads the correct locale strings.
+   * 
+   * @param locale
+   */
   private void loadStrings(final Locale locale)
   {
     try
@@ -105,6 +127,10 @@ public class CalorieCalculatorWindow extends JFrame
     }
   }
 
+  /**
+   * Creates the window.
+   * 
+   */
   private void initializeWindow()
   {
     setTitle(strings.getString("calorie_calculator_title"));
@@ -113,6 +139,10 @@ public class CalorieCalculatorWindow extends JFrame
     setLocationRelativeTo(null);
   }
 
+  /**
+   * Creates the window panels.
+   * 
+   */
   private void createPanels()
   {
     mainPanel = new JPanel(new BorderLayout());
@@ -121,6 +151,12 @@ public class CalorieCalculatorWindow extends JFrame
     caloriesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
   }
 
+  /**
+   * Adds the components to the window.
+   * 
+   * @param unitSystem
+   *          to use correct units
+   */
   private void addComponentsToPanels(UnitSystemPreferences.UnitSystem unitSystem)
   {
     addIconsToPanel();
@@ -128,6 +164,9 @@ public class CalorieCalculatorWindow extends JFrame
     addCaloriesComponents();
   }
 
+  /**
+   * Adds all icons to panel.
+   */
   private void addIconsToPanel()
   {
     openButton = createIconButton(ICON3_PATH, 30, 30, "tooltip_open");
@@ -138,6 +177,10 @@ public class CalorieCalculatorWindow extends JFrame
     iconPanel.add(resetButton);
   }
 
+  /**
+   * Gathers the correct units for window.
+   * 
+   */
   public void updateUnits()
   {
     String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
@@ -145,6 +188,19 @@ public class CalorieCalculatorWindow extends JFrame
     // Any other necessary updates
   }
 
+  /**
+   * Creates the icon.
+   * 
+   * @param imagePath
+   *          path of image
+   * @param width
+   *          of icon
+   * @param height
+   *          of icon
+   * @param toolTipKey
+   *          dislays the key
+   * @return the button
+   */
   private JButton createIconButton(final String imagePath, final int width, final int height,
       final String toolTipKey)
   {
@@ -164,6 +220,12 @@ public class CalorieCalculatorWindow extends JFrame
     return button;
   }
 
+  /**
+   * Adds labels and units.
+   * 
+   * @param unitSystem
+   *          of the window
+   */
   private void addInputComponents(UnitSystemPreferences.UnitSystem unitSystem)
   {
     inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
@@ -196,6 +258,10 @@ public class CalorieCalculatorWindow extends JFrame
     inputPanel.add(unitsComboBox);
   }
 
+  /**
+   * Adds the calorie label.
+   * 
+   */
   private void addCaloriesComponents()
   {
     caloriesPanel.add(new JLabel(strings.getString("calorie_calculator_calories_label")));
@@ -206,6 +272,9 @@ public class CalorieCalculatorWindow extends JFrame
     caloriesPanel.add(caloriesField);
   }
 
+  /**
+   * Creates main window.
+   */
   private void assembleMainPanel()
   {
     JPanel contentPanel = new JPanel(new BorderLayout());
@@ -219,6 +288,13 @@ public class CalorieCalculatorWindow extends JFrame
     add(mainPanel);
   }
 
+  /**
+   * Gets the images for the window.
+   * 
+   * @param path
+   *          of the icon
+   * @return the icon
+   */
   private ImageIcon createImageIcon(final String path)
   {
     java.net.URL imgURL = getClass().getResource(path);
@@ -234,6 +310,9 @@ public class CalorieCalculatorWindow extends JFrame
     }
   }
 
+  /**
+   * Adds listeners to do calculations and open file.
+   */
   private void setupActionListeners()
   {
     calculateButton.addActionListener(e -> calculateCalories());
@@ -243,6 +322,9 @@ public class CalorieCalculatorWindow extends JFrame
     openButton.addActionListener(e -> openFiles());
   }
 
+  /**
+   * Outputs the correct calories.
+   */
   private void calculateCalories()
   {
     String ingredient = (String) ingredientComboBox.getSelectedItem();
@@ -277,6 +359,13 @@ public class CalorieCalculatorWindow extends JFrame
     }
   }
 
+  /**
+   * Gets all units.
+   * 
+   * @param localizedUnit
+   *          of the system
+   * @return correct unit
+   */
   private MassVolumeConverter.Unit stringToUnit(final String localizedUnit)
   {
     if (localizedUnit.equals(strings.getString("unit_pinches")))
@@ -313,6 +402,10 @@ public class CalorieCalculatorWindow extends JFrame
     throw new IllegalArgumentException("Unknown unit: " + localizedUnit);
   }
 
+  /**
+   * Reset the window with blank fields.
+   * 
+   */
   private void resetFields()
   {
     ingredientComboBox.setSelectedIndex(0);
@@ -321,6 +414,10 @@ public class CalorieCalculatorWindow extends JFrame
     caloriesField.setText("");
   }
 
+  /**
+   * Method to open files.
+   * 
+   */
   private void openFiles()
   {
     resetFields();
@@ -379,6 +476,12 @@ public class CalorieCalculatorWindow extends JFrame
     }
   }
 
+  /**
+   * Main to display window.
+   * 
+   * @param args
+   *          strings
+   */
   public static void main(final String[] args)
   {
     SwingUtilities.invokeLater(() -> {
