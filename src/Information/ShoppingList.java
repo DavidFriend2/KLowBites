@@ -19,36 +19,41 @@ public class ShoppingList
 
   /**
    * Shopping List Constructor for a Recipe
-
-   * @param recipe to shop for
-   * @param numofpeople to shop for
+   * 
+   * @param recipe
+   *          to shop for
+   * @param numofpeople
+   *          to shop for
    */
   public ShoppingList(Recipe recipe, int numofpeople)
   {
     // Updated for amount of people
     this.numofpeople = numofpeople;
-    this.recipe = changeIngredientAmount(recipe);
+    Recipe converted = changeIngredientAmount(recipe);
+    this.recipe = converted;
     this.shoppingList = this.recipe.getIngredients();
   }
 
   /**
    * Shopping List Constructor for a Meal
-
-   * @param meal to shop for
-   * @param numofpeople to shop for
+   * 
+   * @param meal
+   *          to shop for
+   * @param numofpeople
+   *          to shop for
    */
   public ShoppingList(Meal meal, int numofpeople)
   {
     this.numofpeople = numofpeople;
     this.meal = meal;
-    
+
     this.shoppingList = new ArrayList<>();
     // go through every meal
     for (Recipe recipe : meal.getRecipes())
     {
       // Update for amount of people
       Recipe converted = changeIngredientAmount(recipe);
-      
+
       // add each ingredient from every meal
       for (RecipeIngredient ri : converted.getIngredients())
       {
@@ -59,23 +64,31 @@ public class ShoppingList
         for (RecipeIngredient alreadyin : this.shoppingList)
         {
           // if ingredients already been added, increase amount
+          double newAmount = ri.getAmount();
           if (ri.getName().equals(alreadyin.getName()))
           {
-            //convert units before adding amount
-            Ingredient riIngredient = Ingredient.getIngredientbyName(ri.getName());
-            MassVolumeConverter.Unit fromUnit = getUnitFromString(ri.getUnit());
-            MassVolumeConverter.Unit toUnit = getUnitFromString(alreadyin.getUnit());
-            
-            double newAmount = convert(ri.getAmount(), fromUnit, toUnit, riIngredient);
-            
+            // convert units before adding amount
+            if (!(ri.getUnit().equals("individual")))
+            {
+
+              if (!(ri.getUnit().equals(alreadyin.getUnit())))
+              {
+                Ingredient riIngredient = Ingredient.getIngredientbyName(ri.getName());
+                MassVolumeConverter.Unit fromUnit = getUnitFromString(ri.getUnit());
+                MassVolumeConverter.Unit toUnit = getUnitFromString(alreadyin.getUnit());
+
+                newAmount = convert(ri.getAmount(), fromUnit, toUnit, riIngredient);
+              }
+            }
+
             alreadyin.setAmount(alreadyin.getAmount() + newAmount);
             in = true;
             break;
           }
-          
+
         }
-        
-        //if ingredient isn't in list add it
+
+        // if ingredient isn't in list add it
         if (!in)
         {
           this.shoppingList.add(ri);
@@ -112,13 +125,14 @@ public class ShoppingList
    * 
    * Updates the amount for each ingredient based on the amount of people to shop for
    * 
-   * @param recipeToChange to update
+   * @param recipeToChange
+   *          to update
    * @return updated recipe
    */
   private Recipe changeIngredientAmount(Recipe recipeToChange)
   {
-    Recipe converted = new Recipe(recipeToChange.getName(), recipeToChange.getServes(), recipeToChange.getIngredients(), 
-        recipeToChange.getUtenils(), recipeToChange.getSteps());
+    Recipe converted = new Recipe(recipeToChange.getName(), recipeToChange.getServes(),
+        recipeToChange.getIngredients(), recipeToChange.getUtenils(), recipeToChange.getSteps());
 
     double convert = (this.numofpeople) * 1.0 / converted.getServes();
 
@@ -136,14 +150,18 @@ public class ShoppingList
    * 
    * Converts amount of an ingredient from one unit to another
    * 
-   * @param value to convert
-   * @param from unit to convert from
-   * @param to unit to convert to
-   * @param ingredient to use in case density info is required
+   * @param value
+   *          to convert
+   * @param from
+   *          unit to convert from
+   * @param to
+   *          unit to convert to
+   * @param ingredient
+   *          to use in case density info is required
    * @return the converted amount
    */
-  public static double convert(double value, MassVolumeConverter.Unit from, MassVolumeConverter.Unit to,
-      Ingredient ingredient)
+  public static double convert(double value, MassVolumeConverter.Unit from,
+      MassVolumeConverter.Unit to, Ingredient ingredient)
   {
     // Check if both from and to are mass units
     if (isMass(from) && isMass(to))
@@ -163,58 +181,62 @@ public class ShoppingList
   /**
    * Get Unit from its string rep
    * 
-   * @param unitString string rep of unit
+   * @param unitString
+   *          string rep of unit
    * @return the actual unit
    */
-  public static MassVolumeConverter.Unit getUnitFromString(String unitString) {
+  public static MassVolumeConverter.Unit getUnitFromString(String unitString)
+  {
     String unit = unitString.trim().toLowerCase();
 
-    switch (unit) {
-        case "cup":
-        case "cups":
-            return MassVolumeConverter.Unit.CUPS;
-        case "gram":
-        case "grams":
-            return MassVolumeConverter.Unit.GRAMS;
-        case "ounce":
-        case "ounces":
-            return MassVolumeConverter.Unit.OUNCES;
-        case "pound":
-        case "pounds":
-            return MassVolumeConverter.Unit.POUNDS;
-        case "milliliter":
-        case "milliliters":
-            return MassVolumeConverter.Unit.MILLILITERS; 
-        case "teaspoon":
-        case "teaspoons":
-            return MassVolumeConverter.Unit.TEASPOONS;
-        case "tablespoon":
-        case "tablespoons":
-            return MassVolumeConverter.Unit.TABLESPOONS;
-        case "pinch":
-        case "pinches":
-            return MassVolumeConverter.Unit.PINCHES;
-        case "pint":
-        case "pints":
-            return MassVolumeConverter.Unit.PINTS;
-        case "quart":
-        case "quarts":
-            return MassVolumeConverter.Unit.QUARTS;
-        case "gallon":
-        case "gallons":
-            return MassVolumeConverter.Unit.GALLONS;
-        case "fluid ounce":
-        case "fluid ounces":
-            return MassVolumeConverter.Unit.FLUID_OUNCES;
-        default:
-            throw new IllegalArgumentException("Invalid unit string: " + unitString);
+    switch (unit)
+    {
+      case "cup":
+      case "cups":
+        return MassVolumeConverter.Unit.CUPS;
+      case "gram":
+      case "grams":
+        return MassVolumeConverter.Unit.GRAMS;
+      case "ounce":
+      case "ounces":
+        return MassVolumeConverter.Unit.OUNCES;
+      case "pound":
+      case "pounds":
+        return MassVolumeConverter.Unit.POUNDS;
+      case "milliliter":
+      case "milliliters":
+        return MassVolumeConverter.Unit.MILLILITERS;
+      case "teaspoon":
+      case "teaspoons":
+        return MassVolumeConverter.Unit.TEASPOONS;
+      case "tablespoon":
+      case "tablespoons":
+        return MassVolumeConverter.Unit.TABLESPOONS;
+      case "pinch":
+      case "pinches":
+        return MassVolumeConverter.Unit.PINCHES;
+      case "pint":
+      case "pints":
+        return MassVolumeConverter.Unit.PINTS;
+      case "quart":
+      case "quarts":
+        return MassVolumeConverter.Unit.QUARTS;
+      case "gallon":
+      case "gallons":
+        return MassVolumeConverter.Unit.GALLONS;
+      case "fluid ounce":
+      case "fluid ounces":
+        return MassVolumeConverter.Unit.FLUID_OUNCES;
+      default:
+        throw new IllegalArgumentException("Invalid unit string: " + unitString);
     }
-}
+  }
 
   /**
-   * Check if unit is mass 
+   * Check if unit is mass
    * 
-   * @param unit to check
+   * @param unit
+   *          to check
    * 
    * @return true if mass unit, false if not
    */
@@ -231,9 +253,10 @@ public class ShoppingList
   }
 
   /**
-   * Check if unit is volume 
+   * Check if unit is volume
    * 
-   * @param unit to check
+   * @param unit
+   *          to check
    * 
    * @return true if volume unit, false if not
    */

@@ -18,7 +18,7 @@ class RecipeTest
   @Test
   void testRecipeConstructorAndGetters()
   {
-    // Arrange: Create test data
+    
     String testName = "Test Recipe";
     int testServes = 4;
 
