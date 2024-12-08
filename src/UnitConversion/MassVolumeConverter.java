@@ -14,15 +14,15 @@ public class MassVolumeConverter
   public enum Unit 
   {
       CUPS, DRAMS, FLUID_OUNCES, GALLONS, GRAMS, MILLILITERS, 
-      OUNCES, PINCHES, PINTS, POUNDS, QUARTS, TABLESPOONS, TEASPOONS
-      //KILOGRAMS, LITERS
+      OUNCES, PINCHES, PINTS, POUNDS, QUARTS, TABLESPOONS, TEASPOONS,
+      KILOGRAMS, LITERS
   }
 
   /**
    * Array of units considered as weights/mass units.
    */
   private static final Unit[] WEIGHTS = {Unit.GRAMS, Unit.DRAMS,
-		      Unit.OUNCES, Unit.POUNDS};// , Unit.KILOGRAMS};
+		      Unit.OUNCES, Unit.POUNDS, Unit.KILOGRAMS};
 
   /**
    * Converts a value from one unit to another for a specific ingredient.

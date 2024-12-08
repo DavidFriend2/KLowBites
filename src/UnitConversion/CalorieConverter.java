@@ -2,14 +2,14 @@ package UnitConversion;
 
 import Information.Ingredient;
 
-import Information.Ingredient;
-
 public class CalorieConverter {
   private static final MassVolumeConverter.Unit[] WEIGHTS  = {
       MassVolumeConverter.Unit.DRAMS, 
       MassVolumeConverter.Unit.GRAMS, 
       MassVolumeConverter.Unit.OUNCES, 
-      MassVolumeConverter.Unit.POUNDS
+      MassVolumeConverter.Unit.POUNDS,
+      MassVolumeConverter.Unit.KILOGRAMS
+      
   };
 
   public static double convert(final Ingredient ingredient, 

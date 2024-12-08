@@ -2,8 +2,6 @@ package gui;
 
 import javax.swing.*;
 
-import Information.Recipe;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +15,9 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-// Main class that extends JFrame to create the primary window of the application
+/**
+ * 
+ */
 public class Main extends JFrame
 {
   private static final long serialVersionUID = 1293847254;
@@ -32,7 +32,13 @@ public class Main extends JFrame
   private JLabel logoLabel;
   public static String htmlPath;
 
-  // Constructor that takes a Locale parameter for internationalization
+  /**
+   * Constructor for the Main class. Initializes the application window with internationalization.
+   * support
+   * 
+   * @param locale
+   *          is the language used
+   */
   public Main(Locale locale)
   {
     loadStrings(locale);
@@ -55,7 +61,9 @@ public class Main extends JFrame
     }
   }
 
-  // Method to load configuration properties from a file
+  /**
+   * Loads the correct configs like logo, color, and units.
+   */
   private void loadConfig()
   {
     try
@@ -85,6 +93,9 @@ public class Main extends JFrame
     }
   }
 
+  /**
+   * Saves user configs like logo, color, and units.
+   */
   private void saveConfig()
   {
     try
@@ -106,6 +117,13 @@ public class Main extends JFrame
     }
   }
 
+  /**
+   * Returns the correct user specified color.
+   * 
+   * @param color
+   *          of the background
+   * @return the correct color
+   */
   private String getColorName(Color color)
   {
     if (color.equals(Color.BLACK))
@@ -137,7 +155,13 @@ public class Main extends JFrame
     return "WHITE";
   }
 
-  // Helper method to convert a color name string to a Color object
+  /**
+   * Converts string to correct color.
+   * 
+   * @param colorName
+   *          of the color
+   * @return the correct color
+   */
   private Color getColorFromString(final String colorName)
   {
     switch (colorName.toUpperCase())
@@ -173,7 +197,12 @@ public class Main extends JFrame
     }
   }
 
-  // Method to load internationalized strings based on the given locale
+  /**
+   * Loads the correct strings based on language.
+   * 
+   * @param locale
+   *          is the language
+   */
   private void loadStrings(final Locale locale)
   {
     currentLocale = locale;
@@ -192,34 +221,27 @@ public class Main extends JFrame
     }
   }
 
-  // Set up the basic properties of our main window
+  /**
+   * Creates the main window with title and size.
+   */
   private void initializeWindow()
   {
-    // Set the title of the window using the internationalized string
     setTitle(strings.getString("main_window_title"));
-
-    // Set the size of the window (width: 600 pixels, height: 400 pixels)
     setSize(600, 400);
-
-    // Specify what happens when the close button is clicked (exit the application)
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    // Center the window on the screen
     setLocationRelativeTo(null);
   }
 
-  // Load and display the application logo
+  /**
+   * Creates the logo for the main window.
+   */
   private void initializeLogo()
   {
-    // Reload the configuration to ensure we have the latest logo path
     loadConfig();
-
-    // Create an ImageIcon object from the logo file
     logoIcon = createImageIcon(logoPath);
 
     if (logoIcon != null)
     {
-      // If the logo was successfully loaded, create a label with the logo
       logoLabel = new JLabel(logoIcon);
       add(logoLabel, BorderLayout.NORTH);
     }
@@ -231,15 +253,18 @@ public class Main extends JFrame
     }
   }
 
-  // Helper method to create an ImageIcon from a file path
+  /**
+   * Creates the button icons in the files.
+   * 
+   * @param path
+   * @return
+   */
   private ImageIcon createImageIcon(final String path)
   {
-    // Get the URL of the image file from the class resources
     java.net.URL imgURL = getClass().getResource(path);
 
     if (imgURL != null)
     {
-      // If the file was found, create and return an ImageIcon
       return new ImageIcon(imgURL);
     }
     else
@@ -250,16 +275,13 @@ public class Main extends JFrame
     }
   }
 
-  // Create the menu bar for the application
+  /**
+   * Creates the menu bar for the main window.
+   */
   private void createMenuBar()
   {
-    // Create a new JMenuBar object
     JMenuBar menuBar = new JMenuBar();
-
-    // Set this JMenuBar as the menu bar for our window
     setJMenuBar(menuBar);
-
-    // Call methods to create each menu and add them to the menu bar
     createFileMenu(menuBar);
     createEditMenu(menuBar);
     createSearchMenu(menuBar);
@@ -269,16 +291,28 @@ public class Main extends JFrame
     createHelpMenu(menuBar);
   }
 
-  // Create the "File" menu
-  private void createFileMenu(JMenuBar menuBar) {
+  /**
+   * Creates the File menu Bar.
+   * 
+   * @param menuBar
+   *          of the application
+   */
+  private void createFileMenu(JMenuBar menuBar)
+  {
     JMenu fileMenu = new JMenu(strings.getString("menu_file"));
     menuBar.add(fileMenu);
 
     JMenuItem exitItem = new JMenuItem(strings.getString("menu_item_exit"));
     exitItem.addActionListener(e -> System.exit(0));
     fileMenu.add(exitItem);
-}
+  }
 
+  /**
+   * Sets the unit correctly for the system.
+   * 
+   * @param unitSystem
+   *          the units used
+   */
   private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem)
   {
     UnitSystemPreferences.setCurrentUnitSystem(unitSystem);
@@ -294,36 +328,41 @@ public class Main extends JFrame
     saveConfig();
   }
 
-  // Create the "Edit" menu
+  /**
+   * Creates the edit menu in the main window.
+   * 
+   * @param menuBar
+   *          of the application
+   */
   private void createEditMenu(final JMenuBar menuBar)
   {
-    // Create a new JMenu for the Edit menu, with an internationalized label
     JMenu editMenu = new JMenu(strings.getString("menu_edit"));
-
-    // Add the Edit menu to the menu bar
     menuBar.add(editMenu);
-
-    // Create a menu item for the recipe editor
     JMenuItem recipeEditorItem = new JMenuItem(strings.getString("menu_item_recipe"));
     editMenu.add(recipeEditorItem);
 
-    // Add an action listener to open the recipe editor when this item is clicked
+    // action listener to open the recipe editor when this item is clicked
     recipeEditorItem.addActionListener(e -> {
       RecipeEditor recipeViewer = new RecipeEditor(currentLocale);
       recipeViewer.setVisible(true);
     });
 
-    // Create a menu item for the meal editor
     JMenuItem mealEditorItem = new JMenuItem(strings.getString("menu_item_meal"));
     editMenu.add(mealEditorItem);
 
-    // Add an action listener to open the meal editor when this item is clicked
+    // action listener to open the meal editor when this item is clicked
     mealEditorItem.addActionListener(e -> {
       MealEditor mealViewer = new MealEditor(currentLocale);
       mealViewer.setVisible(true);
     });
   }
-  
+
+  /**
+   * Creates view menu in main window.
+   * 
+   * @param menuBar
+   *          of the application
+   */
   private void createViewMenu(final JMenuBar menuBar)
   {
     JMenu viewMenu = new JMenu(strings.getString("menu_view"));
@@ -338,23 +377,22 @@ public class Main extends JFrame
     });
   }
 
-  // Add the "Tools" menu to our menu bar
+  /**
+   * Creates the tool menu in the main window.
+   * 
+   * @param menuBar
+   *          of the application
+   */
   private void createToolsMenu(final JMenuBar menuBar)
   {
-    // Create a new menu for Tools using the internationalized string
     JMenu toolsMenu = new JMenu(strings.getString("menu_tools"));
     menuBar.add(toolsMenu);
-
-    // Create menu items for Calories Calculator and Units Converter
     JMenuItem caloriesCalculatorItem = new JMenuItem(
         strings.getString("menu_item_calories_calculator"));
     JMenuItem unitsConverterItem = new JMenuItem(strings.getString("menu_item_units_converter"));
-
-    // Add these items to the Tools menu
     toolsMenu.add(caloriesCalculatorItem);
     toolsMenu.add(unitsConverterItem);
 
-    // Add action listener for the Units Converter item
     unitsConverterItem.addActionListener(e -> {
       // Check if the converter window doesn't exist or is not visible
       if (converterWindow == null || !converterWindow.isDisplayable())
@@ -372,43 +410,41 @@ public class Main extends JFrame
       }
     });
 
-    // Add action listener for the Calories Calculator item
+    // action listener for the Calories Calculator item
     caloriesCalculatorItem.addActionListener(e -> {
       // Check if the calorie window doesn't exist or is not visible
       if (calorieWindow == null || !calorieWindow.isDisplayable())
       {
-        // Create a new calorie calculator window and make it visible
         calorieWindow = new CalorieCalculatorWindow(currentLocale,
             UnitSystemPreferences.getCurrentUnitSystem());
         calorieWindow.setVisible(true);
       }
       else
       {
-        // If the window already exists, bring it to the front and focus on it
         calorieWindow.toFront();
         calorieWindow.requestFocus();
       }
     });
   }
 
-  // Create the Search menu
+  /**
+   * Creates menu bar for main window.
+   * 
+   * @param menuBar
+   *          of the application
+   */
   private void createSearchMenu(final JMenuBar menuBar)
   {
-    // Create a new menu for Search using the internationalized string
     JMenu searchMenu = new JMenu(strings.getString("menu_search"));
     menuBar.add(searchMenu);
-
-    // Create a menu item for Recipe Searcher
     JMenuItem recipeSearcher = new JMenuItem(strings.getString("search_recipe_searcher"));
     searchMenu.add(recipeSearcher);
     // Add action listener for Recipe Searcher
     recipeSearcher.addActionListener(e -> {
-      // Create and display a new Recipe Searcher window
       RecipeSearcher rSearcher = new RecipeSearcher(currentLocale);
       rSearcher.setVisible(true);
     });
 
-    // Create a menu item for Meal Searcher
     JMenuItem mealSearcher = new JMenuItem(strings.getString("search_meal_searcher"));
     searchMenu.add(mealSearcher);
     // Add action listener for Meal Searcher
@@ -418,13 +454,22 @@ public class Main extends JFrame
       mSearcher.setVisible(true);
     });
   }
-  
-  private void createConfigureMenu(JMenuBar menuBar) {
+
+  /**
+   * Create config menu in main window.
+   * 
+   * @param menuBar
+   *          of the application
+   */
+  private void createConfigureMenu(JMenuBar menuBar)
+  {
     JMenu configureMenu = new JMenu(strings.getString("menu_configure"));
     menuBar.add(configureMenu);
 
-    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(strings.getString("menu_metric_units"));
-    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(strings.getString("menu_imperial_units"));
+    JRadioButtonMenuItem metricItem = new JRadioButtonMenuItem(
+        strings.getString("menu_metric_units"));
+    JRadioButtonMenuItem imperialItem = new JRadioButtonMenuItem(
+        strings.getString("menu_imperial_units"));
 
     ButtonGroup unitGroup = new ButtonGroup();
     unitGroup.add(metricItem);
@@ -438,9 +483,12 @@ public class Main extends JFrame
 
     metricItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.METRIC));
     imperialItem.addActionListener(e -> setUnitSystem(UnitSystemPreferences.UnitSystem.IMPERIAL));
-}
+  }
 
-  // Create the main panel of the application
+  /**
+   * Creates the actual main window.
+   * 
+   */
   private void createMainPanel()
   {
     mainPanel = new JPanel();
@@ -457,18 +505,16 @@ public class Main extends JFrame
     add(mainPanel, BorderLayout.CENTER);
   }
 
-  // Create the Help menu
+  /**
+   * Creates the help menu in the main window.
+   * 
+   * @param menuBar
+   *          of the application
+   */
   private void createHelpMenu(final JMenuBar menuBar)
   {
-    // Create a new menu item for Help using internationalized string
     JMenu helpMenu = new JMenu(strings.getString("menu_help"));
     menuBar.add(helpMenu);
-
-    // Create and add an About menu item
-    JMenuItem about = new JMenuItem(strings.getString("menu_item_about"));
-    // helpMenu.add(about);
-
-    // Create and add a User Guide menu item
     JMenuItem userGuide = new JMenuItem(strings.getString("menu_item_user_guide"));
     helpMenu.add(userGuide);
 
@@ -476,7 +522,12 @@ public class Main extends JFrame
     userGuide.addActionListener(e -> openHtmlGuide());
   }
 
-  // Set the appropriate HTML path based on the current locale
+  /**
+   * Sets the correct html guide based on language.
+   * 
+   * @param locale
+   *          is the language
+   */
   private void setHtmlPath(final Locale locale)
   {
     String language = locale.getLanguage();
@@ -489,12 +540,15 @@ public class Main extends JFrame
         htmlPath = "/gui/indexSp.html"; // Spanish guide
         break;
       default:
-        htmlPath = "/gui/indexEn.html"; // Default to English guide
+        htmlPath = "/gui/indexEn.html"; // English guide
         break;
     }
   }
 
-  // Open the HTML user guide in the default browser
+  /**
+   * Opens the correct html path for the language.
+   * 
+   */
   private void openHtmlGuide()
   {
     try (InputStream inputStream = Main.class.getResourceAsStream(htmlPath))
@@ -536,6 +590,14 @@ public class Main extends JFrame
     }
   }
 
+  /**
+   * Gets all the images to be used in the application.
+   * 
+   * @param destinationDir
+   *          where files are located
+   * @throws IOException
+   *           if file isn't found
+   */
   private void copyImagesFromGuiFolder(final File destinationDir) throws IOException
   {
     // Assuming images are in the "gui" folder inside the JAR
@@ -555,6 +617,16 @@ public class Main extends JFrame
     }
   }
 
+  /**
+   * Copies a resource from the JAR file to a specified destination directory.
+   * 
+   * @param resourcePath
+   *          where the file is in jar
+   * @param destinationDir
+   *          where the resource should be copied to
+   * @throws IOException
+   *           error occurs during the copying process
+   */
   private void copyResource(final String resourcePath, final File destinationDir) throws IOException
   {
     // Copy resource from JAR to the temporary directory
@@ -573,7 +645,12 @@ public class Main extends JFrame
     }
   }
 
-  // Main method to start the application
+  /**
+   * Main method to call to get everything working.
+   * 
+   * @param args
+   *          string
+   */
   public static void main(final String[] args)
   {
     // Use SwingUtilities.invokeLater to ensure thread safety in Swing applications

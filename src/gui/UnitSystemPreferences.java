@@ -30,6 +30,8 @@ public class UnitSystemPreferences {
         if (isMetric()) {
             return new String[]{"", 
                 strings.getString("unit_milliliters"),
+                strings.getString("unit_liters"),
+                strings.getString("unit_kilograms"),
                 strings.getString("unit_grams"),
                 strings.getString("unit_pinches"),
                 strings.getString("unit_teaspoons"),
