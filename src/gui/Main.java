@@ -16,7 +16,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
- * 
+ * Main Window that contains all project functionality
  */
 public class Main extends JFrame
 {
@@ -96,26 +96,24 @@ public class Main extends JFrame
   /**
    * Saves user configs like logo, color, and units.
    */
-  private void saveConfig()
-  {
-    try
-    {
-      Properties config = new Properties();
-      config.setProperty("logo_path", logoPath);
-      config.setProperty("background_color", getColorName(backgroundColor));
-      config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
+  private void saveConfig() {
+    try {
+        Properties config = new Properties();
+        config.setProperty("logo_path", logoPath);
+        config.setProperty("background_color", getColorName(backgroundColor));
+        config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
 
-      File configFile = new File(getClass().getResource("/resources/config.properties").toURI());
-      try (OutputStream output = Files.newOutputStream(configFile.toPath()))
-      {
-        config.store(output, "Application Configuration");
-      }
+        // Create a temporary file for the configuration
+        File tempFile = File.createTempFile("config", ".properties");
+        
+        try (OutputStream output = Files.newOutputStream(tempFile.toPath())) {
+            config.store(output, "Application Configuration");
+            System.out.println("Config saved to: " + tempFile.getAbsolutePath());
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-  }
+}
 
   /**
    * Returns the correct user specified color.

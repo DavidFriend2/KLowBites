@@ -74,7 +74,7 @@ public class MealEditor extends JFrame
     buttonCreation.addImageButton(imagePanel, "/img/new.png", strings.getString("tooltip_new"));
     buttonCreation.addImageButton(imagePanel, "/img/open.png", strings.getString("tooltip_open"));
     buttonCreation.addImageButton(imagePanel, "/img/save.png", strings.getString("tooltip_save"));
-    buttonCreation.addImageButton(imagePanel, "/img/saveAs.png",
+    buttonCreation.addImageButton(imagePanel, "/img/saveas.png",
         strings.getString("tooltip_save_as"));
     buttonCreation.addImageButton(imagePanel, "/img/close.png", strings.getString("tooltip_close"));
         
@@ -656,7 +656,7 @@ public class MealEditor extends JFrame
     SwingUtilities.invokeLater(() -> 
     {
       // You can change this to the desired default locale
-      Locale desiredLocale = Locale.ITALIAN;
+      Locale desiredLocale = Locale.getDefault();
       
       // Create a new MealEditor instance with the desired locale
       MealEditor mealEditor = new MealEditor(desiredLocale);
