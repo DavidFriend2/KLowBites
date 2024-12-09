@@ -154,9 +154,7 @@ public class ShoppingListWindow extends JFrame implements Printable
   // Opens a meal or recipe
   private ActionListener openMealorRecipe = e -> {
 
-    UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add
-                                                                                                     // this
-                                                                                                     // line
+    UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name"));
     UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
     UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
     UIManager.put("FileChooser.filesOfTypeLabelText",
@@ -176,8 +174,9 @@ public class ShoppingListWindow extends JFrame implements Printable
         strings.getString("file_chooser_all_files"));
 
     JFileChooser chooser = new JFileChooser();
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Recipe or Meal files", "rcp",
-        "mel");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        strings.getString("file_chooser_recipe_meal_files"),
+        "rcp", "mel");
     chooser.setFileFilter(filter);
     int returnVal = chooser.showOpenDialog(this);
     if (returnVal == JFileChooser.APPROVE_OPTION)

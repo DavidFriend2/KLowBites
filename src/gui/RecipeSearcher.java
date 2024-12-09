@@ -156,7 +156,7 @@ public class RecipeSearcher extends JFrame
       // Allow user to select a directory to search through
       JFileChooser directoryChooser = new JFileChooser();
       directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-      directoryChooser.setDialogTitle("Chose Directory");
+      directoryChooser.setDialogTitle(strings.getString("directory_chooser_title"));
 
       int userSelection = directoryChooser.showSaveDialog(null);
 
@@ -309,7 +309,7 @@ public class RecipeSearcher extends JFrame
   {
     SwingUtilities.invokeLater(() -> 
     {
-      Locale locale = Locale.ITALIAN; // Or any other Locale
+      Locale locale = Locale.getDefault(); // Or any other Locale
       RecipeSearcher recipeSearcher = new RecipeSearcher(locale);
       recipeSearcher.setVisible(true);
     });

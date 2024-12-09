@@ -387,7 +387,7 @@ public class MealEditor extends JFrame
       
       //Allow user to type in filename
       JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle("Save Meal As");
+      fileChooser.setDialogTitle(strings.getString("file_chooser_save_meal_as"));
       int userSelection = fileChooser.showSaveDialog(null);
       
       if (userSelection == JFileChooser.APPROVE_OPTION) 
