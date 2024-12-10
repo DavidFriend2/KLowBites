@@ -36,10 +36,10 @@ class ShoppingListTest
     recipeIngredients.add(ingredient3);
 
     sampleRecipe = new Recipe("Pancakes", 2, recipeIngredients, new ArrayList<>(),
-        new ArrayList<>());
+        new ArrayList<>(), "");
 
     sampleRecipe2 = new Recipe("Scrambeled Eggs", 2, recipeIngredients, new ArrayList<>(),
-        new ArrayList<>());
+        new ArrayList<>(), "");
 
     List<Recipe> recipes = new ArrayList<>();
     recipes.add(sampleRecipe);
@@ -91,7 +91,7 @@ class ShoppingListTest
     recipeIngredients.add(i3);
 
     Recipe recipe = new Recipe("Test Recipe", 1, recipeIngredients, new ArrayList<>(),
-        new ArrayList<>());
+        new ArrayList<>(), "");
     
     List<Recipe> r = new ArrayList<>();
     r.add(sampleRecipe);

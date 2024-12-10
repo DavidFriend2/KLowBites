@@ -132,7 +132,8 @@ public class ShoppingList
   private Recipe changeIngredientAmount(Recipe recipeToChange)
   {
     Recipe converted = new Recipe(recipeToChange.getName(), recipeToChange.getServes(),
-        recipeToChange.getIngredients(), recipeToChange.getUtenils(), recipeToChange.getSteps());
+        recipeToChange.getIngredients(), recipeToChange.getUtenils(), recipeToChange.getSteps(), 
+        recipeToChange.getPairing());
 
     double convert = (this.numofpeople) * 1.0 / converted.getServes();
 

@@ -23,6 +23,7 @@ public class Recipe implements Serializable
   private List<RecipeIngredient> ingredients;
   private List<Utensil> utensils;
   private List<Step> steps;
+  private String pairing;
     
   /**
    * Recipe constructor
@@ -35,13 +36,15 @@ public class Recipe implements Serializable
    */
   public Recipe(final String name, final int serves,
      final List<RecipeIngredient> ingredients, 
-     final List<Utensil> utensils, final List<Step> steps)
+     final List<Utensil> utensils, final List<Step> steps,
+     final String pairing)
   {
     this.name = name;
     this.serves = serves;
     this.ingredients = ingredients;
     this.utensils = utensils;
     this.steps = steps;
+    this.pairing = pairing;
   }
  
   /**
@@ -102,6 +105,15 @@ public class Recipe implements Serializable
   public List<Step> getSteps()
   {
     return this.steps;
+  }
+  
+  /**
+   * Get Drink pairings
+   * 
+   * @return a given drink pairing
+   */
+  public String getPairing() {
+    return this.pairing;
   }
    
   /**
@@ -226,8 +238,10 @@ public class Recipe implements Serializable
     steps.add(new Step("Ignite", "rum","saucepan", null, 4));
     steps.add(new Step("Put", "saucepan","plate", null, 1));
     steps.add(new Step("Put", "ice cream","plate", null, 1));
+    
+    String pairing1 = "";
    
-    Recipe bananasFoster = new Recipe(name, serves, ingredients, utensils, steps);
+    Recipe bananasFoster = new Recipe(name, serves, ingredients, utensils, steps, pairing1);
     recipes.add(bananasFoster);
    
    
@@ -268,8 +282,10 @@ public class Recipe implements Serializable
     steps2.add(new Step("Put", "saucepan","casserole", null, 1));
     steps2.add(new Step("Bake", "casserole","casserole", "at 350 degrees for 25 minutes", 1));
     steps2.add(new Step("Put", "tomato","casserole", null, 1));
+    
+    String pairing2 = "";
    
-    Recipe macaroniCheese = new Recipe(name2, serves2, ingredients2, utensils2, steps2);
+    Recipe macaroniCheese = new Recipe(name2, serves2, ingredients2, utensils2, steps2, pairing2);
     recipes.add(macaroniCheese);
    
    // Oven Fried Chicken
@@ -303,8 +319,11 @@ public class Recipe implements Serializable
     steps3.add(new Step("Dip", "chicken","dish", null, 1));
     steps3.add(new Step("Put", "chicken","baking pan", null, 1));
     steps3.add(new Step("Bake", "chicken","baking pan", "375 degrees for 55 minutes", 1));
+    
+    String pairing3 = "";
    
-    Recipe ovenFriedChicken = new Recipe(name3, serves3, ingredients3, utensils3, steps3);
+    Recipe ovenFriedChicken = new Recipe(name3, serves3, ingredients3, utensils3, steps3,
+        pairing3);
     recipes.add(ovenFriedChicken);
   }
  

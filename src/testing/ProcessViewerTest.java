@@ -37,7 +37,7 @@ class ProcessViewerTest
     RecipeIngredient recipeIngredient2 = new RecipeIngredient("Brown sugar", null, .33, "cup");
     
     testRecipe = new Recipe("Bananas Foster", 3, Arrays.asList(recipeIngredient1,
-        recipeIngredient2), Arrays.asList(utensil1, utensil2), Arrays.asList(step1, step2));
+        recipeIngredient2), Arrays.asList(utensil1, utensil2), Arrays.asList(step1, step2), null);
     processViewer = new RecipeProcessViewer(testRecipe);
   }
 

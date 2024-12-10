@@ -30,7 +30,7 @@ class MealTest
     Meal meal = new Meal("Test", recipes);
 
     assertEquals(0, meal.getRecipes().size());
-    meal.addRecipe(new Recipe("Tacos", 0, null, null, null));
+    meal.addRecipe(new Recipe("Tacos", 0, null, null, null, null));
 
     assertEquals(1, meal.getRecipes().size());
     assertEquals("Tacos", meal.getRecipes().get(0).getName());

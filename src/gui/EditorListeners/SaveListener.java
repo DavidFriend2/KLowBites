@@ -28,11 +28,13 @@ public class SaveListener implements ActionListener
   JButton saveButton;
   JButton closeButton;
   List<JComponent> components;
+  JTextField pairing;
 
   public SaveListener(final OpenListener openListener, SaveAsListener saveAsListener, final JTextField name, 
       final JTextField serves, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
-      JButton saveButton, JButton closeButton, List<JComponent> components)
+      JButton saveButton, JButton closeButton, List<JComponent> components, 
+      final JTextField pairing)
   {
     this.openListener = openListener;
     this.saveAsListener = saveAsListener;
@@ -44,6 +46,7 @@ public class SaveListener implements ActionListener
     this.saveButton = saveButton;
     this.closeButton = closeButton;
     this.components = components;
+    this.pairing = pairing;
   }
   
   @Override
@@ -66,10 +69,11 @@ public class SaveListener implements ActionListener
       }
       Recipe updatedRecipe;
       if (serves.getText().isEmpty() || !check) {
-        updatedRecipe = new Recipe(name.getText(), 0, fullIngredientList, fullUtensilList, fullStepList);
+        updatedRecipe = new Recipe(name.getText(), 0, fullIngredientList, fullUtensilList, fullStepList, 
+            pairing.getText());
       } else {
         updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.
-            getText()), fullIngredientList, fullUtensilList, fullStepList);
+            getText()), fullIngredientList, fullUtensilList, fullStepList, pairing.getText());
       }
       
       // If new Recipe
@@ -93,7 +97,7 @@ public class SaveListener implements ActionListener
   public Recipe getRecipe() 
   {
     return new Recipe(name.getText(), Integer.parseInt(serves.
-        getText()), fullIngredientList, fullUtensilList, fullStepList);
+        getText()), fullIngredientList, fullUtensilList, fullStepList, pairing.getText());
   }
   
 }

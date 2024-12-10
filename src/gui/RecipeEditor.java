@@ -44,6 +44,7 @@ public class RecipeEditor extends JFrame {
   private String add = "Add";
   private String name = "Name: ";
   private JPanel mainPanel;
+  
   private SaveListener saveListener;
   private OpenListener openListener;
   private JButton openButton;
@@ -67,7 +68,7 @@ public class RecipeEditor extends JFrame {
     this.components = new ArrayList<>();
     strings = ResourceBundle.getBundle("resources.Strings", locale); // Corrected line
     setTitle(strings.getString("recipe_editor_title"));
-    setSize(825, 775);
+    setSize(825, 800);
     setResizable(false);
     setLocationRelativeTo(null);
     
@@ -253,6 +254,15 @@ public class RecipeEditor extends JFrame {
     ingAdd.addActionListener(ingAddListen);
     DeleteIngListener ingDeleteListener= new DeleteIngListener(ingList, stepOnCombo);
     ingDelete.addActionListener(ingDeleteListener);
+    
+    //pairings
+    JPanel pairPanel = new JPanel(new BorderLayout());
+    pairPanel.setPreferredSize(new Dimension(200, 25));
+    JLabel pairLabel = new JLabel(strings.getString("label_pairing"));
+    JTextField pairText = new JTextField();
+    components.add(pairText);
+    pairPanel.add(pairLabel, BorderLayout.WEST);
+    pairPanel.add(pairText);
 
     //initialize new button ----------------------------------------------
     ImageIcon newIcon = createImageIcon("/img/new.png");
@@ -289,7 +299,8 @@ public class RecipeEditor extends JFrame {
     saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
     saveAsButton.setEnabled(false);
     SaveAsListener saveAsListener = new SaveAsListener(nameText, 
-        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton, closeButton, currentLocale);
+        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton,
+        closeButton, currentLocale, pairText);
     saveAsButton.addActionListener(saveAsListener);
     imagePanel.add(saveAsButton);
       
@@ -306,11 +317,13 @@ public class RecipeEditor extends JFrame {
     openListener = new OpenListener(nameText, servesText, ingNameInput,
         ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
         utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
-        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale, openButton, saveButton, closeButton, components);
+        fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale, openButton, saveButton,
+        closeButton, components, pairText);
     openButton.addActionListener(openListener);
     
     saveListener = new SaveListener(openListener, saveAsListener, nameText, 
-        servesText, fullIngredientList, fullStepList, fullUtensilList, saveButton, closeButton, components);
+        servesText, fullIngredientList, fullStepList, fullUtensilList, saveButton,
+        closeButton, components, pairText);
     saveButton.addActionListener(saveListener);
     
     new ChangeTracker(closeButton, components, saveAsButton);
@@ -320,6 +333,7 @@ public class RecipeEditor extends JFrame {
     mainPanel.add(utensilPanel);
     mainPanel.add(ingPanel);
     mainPanel.add(stepPanel);
+    mainPanel.add(pairPanel);
 
     add(mainPanel);
   }

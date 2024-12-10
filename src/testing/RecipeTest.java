@@ -30,20 +30,24 @@ class RecipeTest
 
     List<Step> testSteps = new ArrayList<>();
     testSteps.add(new Step("Mix", "flour", "bowl", "until smooth", 5));
+    
+    String testPairing = "Water";
 
-    Recipe recipe = new Recipe(testName, testServes, testIngredients, testUtensils, testSteps);
+    Recipe recipe = new Recipe(testName, testServes, testIngredients, testUtensils, testSteps,
+        testPairing);
 
     assertEquals(testName, recipe.getName());
     assertEquals(testServes, recipe.getServes());
     assertEquals(testIngredients, recipe.getIngredients());
     assertEquals(testUtensils, recipe.getUtenils());
     assertEquals(testSteps, recipe.getSteps());
+    assertEquals(testPairing, recipe.getPairing());
   }
 
   @Test
   void testGetFileName()
   {
-    Recipe recipe = new Recipe("Test Recipe", 0, null, null, null);
+    Recipe recipe = new Recipe("Test Recipe", 0, null, null, null, null);
 
     String expectedFileName = "recipes/Test_Recipe.rcp";
     assertEquals(expectedFileName, recipe.getFileName());
@@ -52,7 +56,7 @@ class RecipeTest
   @Test
   void testToString()
   {
-    Recipe recipe = new Recipe("Test Recipe", 2, null, null, null);
+    Recipe recipe = new Recipe("Test Recipe", 2, null, null, null, null);
     assertEquals("Test Recipe", recipe.toString());
   }
   
@@ -61,7 +65,7 @@ class RecipeTest
   {
     assertEquals(3, Recipe.getRecipes().size());
     
-    Recipe.addRecipe(new Recipe("Test Recipe", 0, null, null, null));
+    Recipe.addRecipe(new Recipe("Test Recipe", 0, null, null, null, null));
     
     assertEquals(4, Recipe.getRecipes().size());
     

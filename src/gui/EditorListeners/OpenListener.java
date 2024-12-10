@@ -48,6 +48,7 @@ public class OpenListener implements ActionListener
   JButton saveButton;
   JButton closeButton;
   List<JComponent> components;
+  JTextField pairing;
   
   public OpenListener(final JTextField name, final JTextField serves, 
       final JTextField ingNameInput, final JTextField ingDetailsInput, 
@@ -57,7 +58,8 @@ public class OpenListener implements ActionListener
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
       final DefaultListModel<String> dlm, final DefaultListModel<String> dlm2, 
       final DefaultListModel<String> dlm3, Locale locale, JButton openButton, 
-      JButton saveButton, JButton closeButton, List<JComponent> components) 
+      JButton saveButton, JButton closeButton, List<JComponent> components,
+      final JTextField pairing) 
   {
     this.name = name;
     this.serves = serves;
@@ -81,6 +83,7 @@ public class OpenListener implements ActionListener
     this.closeButton = closeButton;
     this.components = components;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
+    this.pairing = pairing;
   }
   
   @SuppressWarnings("unchecked")
@@ -211,6 +214,7 @@ public class OpenListener implements ActionListener
   {
     name.setText(recipe.getName());
     serves.setText(String.valueOf(recipe.getServes()));
+    pairing.setText(recipe.getPairing());
     for (RecipeIngredient ri : recipe.getIngredients()) 
     {
       fullIngredientList.add(ri);
