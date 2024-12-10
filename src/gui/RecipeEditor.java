@@ -699,6 +699,7 @@ public class RecipeEditor extends JFrame {
       if (selectedIndex != -1) 
       { // Ensure an item is selected
         fullStepList.remove(selectedIndex);
+        saveButton.setEnabled(true);
         dlm3.removeElement(stepList.getSelectedValue());
       } 
       else 

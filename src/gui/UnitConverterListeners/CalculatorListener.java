@@ -8,11 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
 import Information.Ingredient;
 import UnitConversion.MassUnitConverter;
 import UnitConversion.MassVolumeConverter;
@@ -114,6 +112,10 @@ public class CalculatorListener implements ActionListener
     if (unitStr.equals(strings.getString("unit_gallons"))) return MassVolumeConverter.Unit.GALLONS;
     if (unitStr.equals(strings.getString("unit_milliliters"))) 
       return MassVolumeConverter.Unit.MILLILITERS;
+    if (unitStr.equals(strings.getString("unit_liters"))) 
+      return MassVolumeConverter.Unit.LITERS;
+    if (unitStr.equals(strings.getString("unit_kilograms"))) 
+      return MassVolumeConverter.Unit.KILOGRAMS;
     if (unitStr.equals(strings.getString("unit_drams"))) return MassVolumeConverter.Unit.DRAMS;
     if (unitStr.equals(strings.getString("unit_grams"))) return MassVolumeConverter.Unit.GRAMS;
     if (unitStr.equals(strings.getString("unit_ounces"))) return MassVolumeConverter.Unit.OUNCES;
@@ -127,7 +129,8 @@ public class CalculatorListener implements ActionListener
         MassVolumeConverter.Unit.POUNDS,
         MassVolumeConverter.Unit.GRAMS,
         MassVolumeConverter.Unit.DRAMS,
-        MassVolumeConverter.Unit.OUNCES
+        MassVolumeConverter.Unit.OUNCES,
+        MassVolumeConverter.Unit.KILOGRAMS
     );
     return massUnits.contains(unit);
   }

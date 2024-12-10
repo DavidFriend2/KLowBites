@@ -140,6 +140,7 @@ public class UnitConverterWindow extends JFrame
   {
     try 
     {
+      
       Ingredient.setIngredients(Ingredient.loadIngredients("IngredientsNutrition/ingredients.ntr"));
       JLabel inLabel = new JLabel(strings.getString("ingredient_label"));
       ingredient.add(inLabel);

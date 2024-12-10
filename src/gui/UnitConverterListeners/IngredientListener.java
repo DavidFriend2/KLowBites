@@ -30,6 +30,7 @@ public class IngredientListener implements ActionListener
     massUnits.add("Grams");
     massUnits.add("Drams");
     massUnits.add("Ounces");
+    massUnits.add("Kilograms");
     if ((massUnits.contains(from.getSelectedItem()) && !(from.getSelectedItem().
         equals(""))) && !(massUnits.contains(to.
             getSelectedItem())) && !(to.getSelectedItem().equals(""))) 
