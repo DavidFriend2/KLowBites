@@ -50,6 +50,8 @@ public class RecipeEditor extends JFrame {
   private JButton openButton;
   private JButton closeButton;
   private JButton saveButton;
+  private JButton newButton;
+  private JButton saveAsButton;
   private ResourceBundle strings;
   private String state;
   private Locale currentLocale;
@@ -267,11 +269,11 @@ public class RecipeEditor extends JFrame {
     //initialize new button ----------------------------------------------
     ImageIcon newIcon = createImageIcon("/img/new.png");
     Image newImg = newIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    JButton newButton = new JButton(new ImageIcon(newImg));
+    newButton = new JButton(new ImageIcon(newImg));
     newButton.setPreferredSize(new Dimension(50, 50));
     newButton.setToolTipText(strings.getString("tooltip_new"));
     NewListener newListener = new NewListener();
-    newButton.addActionListener(newListener);
+    //newButton.addActionListener(newListener);
     imagePanel.add(newButton);
 
     //initialize open button ----------------------------------------------
@@ -294,14 +296,10 @@ public class RecipeEditor extends JFrame {
     //initialize save as button ----------------------------------------------
     ImageIcon saveAsIcon = createImageIcon("/img/saveas.png");
     Image saveAsImg = saveAsIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    JButton saveAsButton = new JButton(new ImageIcon(saveAsImg));
+    saveAsButton = new JButton(new ImageIcon(saveAsImg));
     saveAsButton.setPreferredSize(new Dimension(50, 50));
     saveAsButton.setToolTipText(strings.getString("tooltip_save_as"));
     saveAsButton.setEnabled(false);
-    SaveAsListener saveAsListener = new SaveAsListener(nameText, 
-        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton,
-        closeButton, currentLocale, pairText);
-    saveAsButton.addActionListener(saveAsListener);
     imagePanel.add(saveAsButton);
       
     ImageIcon closeIcon = createImageIcon("/img/close.png");
@@ -318,15 +316,21 @@ public class RecipeEditor extends JFrame {
         ingDetailsInput, ingAmountInput, ingUnitCombo, ingList, stepList,
         utensilsList, stepOnCombo, stepUtensilCombo, fullIngredientList,
         fullStepList, fullUtensilList, dlm, dlm2, dlm3, currentLocale, openButton, saveButton,
-        closeButton, components, pairText);
+        closeButton, components, newButton, pairText);
     openButton.addActionListener(openListener);
+    
+    SaveAsListener saveAsListener = new SaveAsListener(nameText, 
+        servesText, fullIngredientList, fullUtensilList, fullStepList, components, saveButton,
+        closeButton, newButton, currentLocale, pairText);
+    saveAsButton.addActionListener(saveAsListener);
     
     saveListener = new SaveListener(openListener, saveAsListener, nameText, 
         servesText, fullIngredientList, fullStepList, fullUtensilList, saveButton,
-        closeButton, components, pairText);
+        closeButton, newButton, components, pairText);
     saveButton.addActionListener(saveListener);
     
-    new ChangeTracker(closeButton, components, saveAsButton);
+    newButton.addActionListener(saveAsListener);
+    new ChangeTracker(closeButton, newButton, components, saveAsButton);
     
     mainPanel.add(imagePanel);
     mainPanel.add(namePanel);
@@ -383,10 +387,7 @@ public class RecipeEditor extends JFrame {
     @Override
     public void actionPerformed(final ActionEvent e) 
     {
-      RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
-      re.getCloseButton().setEnabled(false);
-      re.setVisible(true);
-      state = "unchanged";
+      //new SaveAsListener()
     }
   }
   
@@ -545,7 +546,7 @@ public class RecipeEditor extends JFrame {
 
       if (!stepDetails.getText().equals("")) 
       {
-        stepDescription.append(stepDetails.getText()).append(". ");
+        stepDescription.append(" " + stepDetails.getText()).append(". ");
       }
 
       stepDescription.append(strings.getString("estimated_time"))

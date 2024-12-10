@@ -44,6 +44,7 @@ public class MealEditor extends JFrame
   private ResourceBundle strings;
   private JButton save;
   private JButton saveAs;
+  private JButton newB;
   private JButton open;
   private OpenListener ol;
   private SaveAsListener sal;
@@ -125,8 +126,7 @@ public class MealEditor extends JFrame
     mainPanel.add(d);
         
     //Initialize buttons listeners
-    JButton newB = (JButton) imagePanel.getComponent(0);
-    newB.addActionListener(new NewListener());
+    newB = (JButton) imagePanel.getComponent(0);
     open = (JButton) imagePanel.getComponent(1);
     ol = new OpenListener(scroll, this, recipeBox, textBox, open);
     open.addActionListener(ol);
@@ -140,7 +140,7 @@ public class MealEditor extends JFrame
     close.addActionListener(new CloseListener());
     close.setEnabled(false);
     save.addActionListener(new SaveListener(textBox, ol, sal));
-        
+    newB.addActionListener(sal);
     //initialize delete button listener
     DeleteListener dl = new DeleteListener(recipeBox, recipeBoxBottom, scroll, this);
     delete.addActionListener(dl);
@@ -209,9 +209,9 @@ public class MealEditor extends JFrame
           List<JComponent> comps = re.getComps();
           comps.add(textBox);
           if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
-            new ChangeTracker(close, comps, saveAs);
+            new ChangeTracker(close, newB, comps, saveAs);
           } else {
-            new ChangeTracker(close, comps, saveAs, save);
+            new ChangeTracker(close, newB, comps, saveAs, save);
           }
         }
       } else 
@@ -240,9 +240,9 @@ public class MealEditor extends JFrame
           List<JComponent> comps = re.getComps();
           comps.add(textBox);
           if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
-            new ChangeTracker(close, comps, saveAs);
+            new ChangeTracker(close, newB, comps, saveAs);
           } else {
-            new ChangeTracker(close, comps, saveAs, save);
+            new ChangeTracker(close, newB, comps, saveAs, save);
           }
         }
       }
@@ -310,12 +310,12 @@ public class MealEditor extends JFrame
           for (RecipeEditor re : recipeEditors) {
             List<JComponent> comps = re.getComps();
             comps.add(textBox);
-            new ChangeTracker(close, comps, save, saveAs);
+            new ChangeTracker(close, newB, comps, save, saveAs);
           }
         } else {
           List<JComponent> comps = new ArrayList<>();
           comps.add(textBox);
-          new ChangeTracker(close, comps, save, saveAs);
+          new ChangeTracker(close, newB, comps, save, saveAs);
         }
       } 
       catch(IOException ex) 
@@ -407,12 +407,12 @@ public class MealEditor extends JFrame
             for (RecipeEditor re : recipeEditors) {
               List<JComponent> comps = re.getComps();
               comps.add(textBox);
-              new ChangeTracker(close, comps, save, saveAs);
+              new ChangeTracker(close, newB, comps, save, saveAs);
             }
           } else {
             List<JComponent> comps = new ArrayList<>();
             comps.add(textBox);
-            new ChangeTracker(close, comps, save, saveAs);
+            new ChangeTracker(close, newB, comps, save, saveAs);
           }
           close.setEnabled(true);
         } 
@@ -495,7 +495,7 @@ public class MealEditor extends JFrame
           if (loaded.getRecipes().size() == 0) {
             List<JComponent> comps = new ArrayList<>();
             comps.add(textBox);
-            new ChangeTracker(close, comps, save, saveAs);
+            new ChangeTracker(close, newB, comps, save, saveAs);
           }
           for (Recipe r : loaded.getRecipes()) 
           {
@@ -558,7 +558,7 @@ public class MealEditor extends JFrame
             button.setEnabled(false);
             List<JComponent> comps = re.getComps();
             comps.add(textBox);
-            new ChangeTracker(close, comps, save, saveAs);
+            new ChangeTracker(close, newB, comps, save, saveAs);
           }
           open.setEnabled(false);
           close.setEnabled(true);

@@ -16,11 +16,13 @@ public class ChangeTracker
   private List<JComponent> components;
   private JButton[] saveButtons;
   private JButton closeButton;
+  private JButton newButton;
   
-  public ChangeTracker(JButton closeButton, List<JComponent> components, JButton... saveButtons) {
+  public ChangeTracker(JButton closeButton, JButton newButton, List<JComponent> components, JButton... saveButtons) {
     this.components = components;
     this.saveButtons = saveButtons;
     this.closeButton = closeButton;
+    this.newButton = newButton;
     checkChanged();
   }
 
@@ -37,11 +39,15 @@ public class ChangeTracker
       {
         if (saveButtons.length == 1) {
           ((JComboBox) component).addActionListener(e -> saveButtons[0].setEnabled(true));
+          ((JComboBox) component).addActionListener(e -> closeButton.setEnabled(false));
+          ((JComboBox) component).addActionListener(e -> newButton.setEnabled(false));
         }
         else 
         {
           ((JComboBox) component).addActionListener(e -> saveButtons[0].setEnabled(true));
           ((JComboBox) component).addActionListener(e -> saveButtons[1].setEnabled(true));
+          ((JComboBox) component).addActionListener(e -> closeButton.setEnabled(false));
+          ((JComboBox) component).addActionListener(e -> newButton.setEnabled(false));
         }
       }
     }
@@ -55,12 +61,14 @@ public class ChangeTracker
       if (saveButtons.length == 1) {
         saveButtons[0].setEnabled(true);
         closeButton.setEnabled(false);
+        newButton.setEnabled(false);
       }
       else 
       {
         saveButtons[0].setEnabled(true);
         saveButtons[1].setEnabled(true);
         closeButton.setEnabled(false);
+        newButton.setEnabled(false);
       }
     }
 
@@ -70,12 +78,14 @@ public class ChangeTracker
       if (saveButtons.length == 1) {
         saveButtons[0].setEnabled(true);
         closeButton.setEnabled(false);
+        newButton.setEnabled(false);
       }
       else 
       {
         saveButtons[0].setEnabled(true);
         saveButtons[1].setEnabled(true);
         closeButton.setEnabled(false);
+        newButton.setEnabled(false);
       }
     }
 
@@ -85,12 +95,14 @@ public class ChangeTracker
       if (saveButtons.length == 1) {
         saveButtons[0].setEnabled(true);
         closeButton.setEnabled(false);
+        newButton.setEnabled(false);
       }
       else 
       {
         saveButtons[0].setEnabled(true);
         saveButtons[1].setEnabled(true);
         closeButton.setEnabled(false);
+        newButton.setEnabled(false);
       }
     }
     

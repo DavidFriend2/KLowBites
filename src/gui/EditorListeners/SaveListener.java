@@ -27,13 +27,14 @@ public class SaveListener implements ActionListener
   List<Utensil> fullUtensilList;
   JButton saveButton;
   JButton closeButton;
+  JButton newButton;
   List<JComponent> components;
   JTextField pairing;
 
   public SaveListener(final OpenListener openListener, SaveAsListener saveAsListener, final JTextField name, 
       final JTextField serves, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
-      JButton saveButton, JButton closeButton, List<JComponent> components, 
+      JButton saveButton, JButton closeButton, JButton newButton, List<JComponent> components, 
       final JTextField pairing)
   {
     this.openListener = openListener;
@@ -45,6 +46,7 @@ public class SaveListener implements ActionListener
     this.fullUtensilList = fullUtensilList;
     this.saveButton = saveButton;
     this.closeButton = closeButton;
+    this.newButton = newButton;
     this.components = components;
     this.pairing = pairing;
   }
@@ -86,7 +88,7 @@ public class SaveListener implements ActionListener
       updatedRecipe.saveRecipeToFile(fileName);
       saveButton.setEnabled(false);
       closeButton.setEnabled(true);
-      new ChangeTracker(closeButton, components, saveButton);
+      new ChangeTracker(closeButton, newButton, components, saveButton);
     } catch(IOException ex) 
     {
       ex.printStackTrace();
