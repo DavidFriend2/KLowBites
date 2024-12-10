@@ -39,10 +39,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import Information.*;
 import UnitConversion.MassVolumeConverter;
 
-/*
- * Shopping List Window
- *
- *@author Ryan Mendez
+/**
+ * Shopping List window
+ * 
+ * @author ryan mendez
  */
 public class ShoppingListWindow extends JFrame implements Printable
 {
@@ -56,6 +56,10 @@ public class ShoppingListWindow extends JFrame implements Printable
   private String fileOpened;
   private ResourceBundle strings;
 
+  /**
+   * Constructor for window
+   * @param locale
+   */
   public ShoppingListWindow(Locale locale)
   {
     strings = ResourceBundle.getBundle("resources.Strings", locale);
@@ -151,7 +155,9 @@ public class ShoppingListWindow extends JFrame implements Printable
     add(mainPanel);
   }
 
-  // Opens a meal or recipe
+  /**
+   * Opens meal or recipe action listener
+   */
   private ActionListener openMealorRecipe = e -> {
 
     UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name"));
@@ -206,6 +212,11 @@ public class ShoppingListWindow extends JFrame implements Printable
     }
   };
 
+  /**
+   * Update people method
+   * 
+   * Updates the people to shop for based on entered count
+   */
   private void peopleUpdated()
   {
     int peopleCount = getPeopleCount();
@@ -230,9 +241,10 @@ public class ShoppingListWindow extends JFrame implements Printable
 
   }
 
-  /*
+  /**
    * Update shopping list method
    * 
+   * @param shoppingList to update
    */
   private void updateShoppingList(ShoppingList shoppingList)
   {
@@ -246,8 +258,10 @@ public class ShoppingListWindow extends JFrame implements Printable
     }
   }
 
-  /*
-   * Get people count
+  /**
+   * Get amount of people entered
+   * 
+   * @return amount of people to shop for
    */
   private int getPeopleCount()
   {
@@ -261,7 +275,12 @@ public class ShoppingListWindow extends JFrame implements Printable
     }
   }
 
-  // Pop up to change the unit of an ingredient
+  /**
+   * Unit editor
+   * 
+   * @param ingredient to edit
+   * @param index to change
+   */
   private void unitEditor(RecipeIngredient ingredient, int index)
   {
     UnitSystemPreferences.UnitSystem currentSystem = UnitSystemPreferences.getCurrentUnitSystem();
@@ -288,7 +307,15 @@ public class ShoppingListWindow extends JFrame implements Printable
     }
   }
 
-  //Method to create button with image
+  /**
+   * Create print button method
+   * 
+   * @param imagePath
+   * @param width
+   * @param height
+   * @param toolTipText
+   * @return
+   */
   private JButton createButton(String imagePath, int width, int height, String toolTipText)
   {
     ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
@@ -306,7 +333,11 @@ public class ShoppingListWindow extends JFrame implements Printable
     return button;
   }
 
-  // print stuff
+  /**
+   * Print shopping listmethod
+   * 
+   * prints the shopping list
+   */
   private void printRecipe()
   {
     PrinterJob job = PrinterJob.getPrinterJob();
@@ -325,6 +356,9 @@ public class ShoppingListWindow extends JFrame implements Printable
     }
   }
 
+  /**
+   * Print overide method
+   */
   @Override
   public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException
   {
@@ -342,7 +376,11 @@ public class ShoppingListWindow extends JFrame implements Printable
     return PAGE_EXISTS;
   }
 
-  // Main to display the searcher
+  /**
+   * Main program
+   * 
+   * @param args
+   */
   public static void main(final String[] args)
   {
     SwingUtilities.invokeLater(() -> {

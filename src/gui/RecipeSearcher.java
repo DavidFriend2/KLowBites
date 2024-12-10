@@ -26,14 +26,14 @@ import javax.swing.UIManager;
 
 import Information.*;
 
-/*
+/**
  * Recipe Searcher Class
  * 
  * @author Ryan Mendez
  * 
  * Allows users to search for recipes from a directory that contain given ingredients
  * Clicking on the recipes opens a process viewer for the users.
- * 
+
  */
 public class RecipeSearcher extends JFrame
 {
@@ -49,6 +49,11 @@ public class RecipeSearcher extends JFrame
   private List<Recipe> selectedRecipes = new ArrayList<>();
   private JComboBox<Recipe> recipeDropdown;
 
+  /**
+   * Recipe Searcher Constructor
+   * 
+   * @param locale
+   */
   public RecipeSearcher(final Locale locale) 
   {
     strings = ResourceBundle.getBundle("resources.Strings", locale); 
@@ -170,6 +175,11 @@ public class RecipeSearcher extends JFrame
 
   }
 
+  /**
+   * Loads recipes from a folder
+   * 
+   * @param directory
+   */
   private void loadAllRecipes(final File directory)
   {
     File[] files = directory.listFiles((dir, name) -> name.endsWith(".rcp"));
@@ -198,7 +208,7 @@ public class RecipeSearcher extends JFrame
 
   }
 
-  /*
+  /**
    * Add Ingredient Listener
    */
   private class AddIngredientListener implements ActionListener
@@ -217,6 +227,9 @@ public class RecipeSearcher extends JFrame
     }
   }
 
+  /**
+   * Delete Ingredient LIstener
+   */
   private class DeleteIngredientListener implements ActionListener
   {
 
@@ -236,6 +249,9 @@ public class RecipeSearcher extends JFrame
 
   }
 
+  /**
+   * Search Recipes Listener
+   */
   private class SearchRecipesListener implements ActionListener
   {
 
@@ -297,6 +313,9 @@ public class RecipeSearcher extends JFrame
 
   }
 
+  /**
+   * Recipe drop down listener---- not needed due to removal of process viewer
+   */
   private ActionListener recipeDropdownListener = e -> {
     Recipe selectedRecipe = (Recipe) recipeDropdown.getSelectedItem();
     if (selectedRecipe != null)
@@ -305,6 +324,11 @@ public class RecipeSearcher extends JFrame
     }
   };
 
+  /**
+   * Main program 
+   * 
+   * @param args
+   */
   public static void main(final String[] args)
   {
     SwingUtilities.invokeLater(() -> 
