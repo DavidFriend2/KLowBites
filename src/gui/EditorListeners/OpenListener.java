@@ -47,6 +47,7 @@ public class OpenListener implements ActionListener
   JButton openButton;
   JButton saveButton;
   JButton closeButton;
+  JButton newButton;
   List<JComponent> components;
   JTextField pairing;
   
@@ -59,7 +60,7 @@ public class OpenListener implements ActionListener
       final DefaultListModel<String> dlm, final DefaultListModel<String> dlm2, 
       final DefaultListModel<String> dlm3, Locale locale, JButton openButton, 
       JButton saveButton, JButton closeButton, List<JComponent> components,
-      final JTextField pairing) 
+      JButton newButton, final JTextField pairing) 
   {
     this.name = name;
     this.serves = serves;
@@ -81,6 +82,7 @@ public class OpenListener implements ActionListener
     this.openButton = openButton;
     this.saveButton = saveButton;
     this.closeButton = closeButton;
+    this.newButton = newButton;
     this.components = components;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
     this.pairing = pairing;
@@ -158,7 +160,7 @@ public class OpenListener implements ActionListener
           boolean isUtensil = false;
           for (Utensil ut : loaded.getUtenils()) {
             System.out.println(st.getSourceUtensilOrIngredient());
-            if (ut.getName().toLowerCase().equals(st.getSourceUtensilOrIngredient())) {
+            if (ut.getName().toLowerCase().equals(st.getSourceUtensilOrIngredient().toLowerCase())) {
               isUtensil = true;
               break;
             }
@@ -197,7 +199,7 @@ public class OpenListener implements ActionListener
         utensilList.setModel(dlm2);
         openButton.setEnabled(false);
         closeButton.setEnabled(true);
-        new ChangeTracker(closeButton, components, saveButton);
+        new ChangeTracker(closeButton, newButton, components, saveButton);
       } catch (ClassNotFoundException e1) 
       {
         // TODO Auto-generated catch block
