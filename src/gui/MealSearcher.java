@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 
 import Information.*;
 
-/*
+/**
  * Meal Searcher Class
  * 
  * @author Ryan Mendez
@@ -48,6 +48,11 @@ public class MealSearcher extends JFrame {
   private List<Meal> selectedMeals = new ArrayList<>();
   private JComboBox<Meal> mealDropdown;
 
+  /**
+   * Meal Searcher Constructor
+   * 
+   * @param locale
+   */
   public MealSearcher(final Locale locale) {
     strings = ResourceBundle.getBundle("resources.Strings", 
         locale); // Load the resource bundle based on locale
@@ -166,7 +171,11 @@ public class MealSearcher extends JFrame {
       }
   }
   
-  //Helper function to load in each meal from a directory 
+  /**
+   * Load all meals from a directory method
+   * 
+   * @param directory to load
+   */
   private void loadAllMeals(final File directory)
   {
     File[] files = directory.listFiles((dir, name) -> name.endsWith(".mel"));
@@ -196,7 +205,9 @@ public class MealSearcher extends JFrame {
 
   }
 
-  // Add Ingredient listener
+  /**
+   * Add Ingredient Listener
+   */
   private class AddIngredientListener implements ActionListener
   {
     @Override
@@ -208,13 +219,14 @@ public class MealSearcher extends JFrame {
         Ingredient ingredient = Ingredient.getIngredientbyName(ingredientName);
         containedIngredients.add(ingredient);
         ingredientDml.addElement(ingredient);
-        // status.append("\nAdded ingredient: " + ingredientName);
         ingredientField.setText("");
       }
     }
   }
 
-  // Action Listener to delete added ingredients
+  /**
+   * Delete Ingredient Listener
+   */
   private class DeleteIngredientListener implements ActionListener
   {
 
@@ -228,15 +240,15 @@ public class MealSearcher extends JFrame {
         Ingredient ingredientToRemove = ingredientDml.get(selectedIngredient);
         containedIngredients.remove(ingredientToRemove);
         ingredientDml.remove(selectedIngredient);
-        // status.append("\nRemoved " + ingredientToRemove + containedIngredients.size());
       }
 
     }
 
   }
   
-  //Action Listener to search for meals
-  // Searches through meals to see if a recipe in the meal contains the specified ingredients
+  /**
+   * Search for MEals Listener
+   */
   private class SearchMealsListener implements ActionListener
   {
 
@@ -311,7 +323,9 @@ public class MealSearcher extends JFrame {
 
   }
 
-  //Opens a Process viewer when a meal is clicked
+  /**
+   * Drop down listener-- not needed after removing process viewer
+   */
   private ActionListener mealDropdownListener = e -> {
     Meal selectedMeal = (Meal) mealDropdown.getSelectedItem();
     if (selectedMeal != null)
@@ -321,7 +335,10 @@ public class MealSearcher extends JFrame {
   };
   
   
-//Main to display the searcher
+  /**
+   * Main program
+   * @param args
+   */
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> 
     {
