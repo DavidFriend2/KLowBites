@@ -5,14 +5,20 @@ import java.awt.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * @author jayden smith
+ */
 public class AboutWindow extends JFrame {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1234234234;
 	private final ResourceBundle strings;
 
+	
+	/**
+	 * constructor with correct language.
+	 * 
+	 * @param locale the language used
+	 */
     public AboutWindow(Locale locale) {
     	strings = ResourceBundle.getBundle("resources.Strings", locale);
         initializeUI(locale);
@@ -21,7 +27,7 @@ public class AboutWindow extends JFrame {
 	private void initializeUI(Locale locale) {
 		setTitle(strings.getString("about_window_title"));
 		setSize(300, 200);
-		setLocationRelativeTo(null); // Center on screen
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel();
@@ -44,6 +50,11 @@ public class AboutWindow extends JFrame {
 		add(panel);
 	}
 	
+	/**
+	 * To create window.
+	 * 
+	 * @param args strings
+	 */
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(() -> {
             Locale locale = Locale.getDefault(); // Or any other Locale

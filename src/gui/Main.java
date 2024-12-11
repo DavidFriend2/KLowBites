@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 
 /**
  * Main Window that contains all project functionality.
+ * 
+ * @author jayden smith
  */
 public class Main extends JFrame
 {
@@ -685,7 +687,7 @@ public class Main extends JFrame
     SwingUtilities.invokeLater(() -> 
     {
       // Get the default locale of the system (or set to any other desired locale)
-      Locale desiredLocale = Locale.getDefault();
+      Locale desiredLocale = Locale.ITALIAN;
 
       // Create the main window with the chosen locale
       Main window = new Main(desiredLocale);
