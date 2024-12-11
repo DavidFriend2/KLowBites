@@ -511,7 +511,7 @@ private String state;
 
             Ingredient newIngredient = new Ingredient(name, cals, gramsper);
             Ingredient.addIngredient(newIngredient);
-            Ingredient.saveIngredients("IngredientsNutrition/ingredients.ntr");
+            Ingredient.saveIngredients("ingredients.ntr");
   
                   // Add ingredient to list, using name in case they change it while adding
             fullIngredientList.add(new RecipeIngredient(name, ingDetail.getText(),
