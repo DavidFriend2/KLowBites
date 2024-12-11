@@ -9,9 +9,20 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+/**
+ * Button Creation helper.
+ * 
+ * @author Team3C
+ */
 public class buttonCreation {
 
-	@SuppressWarnings("unused")
+  /**
+   * Creates an image button.
+   * 
+   * @param panel
+   * @param imagePath given image
+   * @param buttonName
+   */
 	public void addImageButton(final JPanel panel, final String imagePath, 
 	    final String buttonName) 
 	{
@@ -27,10 +38,17 @@ public class buttonCreation {
       panel.add(button);
     }
   }
-
-    public ImageIcon createImageIcon(final String path) {
+  	/**
+  	 * Creates the image icon.
+  	 * 
+  	 * @param path
+  	 * @return the image
+  	 */
+  public ImageIcon createImageIcon(final String path)
+  {
     java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null) {
+    if (imgURL != null) 
+    {
       return new ImageIcon(imgURL);
     } 
     else 

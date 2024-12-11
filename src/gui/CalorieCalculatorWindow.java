@@ -50,7 +50,8 @@ public class CalorieCalculatorWindow extends JFrame
    * @param unitSystem
    *          to use correct units
    */
-  public CalorieCalculatorWindow(Locale locale, UnitSystemPreferences.UnitSystem unitSystem)
+  public CalorieCalculatorWindow(final Locale locale, 
+      final UnitSystemPreferences.UnitSystem unitSystem)
   {
     strings = ResourceBundle.getBundle("resources.Strings", locale);
     loadStrings(locale);
@@ -157,7 +158,7 @@ public class CalorieCalculatorWindow extends JFrame
    * @param unitSystem
    *          to use correct units
    */
-  private void addComponentsToPanels(UnitSystemPreferences.UnitSystem unitSystem)
+  private void addComponentsToPanels(final UnitSystemPreferences.UnitSystem unitSystem)
   {
     addIconsToPanel();
     addInputComponents(unitSystem);
@@ -226,7 +227,7 @@ public class CalorieCalculatorWindow extends JFrame
    * @param unitSystem
    *          of the window
    */
-  private void addInputComponents(UnitSystemPreferences.UnitSystem unitSystem)
+  private void addInputComponents(final UnitSystemPreferences.UnitSystem unitSystem)
   {
     inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
 
@@ -484,11 +485,12 @@ public class CalorieCalculatorWindow extends JFrame
    */
   public static void main(final String[] args)
   {
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(() -> 
+    {
       Locale locale = Locale.getDefault(); // Use system default or specified locale
-      UnitSystemPreferences.UnitSystem unitSystem = UnitSystemPreferences.getCurrentUnitSystem(); // Get
+      UnitSystemPreferences.UnitSystem unitSystem = 
+          UnitSystemPreferences.getCurrentUnitSystem(); // Get
       CalorieCalculatorWindow window = new CalorieCalculatorWindow(locale, unitSystem); // Pass both
-                                                                                        // parameters
       window.setVisible(true);
     });
   }

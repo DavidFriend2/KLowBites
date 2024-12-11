@@ -40,7 +40,7 @@ import Information.*;
 import UnitConversion.MassVolumeConverter;
 
 /**
- * Shopping List window
+ * Shopping List window.
  * 
  * @author ryan mendez
  */
@@ -57,10 +57,11 @@ public class ShoppingListWindow extends JFrame implements Printable
   private ResourceBundle strings;
 
   /**
-   * Constructor for window
+   * Constructor for window.
+   * 
    * @param locale
    */
-  public ShoppingListWindow(Locale locale)
+  public ShoppingListWindow(final Locale locale)
   {
     strings = ResourceBundle.getBundle("resources.Strings", locale);
     // based on locale
@@ -78,7 +79,7 @@ public class ShoppingListWindow extends JFrame implements Printable
     printButton.addActionListener(new ActionListener()
     {
       @Override
-      public void actionPerformed(ActionEvent e)
+      public void actionPerformed(final ActionEvent e)
       {
         printRecipe();
       }
@@ -104,7 +105,7 @@ public class ShoppingListWindow extends JFrame implements Printable
     updatePeople.addActionListener(new ActionListener()
     {
       @Override
-      public void actionPerformed(ActionEvent e)
+      public void actionPerformed(final ActionEvent e)
       {
         System.out.print("Button clicked");
         peopleUpdated();
@@ -128,7 +129,7 @@ public class ShoppingListWindow extends JFrame implements Printable
     shoppingJlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     shoppingJlist.addMouseListener(new java.awt.event.MouseAdapter()
     {
-      public void mouseClicked(java.awt.event.MouseEvent evt)
+      public void mouseClicked(final java.awt.event.MouseEvent evt)
       {
         if (evt.getClickCount() == 2)
         { // Double-click event
@@ -156,7 +157,7 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Opens meal or recipe action listener
+   * Opens meal or recipe action listener.
    */
   private ActionListener openMealorRecipe = e -> {
 
@@ -215,7 +216,7 @@ public class ShoppingListWindow extends JFrame implements Printable
   };
 
   /**
-   * Update people method
+   * Update people method.
    * 
    * Updates the people to shop for based on entered count
    */
@@ -244,11 +245,11 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Update shopping list method
+   * Update shopping list method.
    * 
    * @param shoppingList to update
    */
-  private void updateShoppingList(ShoppingList shoppingList)
+  private void updateShoppingList(final ShoppingList shoppingList)
   {
 
     DefaultListModel<RecipeIngredient> model = (DefaultListModel<RecipeIngredient>) shoppingJlist
@@ -261,7 +262,7 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Get amount of people entered
+   * Get amount of people entered.
    * 
    * @return amount of people to shop for
    */
@@ -278,12 +279,12 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Unit editor
+   * Unit editor.
    * 
    * @param ingredient to edit
    * @param index to change
    */
-  private void unitEditor(RecipeIngredient ingredient, int index)
+  private void unitEditor(final RecipeIngredient ingredient, final int index)
   {
     UnitSystemPreferences.UnitSystem currentSystem = UnitSystemPreferences.getCurrentUnitSystem();
     String[] availableUnits = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
@@ -310,15 +311,16 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Create print button method
+   * Create print button method.
    * 
    * @param imagePath
    * @param width
    * @param height
    * @param toolTipText
-   * @return
+   * @return button
    */
-  private JButton createButton(String imagePath, int width, int height, String toolTipText)
+  private JButton createButton(final String imagePath, final int width, 
+      final int height, final String toolTipText)
   {
     ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
 
@@ -336,7 +338,7 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Print shopping listmethod
+   * Print shopping listmethod.
    * 
    * prints the shopping list
    */
@@ -359,10 +361,11 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Print overide method
+   * Print overide method.
    */
   @Override
-  public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException
+  public int print(final Graphics graphics, final PageFormat pageFormat, 
+      final int pageIndex) throws PrinterException
   {
     if (pageIndex > 0)
     {
@@ -379,13 +382,14 @@ public class ShoppingListWindow extends JFrame implements Printable
   }
 
   /**
-   * Main program
+   * Main program.
    * 
    * @param args
    */
   public static void main(final String[] args)
   {
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(() -> 
+    {
       // You can change this to the desired default locale
       Locale desiredLocale = Locale.getDefault();
 
