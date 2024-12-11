@@ -12,6 +12,11 @@ import java.util.ResourceBundle;
 import Information.Ingredient;
 import gui.UnitConverterListeners.*;
 
+/**
+ * Unit converter window.
+ * 
+ * @author David Friend, Jayden Smith
+ */
 public class UnitConverterWindow extends JFrame 
 {
   private static final long serialVersionUID = 1L;
@@ -26,14 +31,21 @@ public class UnitConverterWindow extends JFrame
   private JComboBox<String> fromDrop;
   private JComboBox<String> toDrop;
   private JComboBox<String> inDrop;
-  private JComboBox<String> unitsComboBox;
   private JTextField text;
   private JLabel toAmountLabel;
   
   private ResourceBundle strings;
   private Locale currentLocale;
   
-  public UnitConverterWindow(final Locale locale, UnitSystemPreferences.UnitSystem unitSystem) {
+  /**
+   * Default constructor.
+   * 
+   * @param locale
+   * @param unitSystem
+   */
+  public UnitConverterWindow(final Locale locale, 
+      final UnitSystemPreferences.UnitSystem unitSystem) 
+  {
     this.currentLocale = locale;
     loadStrings(locale);
     initializeWindow();
@@ -41,7 +53,7 @@ public class UnitConverterWindow extends JFrame
     addComponents(unitSystem);
     createActionDependentComponents();
     finish();
-}
+  }
   
   private void loadStrings(final Locale locale) 
   {
@@ -76,11 +88,12 @@ public class UnitConverterWindow extends JFrame
     temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
   }
   
-  private void addComponents(UnitSystemPreferences.UnitSystem unitSystem) {
+  private void addComponents(final UnitSystemPreferences.UnitSystem unitSystem) 
+  {
     addFromToComponents(unitSystem);
     addIngredientComponents();
     addFromAmountComponents();
-}
+  }
   
   private void createActionDependentComponents() 
   {
@@ -95,15 +108,22 @@ public class UnitConverterWindow extends JFrame
     add(temp, BorderLayout.NORTH);
   }
   
-  public void updateUnits(UnitSystemPreferences.UnitSystem unitSystem) {
+  /**
+   * Updates units.
+   * 
+   * @param unitSystem
+   */
+  public void updateUnits(final UnitSystemPreferences.UnitSystem unitSystem) 
+  {
     String[] units = UnitSystemPreferences.getUnitsForCurrentSystem(strings);
     updateComboBox(fromDrop, units);
     updateComboBox(toDrop, units);
     revalidate();
     repaint();
-}
+  }
   
-  private void addFromToComponents(UnitSystemPreferences.UnitSystem unitSystem) {
+  private void addFromToComponents(final UnitSystemPreferences.UnitSystem unitSystem) 
+  {
     JLabel fromLabel = new JLabel(strings.getString("from_units_label"));
     from.add(fromLabel);
     fromDrop = new JComboBox<>(UnitSystemPreferences.getUnitsForCurrentSystem(strings));
@@ -114,7 +134,7 @@ public class UnitConverterWindow extends JFrame
     toDrop = new JComboBox<>(UnitSystemPreferences.getUnitsForCurrentSystem(strings));
     to.add(toDrop);
     from.add(to);
-}
+  }
   
   private String[] getLocalizedUnits() 
   {
@@ -238,6 +258,11 @@ public class UnitConverterWindow extends JFrame
     }
   }
   
+  /**
+   * Updates language.
+   * 
+   * @param newLocale
+   */
   public void updateLanguage(final Locale newLocale) 
   {
     loadStrings(newLocale);
@@ -292,12 +317,19 @@ public class UnitConverterWindow extends JFrame
     comboBox.setSelectedItem(selectedItem);
   }
   
-  public static void main(final String[] args) {
-    SwingUtilities.invokeLater(() -> {
-        Locale locale = Locale.getDefault();
-        UnitSystemPreferences.UnitSystem unitSystem = UnitSystemPreferences.getCurrentUnitSystem();
-        UnitConverterWindow window = new UnitConverterWindow(locale, unitSystem);
-        window.setVisible(true);
+  /**
+   * Main Method.
+   * 
+   * @param args
+   */
+  public static void main(final String[] args) 
+  {
+    SwingUtilities.invokeLater(() -> 
+    {
+      Locale locale = Locale.getDefault();
+      UnitSystemPreferences.UnitSystem unitSystem = UnitSystemPreferences.getCurrentUnitSystem();
+      UnitConverterWindow window = new UnitConverterWindow(locale, unitSystem);
+      window.setVisible(true);
     });
-}
+  }
 }

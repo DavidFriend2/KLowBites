@@ -1,6 +1,7 @@
 package gui.EditorListeners;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
@@ -13,8 +14,12 @@ import Information.Recipe;
 import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
-import gui.RecipeEditor;
 
+/**
+ * SaveListener used by recipeEditor.
+ * 
+ * @author Nathan Kirby, David Friend
+ */
 public class SaveListener implements ActionListener 
 {
   
@@ -30,11 +35,15 @@ public class SaveListener implements ActionListener
   JButton newButton;
   List<JComponent> components;
   JTextField pairing;
-
-  public SaveListener(final OpenListener openListener, SaveAsListener saveAsListener, final JTextField name, 
+  /**
+   * Default contructor.
+   */
+  public SaveListener(final OpenListener openListener, 
+      final SaveAsListener saveAsListener, final JTextField name, 
       final JTextField serves, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
-      JButton saveButton, JButton closeButton, JButton newButton, List<JComponent> components, 
+      final JButton saveButton, final JButton closeButton, final JButton newButton, 
+      final List<JComponent> components, 
       final JTextField pairing)
   {
     this.openListener = openListener;
@@ -57,23 +66,32 @@ public class SaveListener implements ActionListener
     try 
     {
       String fileName;
-      if (openListener.getCurrentFileName() == null) {
+      if (openListener.getCurrentFileName() == null) 
+      {
         fileName = saveAsListener.getFilename();
-      } else {
+      } 
+      else 
+      {
         fileName = openListener.getCurrentFileName();
       }
       
       boolean check = true;
-      for (char c : serves.getText().toCharArray()) {
-        if (!Character.isDigit(c)) {
+      for (char c : serves.getText().toCharArray()) 
+      {
+        if (!Character.isDigit(c)) 
+        {
           check = false;
         }
       }
       Recipe updatedRecipe;
-      if (serves.getText().isEmpty() || !check) {
-        updatedRecipe = new Recipe(name.getText(), 0, fullIngredientList, fullUtensilList, fullStepList, 
+      if (serves.getText().isEmpty() || !check)
+      {
+        updatedRecipe = new Recipe(name.getText(), 0, fullIngredientList, 
+            fullUtensilList, fullStepList, 
             pairing.getText());
-      } else {
+      } 
+      else 
+      {
         updatedRecipe = new Recipe(name.getText(), Integer.parseInt(serves.
             getText()), fullIngredientList, fullUtensilList, fullStepList, pairing.getText());
       }
@@ -96,6 +114,11 @@ public class SaveListener implements ActionListener
     
   }
   
+  /**
+   * Gets recipe.
+   * 
+   * @return recipe
+   */
   public Recipe getRecipe() 
   {
     return new Recipe(name.getText(), Integer.parseInt(serves.

@@ -24,18 +24,14 @@ import Information.Recipe;
 import gui.EditorListeners.ChangeTracker;
 
 /**
- * Meal editor is saved as a Jframe.
+ * Meal Editor Window.
  * 
- * @author natek
+ * @author David Friend
  */
 public class MealEditor extends JFrame
 {
 
-  /**
-   * I really wish i knew what this did.
-   */
   private static final long serialVersionUID = -4907901058401288335L;
-  private static final String OPEN = "Open";
   private static Locale currentLocale = Locale.getDefault();
   private JPanel mainPanel;
   private JButton close;
@@ -51,7 +47,9 @@ public class MealEditor extends JFrame
   private JTextField textBox;
   
   /**
-   * default constructor for the window.
+   * Default constructor for the window.
+   * 
+   * @param locale used for languages
    */
   public MealEditor(final Locale locale) 
   {
@@ -208,9 +206,12 @@ public class MealEditor extends JFrame
           recipeEditors.add(re);
           List<JComponent> comps = re.getComps();
           comps.add(textBox);
-          if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
+          if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) 
+          {
             new ChangeTracker(close, newB, comps, saveAs);
-          } else {
+          } 
+          else
+          {
             new ChangeTracker(close, newB, comps, saveAs, save);
           }
         }
@@ -239,9 +240,12 @@ public class MealEditor extends JFrame
           frame.setSize(1000, 825);
           List<JComponent> comps = re.getComps();
           comps.add(textBox);
-          if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) {
+          if (sal.getCurrentFileName() == null && ol.getCurrentFileName() == null) 
+          {
             new ChangeTracker(close, newB, comps, saveAs);
-          } else {
+          } 
+          else 
+          {
             new ChangeTracker(close, newB, comps, saveAs, save);
           }
         }
@@ -259,7 +263,6 @@ public class MealEditor extends JFrame
     {
       RecipeEditor re = new RecipeEditor(currentLocale);
       re.setVisible(true);
-      re.getCloseButton().setEnabled(false);
     }
   }
   
@@ -271,7 +274,8 @@ public class MealEditor extends JFrame
     MealEditor.SaveAsListener saveAsListener;
     JTextField textBox;
 
-    public SaveListener(final JTextField textBox, final MealEditor.OpenListener openListener, MealEditor.SaveAsListener saveAsListener) 
+    public SaveListener(final JTextField textBox, final MealEditor.OpenListener openListener, 
+        final MealEditor.SaveAsListener saveAsListener) 
     {
       this.textBox = textBox;
       this.openListener = openListener;
@@ -284,9 +288,12 @@ public class MealEditor extends JFrame
       try 
       {
         String fileName;
-        if (openListener.getCurrentFileName() == null) {
+        if (openListener.getCurrentFileName() == null) 
+        {
           fileName = saveAsListener.getCurrentFileName();
-        } else {
+        } 
+        else 
+        {
           fileName = openListener.getCurrentFileName();
         }
         List<Recipe> recList = new ArrayList<>();
@@ -306,13 +313,17 @@ public class MealEditor extends JFrame
         updatedMeal.saveMealToFile(fileName);
         save.setEnabled(false);
         close.setEnabled(true);
-        if (recipeEditors.size() > 0) {
-          for (RecipeEditor re : recipeEditors) {
+        if (recipeEditors.size() > 0) 
+        {
+          for (RecipeEditor re : recipeEditors) 
+          {
             List<JComponent> comps = re.getComps();
             comps.add(textBox);
             new ChangeTracker(close, newB, comps, save, saveAs);
           }
-        } else {
+        } 
+        else 
+        {
           List<JComponent> comps = new ArrayList<>();
           comps.add(textBox);
           new ChangeTracker(close, newB, comps, save, saveAs);
@@ -326,21 +337,7 @@ public class MealEditor extends JFrame
     }
     
   }
-  //Opens a new meal editor
-  private class NewListener implements ActionListener 
-  {
-
-    @Override
-    public void actionPerformed(final ActionEvent e) 
-    {
-      MealEditor me = new MealEditor(currentLocale);
-      me.setVisible(true);
-      me.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-      me.getCloseButton().setEnabled(false);
-       
-    }
-    
-  }
+  
   //Closes the mealEditor
   private class CloseListener implements ActionListener 
   {
@@ -371,19 +368,31 @@ public class MealEditor extends JFrame
     @Override
     public void actionPerformed(final ActionEvent e) 
     {
-      UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name")); // Add this line
+      UIManager.put("FileChooser.folderNameLabelText", 
+          strings.getString("file_chooser_folder_name")); // Add this line
       UIManager.put("FileChooser.saveInLabelText", strings.getString("file_chooser_save_in"));
-      UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
-      UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
-      UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
-      UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
-      UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
-      UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
-      UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
-      UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
-      UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
-      UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
-      UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
+      UIManager.put("FileChooser.fileNameLabelText", 
+          strings.getString("file_chooser_file_name"));
+      UIManager.put("FileChooser.filesOfTypeLabelText", 
+          strings.getString("file_chooser_files_of_type"));
+      UIManager.put("FileChooser.upFolderToolTipText", 
+          strings.getString("file_chooser_up_folder"));
+      UIManager.put("FileChooser.homeFolderToolTipText", 
+          strings.getString("file_chooser_home_folder"));
+      UIManager.put("FileChooser.newFolderToolTipText", 
+          strings.getString("file_chooser_new_folder"));
+      UIManager.put("FileChooser.listViewButtonToolTipText", 
+          strings.getString("file_chooser_list_view"));
+      UIManager.put("FileChooser.detailsViewButtonToolTipText", 
+          strings.getString("file_chooser_details_view"));
+      UIManager.put("FileChooser.saveButtonText", 
+          strings.getString("file_chooser_save_button"));
+      UIManager.put("FileChooser.openButtonText", 
+          strings.getString("file_chooser_open_button"));
+      UIManager.put("FileChooser.cancelButtonText", 
+          strings.getString("file_chooser_cancel_button"));
+      UIManager.put("FileChooser.acceptAllFileFilterText", 
+          strings.getString("file_chooser_all_files"));
       
       //Allow user to type in filename
       JFileChooser fileChooser = new JFileChooser();
@@ -403,13 +412,17 @@ public class MealEditor extends JFrame
           }
           Meal newMeal = new Meal(textBox.getText(), recList);
           newMeal.saveMealToFile(fileName);
-          if (recipeEditors.size() > 0) {
-            for (RecipeEditor re : recipeEditors) {
+          if (recipeEditors.size() > 0) 
+          {
+            for (RecipeEditor re : recipeEditors) 
+            {
               List<JComponent> comps = re.getComps();
               comps.add(textBox);
               new ChangeTracker(close, newB, comps, save, saveAs);
             }
-          } else {
+          } 
+          else 
+          {
             List<JComponent> comps = new ArrayList<>();
             comps.add(textBox);
             new ChangeTracker(close, newB, comps, save, saveAs);
@@ -439,9 +452,6 @@ public class MealEditor extends JFrame
     JFrame frame;
     JTextField name;
     JPanel recipeBox;
-    JList ingList;
-    JList stepList;
-    JList utensilList;
     JButton button;
     String currentFileName;
     
@@ -461,19 +471,28 @@ public class MealEditor extends JFrame
     public void actionPerformed(final ActionEvent e) 
     {
       
-      UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name"));
+      UIManager.put("FileChooser.folderNameLabelText", 
+          strings.getString("file_chooser_folder_name"));
       UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
       UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
-      UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
-      UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
-      UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
-      UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
-      UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
-      UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+      UIManager.put("FileChooser.filesOfTypeLabelText", 
+          strings.getString("file_chooser_files_of_type"));
+      UIManager.put("FileChooser.upFolderToolTipText", 
+          strings.getString("file_chooser_up_folder"));
+      UIManager.put("FileChooser.homeFolderToolTipText", 
+          strings.getString("file_chooser_home_folder"));
+      UIManager.put("FileChooser.newFolderToolTipText", 
+          strings.getString("file_chooser_new_folder"));
+      UIManager.put("FileChooser.listViewButtonToolTipText", 
+          strings.getString("file_chooser_list_view"));
+      UIManager.put("FileChooser.detailsViewButtonToolTipText", 
+          strings.getString("file_chooser_details_view"));
       UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
       UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
-      UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
-      UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
+      UIManager.put("FileChooser.cancelButtonText", 
+          strings.getString("file_chooser_cancel_button"));
+      UIManager.put("FileChooser.acceptAllFileFilterText", 
+          strings.getString("file_chooser_all_files"));
 
       JFileChooser chooser = new JFileChooser();
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -492,7 +511,8 @@ public class MealEditor extends JFrame
           //serves.setText(String.valueOf(loaded.getServes()));
           name.setText(loaded.getName());
           int count = 0;
-          if (loaded.getRecipes().size() == 0) {
+          if (loaded.getRecipes().size() == 0) 
+          {
             List<JComponent> comps = new ArrayList<>();
             comps.add(textBox);
             new ChangeTracker(close, newB, comps, save, saveAs);
@@ -631,28 +651,42 @@ public class MealEditor extends JFrame
     }
     
   }
+  
+  /**
+   * Checks if textfields have been changed.
+   */
   public class TextFieldChanger implements DocumentListener
   {
 
     @Override
-    public void insertUpdate(DocumentEvent e)
+    public void insertUpdate(final DocumentEvent e)
     {
       saveAs.setEnabled(true);
+      newB.setEnabled(false);
     }
 
     @Override
-    public void removeUpdate(DocumentEvent e)
+    public void removeUpdate(final DocumentEvent e)
     {
       saveAs.setEnabled(true);
+      newB.setEnabled(false);
     }
 
     @Override
-    public void changedUpdate(DocumentEvent e)
+    public void changedUpdate(final DocumentEvent e)
     {
       saveAs.setEnabled(true);
+      newB.setEnabled(false);
     }
   }
-  public static void main(final String[] args) {
+  
+  /**
+   * Main Method.
+   * 
+   * @param args
+   */
+  public static void main(final String[] args) 
+  {
     SwingUtilities.invokeLater(() -> 
     {
       // You can change this to the desired default locale

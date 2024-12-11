@@ -10,7 +10,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-//ActionListener for the reset button
+/**
+ * ActionListener for the reset button.
+ * 
+ * @author David Friend, Jayden Smith
+ */
 public class ResetListener implements ActionListener
 {
   private JLabel toAmount;
@@ -21,6 +25,16 @@ public class ResetListener implements ActionListener
   private Locale currentLocale;
   private ResourceBundle strings;
  
+  /**
+   * Default constructor.
+   * 
+   * @param toAmount
+   * @param from
+   * @param to
+   * @param ingredient
+   * @param amount
+   * @param locale
+   */
   public ResetListener(final JLabel toAmount, final JComboBox<String> from, 
       final JComboBox<String> to, final JComboBox<String> ingredient, 
       final JTextField amount, final Locale locale) 
@@ -48,7 +62,7 @@ public class ResetListener implements ActionListener
     }
   }
   
-  //Resets the window
+  @Override
   public void actionPerformed(final ActionEvent e)
   {
     toAmount.setText(strings.getString("to_amount_label") + ": ______________");
@@ -59,6 +73,11 @@ public class ResetListener implements ActionListener
     amount.setText("");
   }
   
+  /**
+   * Updates locale.
+   * 
+   * @param newLocale
+   */
   public void updateLocale(final Locale newLocale)
   {
     this.currentLocale = newLocale;

@@ -6,14 +6,24 @@ import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 
-//ActionListener for the Ingredient JComboBox since it starts disabled
+/**
+ * ActionListener for the Ingredient JComboBox since it starts disabled.
+ * 
+ * @author David Friend, Jayden Smith
+ */
 public class IngredientListener implements ActionListener 
 {
   JComboBox<String> from;
   JComboBox<String> to;
   JComboBox<String> ingredient;
   
-  //Initializes the attributes needed to change ingredient combo box
+  /**
+   * Initializes the attributes needed to change ingredient combo box.
+   * 
+   * @param from
+   * @param to
+   * @param ingredient
+   */
   public IngredientListener(final JComboBox<String> from, 
       final JComboBox<String> to, final JComboBox<String> ingredient) 
   {
@@ -22,7 +32,7 @@ public class IngredientListener implements ActionListener
     this.ingredient = ingredient;
   }
   
-  //Determines if the Ingredients drop down menu should be enabled or disabled
+  @Override
   public void actionPerformed(final ActionEvent e)
   {
     ArrayList<String> massUnits = new ArrayList<>();

@@ -18,6 +18,11 @@ import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
 
+/**
+ * Save As Listener used by recipe editor.
+ * 
+ * @author Nathan Kirby
+ */
 public class SaveAsListener implements ActionListener 
 {
   private JTextField name;
@@ -33,10 +38,15 @@ public class SaveAsListener implements ActionListener
   private JTextField pairing;
   private JButton newButton;
   
+  /**
+   * Default constructor.
+   */
   public SaveAsListener(final JTextField nameText, final JTextField servesText, 
       final List<RecipeIngredient> fullIngredientList, 
-      final List<Utensil> fullUtensilList, final List<Step> fullStepList, List<JComponent> components, 
-      JButton saveButton, JButton closeButton, JButton newButton, Locale locale, final JTextField pairText) 
+      final List<Utensil> fullUtensilList, final List<Step> fullStepList, 
+      final List<JComponent> components, 
+      final JButton saveButton, final JButton closeButton, 
+      final JButton newButton, final Locale locale, final JTextField pairText) 
   {
     this.name = nameText;
     this.serves = servesText;
@@ -61,9 +71,11 @@ public class SaveAsListener implements ActionListener
     UIManager.put("FileChooser.folderNameLabelText", strings.getString("file_chooser_folder_name"));
     UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
     UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
-    UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+    UIManager.put("FileChooser.filesOfTypeLabelText", 
+        strings.getString("file_chooser_files_of_type"));
     UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
-    UIManager.put("FileChooser.saveDialogTitleText", strings.getString("file_chooser_save_dialog_title"));
+    UIManager.put("FileChooser.saveDialogTitleText", 
+        strings.getString("file_chooser_save_dialog_title"));
 
     // Allow user to type in filename
     JFileChooser fileChooser = new JFileChooser();
@@ -78,16 +90,21 @@ public class SaveAsListener implements ActionListener
       {
         // Create an updated recipe and save it to the chosen file name
         boolean check = true;
-        for (char c : serves.getText().toCharArray()) {
-          if (!Character.isDigit(c)) {
+        for (char c : serves.getText().toCharArray()) 
+        {
+          if (!Character.isDigit(c)) 
+          {
             check = false;
           }
         }
-        if (serves.getText().isEmpty() || !check) {
+        if (serves.getText().isEmpty() || !check) 
+        {
           Recipe newRecipe = new Recipe(name.getText(), 0, 
               fullIngredientList, fullUtensilList, fullStepList, pairing.getText());
           newRecipe.saveRecipeToFile(fileName);
-        } else {
+        } 
+        else 
+        {
           Recipe newRecipe = new Recipe(name.getText(), Integer.parseInt(serves.getText()), 
               fullIngredientList, fullUtensilList, fullStepList, pairing.getText());
           newRecipe.saveRecipeToFile(fileName);
@@ -101,7 +118,14 @@ public class SaveAsListener implements ActionListener
       }
     }
   } 
-  public String getFilename() {
+  
+  /**
+   * Gets the filename.
+   * 
+   * @return the filename
+   */
+  public String getFilename() 
+  {
     return fileName;
   }
 }

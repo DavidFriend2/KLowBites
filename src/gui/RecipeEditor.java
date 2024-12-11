@@ -34,17 +34,25 @@ import Information.Utensil;
 import UnitConversion.MassVolumeConverter;
 import gui.EditorListeners.*;
 
-public class RecipeEditor extends JFrame {
+/**
+ * Recipe Editor Window.
+ * 
+ * @author Nathan Kirby, David Friend
+ */
+public class RecipeEditor extends JFrame 
+{
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -1922930697879333939L;
+  public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
+  public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
+  public DefaultListModel<String> dlm3 = new DefaultListModel<>();
+  public List<Step> fullStepList = new ArrayList<>();
+  public DefaultListModel<String> dlm2 = new DefaultListModel<>();
+  public List<Utensil> fullUtensilList = new ArrayList<>();
   private String delete = "Delete";
   private String add = "Add";
   private String name = "Name: ";
   private JPanel mainPanel;
-  
   private SaveListener saveListener;
   private OpenListener openListener;
   private JButton openButton;
@@ -57,15 +65,13 @@ public class RecipeEditor extends JFrame {
   private Locale currentLocale;
   private List<JComponent> components;
   
-  public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
-  public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
-  public DefaultListModel<String> dlm3 = new DefaultListModel<>();
-  public List<Step> fullStepList = new ArrayList<>();
-  public DefaultListModel<String> dlm2 = new DefaultListModel<>();
-  public List<Utensil> fullUtensilList = new ArrayList<>();
-  
-  
-  public RecipeEditor(final Locale locale) {
+  /**
+   * Default constructor, initilizes the window.
+   * 
+   * @param locale used for lang
+   */
+  public RecipeEditor(final Locale locale) 
+  {
     this.currentLocale = locale;
     this.components = new ArrayList<>();
     strings = ResourceBundle.getBundle("resources.Strings", locale); // Corrected line
@@ -151,8 +157,9 @@ public class RecipeEditor extends JFrame {
     JLabel ingUnits = new JLabel(strings.getString("label_units"));
     JComboBox<String> ingUnitCombo = new JComboBox<String>();
     components.add(ingUnitCombo);
-    for (String unit : UnitSystemPreferences.getUnitsForCurrentSystem(strings)) {
-        ingUnitCombo.addItem(unit);
+    for (String unit : UnitSystemPreferences.getUnitsForCurrentSystem(strings)) 
+    {
+      ingUnitCombo.addItem(unit);
     }
     JButton ingAdd = new JButton(strings.getString("button_add"));
 
@@ -272,8 +279,6 @@ public class RecipeEditor extends JFrame {
     newButton = new JButton(new ImageIcon(newImg));
     newButton.setPreferredSize(new Dimension(50, 50));
     newButton.setToolTipText(strings.getString("tooltip_new"));
-    NewListener newListener = new NewListener();
-    //newButton.addActionListener(newListener);
     imagePanel.add(newButton);
 
     //initialize open button ----------------------------------------------
@@ -351,6 +356,7 @@ public class RecipeEditor extends JFrame {
   {
     return openButton;
   }
+  
   protected JButton getCloseButton() 
   {
     return closeButton;
@@ -364,10 +370,18 @@ public class RecipeEditor extends JFrame {
   {
     return openListener;
   }
-  protected List<JComponent> getComps() {
+  
+  protected List<JComponent> getComps() 
+  {
     return components;
   }
 
+  /**
+   * Creates image icons for the buttons.
+   * 
+   * @param path
+   * @return the image
+   */
   public ImageIcon createImageIcon(final String path) 
   {
     java.net.URL imgURL = getClass().getResource(path);
@@ -521,21 +535,26 @@ public class RecipeEditor extends JFrame {
     {
         // Add info to the list
       boolean isUtensil = false;
-      for (Utensil ut : fullUtensilList) {
-        if (ut.getName().equals(stepOn.getSelectedItem().toString())) {
+      for (Utensil ut : fullUtensilList) 
+      {
+        if (ut.getName().equals(stepOn.getSelectedItem().toString())) 
+        {
           isUtensil = true;
           break;
         }
       }
       StringBuilder stepDescription;
-      if (isUtensil) {
+      if (isUtensil) 
+      {
         stepDescription = new StringBuilder();
         stepDescription.append(stepAction.getSelectedItem().toString())
                        .append(" the ")
                        .append("contents of the " + stepOn.getSelectedItem().toString())
                        .append(" in the ")
                        .append(stepUtensil.getSelectedItem().toString());
-      } else {
+      } 
+      else 
+      {
         stepDescription = new StringBuilder();
         stepDescription.append(stepAction.getSelectedItem().toString())
                        .append(" the ")
@@ -652,7 +671,7 @@ public class RecipeEditor extends JFrame {
     JComboBox stepOn;
 
     public DeleteUtensilListener(final JList<String> utensilList, 
-        final JComboBox<String> stepUtensilCombo, JComboBox stepOn) 
+        final JComboBox<String> stepUtensilCombo, final JComboBox stepOn) 
     {
       this.utensilList = utensilList;
       this.stepUtensilCombo = stepUtensilCombo;
@@ -725,7 +744,13 @@ public class RecipeEditor extends JFrame {
     }
   }
 
-  public static void main(final String[] args) {
+  /**
+   * Main Method used to run the window.
+   * 
+   * @param args
+   */
+  public static void main(final String[] args) 
+  {
     SwingUtilities.invokeLater(() -> 
     {
       Locale locale = Locale.getDefault(); //change this

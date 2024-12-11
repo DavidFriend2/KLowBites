@@ -16,6 +16,11 @@ import UnitConversion.MassUnitConverter;
 import UnitConversion.MassVolumeConverter;
 import UnitConversion.VolumeUnitConverter;
 
+/**
+ * CalculatorListener used by UnitConverter.
+ * 
+ * @author David Friend, Jayden Smith
+ */
 public class CalculatorListener implements ActionListener 
 {
   
@@ -27,6 +32,16 @@ public class CalculatorListener implements ActionListener
   private Locale currentLocale;
   private ResourceBundle strings;
 
+  /**
+   * Default Constructor.
+   * 
+   * @param toAmount
+   * @param from
+   * @param ingredient
+   * @param to
+   * @param amount
+   * @param locale
+   */
   public CalculatorListener(final JLabel toAmount, final JComboBox<String> from, 
       final JComboBox<String> to, final JComboBox<String> ingredient, 
       final JTextField amount, final Locale locale) 
@@ -39,7 +54,8 @@ public class CalculatorListener implements ActionListener
     this.currentLocale = locale;
     this.strings = ResourceBundle.getBundle("resources.Strings", locale);
   }
-
+  
+  @Override
   public void actionPerformed(final ActionEvent e) 
   {
     if (!(from.getSelectedItem().equals("")) && !(to.getSelectedItem()
@@ -135,6 +151,11 @@ public class CalculatorListener implements ActionListener
     return massUnits.contains(unit);
   }
 
+  /**
+   * Updates the Locale.
+   * 
+   * @param newLocale
+   */
   public void updateLocale(final Locale newLocale) 
   {
     this.currentLocale = newLocale;

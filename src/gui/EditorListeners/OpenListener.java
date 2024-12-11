@@ -22,6 +22,11 @@ import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
 
+/**
+ * OpenListener used by recipe editor.
+ * 
+ * @author Nathan Kirby, David Friend
+ */
 public class OpenListener implements ActionListener 
 {
 
@@ -51,6 +56,9 @@ public class OpenListener implements ActionListener
   List<JComponent> components;
   JTextField pairing;
   
+  /**
+   * Default constructor.
+   */
   public OpenListener(final JTextField name, final JTextField serves, 
       final JTextField ingNameInput, final JTextField ingDetailsInput, 
       final JTextField ingAmountInput, final JComboBox ingUnitCombo, final JList ingList,
@@ -58,9 +66,9 @@ public class OpenListener implements ActionListener
       final JComboBox stepUtensilCombo, final List<RecipeIngredient> fullIngredientList, 
       final List<Step> fullStepList, final List<Utensil> fullUtensilList, 
       final DefaultListModel<String> dlm, final DefaultListModel<String> dlm2, 
-      final DefaultListModel<String> dlm3, Locale locale, JButton openButton, 
-      JButton saveButton, JButton closeButton, List<JComponent> components,
-      JButton newButton, final JTextField pairing) 
+      final DefaultListModel<String> dlm3, final Locale locale, final JButton openButton, 
+      final JButton saveButton, final JButton closeButton, final List<JComponent> components,
+      final JButton newButton, final JTextField pairing) 
   {
     this.name = name;
     this.serves = serves;
@@ -95,16 +103,21 @@ public class OpenListener implements ActionListener
     // Set localized strings for JFileChooser
     UIManager.put("FileChooser.lookInLabelText", strings.getString("file_chooser_look_in"));
     UIManager.put("FileChooser.fileNameLabelText", strings.getString("file_chooser_file_name"));
-    UIManager.put("FileChooser.filesOfTypeLabelText", strings.getString("file_chooser_files_of_type"));
+    UIManager.put("FileChooser.filesOfTypeLabelText", 
+        strings.getString("file_chooser_files_of_type"));
     UIManager.put("FileChooser.upFolderToolTipText", strings.getString("file_chooser_up_folder"));
-    UIManager.put("FileChooser.homeFolderToolTipText", strings.getString("file_chooser_home_folder"));
+    UIManager.put("FileChooser.homeFolderToolTipText", 
+        strings.getString("file_chooser_home_folder"));
     UIManager.put("FileChooser.newFolderToolTipText", strings.getString("file_chooser_new_folder"));
-    UIManager.put("FileChooser.listViewButtonToolTipText", strings.getString("file_chooser_list_view"));
-    UIManager.put("FileChooser.detailsViewButtonToolTipText", strings.getString("file_chooser_details_view"));
+    UIManager.put("FileChooser.listViewButtonToolTipText", 
+        strings.getString("file_chooser_list_view"));
+    UIManager.put("FileChooser.detailsViewButtonToolTipText", 
+        strings.getString("file_chooser_details_view"));
     UIManager.put("FileChooser.saveButtonText", strings.getString("file_chooser_save_button"));
     UIManager.put("FileChooser.openButtonText", strings.getString("file_chooser_open_button"));
     UIManager.put("FileChooser.cancelButtonText", strings.getString("file_chooser_cancel_button"));
-    UIManager.put("FileChooser.acceptAllFileFilterText", strings.getString("file_chooser_all_files"));
+    UIManager.put("FileChooser.acceptAllFileFilterText", 
+        strings.getString("file_chooser_all_files"));
     JFileChooser chooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "RCP files", "rcp");
@@ -158,7 +171,8 @@ public class OpenListener implements ActionListener
         for (Step st : loaded.getSteps()) 
         {
           boolean isUtensil = false;
-          for (Utensil ut : loaded.getUtenils()) {
+          for (Utensil ut : loaded.getUtenils()) 
+          {
             System.out.println(st.getSourceUtensilOrIngredient());
             if (ut.getName().toLowerCase().equals(st.getSourceUtensilOrIngredient().toLowerCase())) {
               isUtensil = true;
@@ -167,11 +181,13 @@ public class OpenListener implements ActionListener
           }
           if (st.getDetails() == null || st.getDetails().equals("")) 
           {
-            if (isUtensil) {
+            if (isUtensil) 
+            {
               dlm3.addElement(st.getAction() + " the contents of the " 
                   + st.getSourceUtensilOrIngredient() + " in the "
                   + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
-            } else {
+            } else 
+            {
               dlm3.addElement(st.getAction() + " the " 
                   + st.getSourceUtensilOrIngredient() + " in the "
                   + st.getDestinationUtensil() + ". Estimated Time: " + st.getTime() + " minutes");
@@ -179,7 +195,8 @@ public class OpenListener implements ActionListener
           } 
           else 
           {
-            if (isUtensil) {
+            if (isUtensil) 
+            {
               dlm3.addElement(st.getAction() + " the contents of the "
                   + st.getSourceUtensilOrIngredient() + " in the "
                   + st.getDestinationUtensil() + " " + st.getDetails() 
@@ -212,6 +229,11 @@ public class OpenListener implements ActionListener
     }
   }
   
+  /**
+   * Helps the meal editor open a meal.
+   * 
+   * @param recipe
+   */
   public void openMeal(final Recipe recipe) 
   {
     name.setText(recipe.getName());
@@ -269,6 +291,11 @@ public class OpenListener implements ActionListener
     utensilList.setModel(dlm2);
   }
   
+  /**
+   * Gets the current filename.
+   * 
+   * @return the filename
+   */
   public String getCurrentFileName() 
   {
     return currentFileName;
