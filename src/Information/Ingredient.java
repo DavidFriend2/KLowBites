@@ -188,7 +188,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
    */
   public static void saveIngredients(final String path) throws IOException
   {
-    File file = new File(path);
+    File file = new File("/" + path);
 
     // Check if the parent directories exist, if not, create them
     if (!file.getParentFile().exists())
