@@ -160,23 +160,11 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   public static List<Ingredient> loadIngredients(final String path)
       throws IOException, ClassNotFoundException
   {
-    File newfile = new File(path);
 
-    // Try loading from the external path
-    if (newfile.exists() && newfile.isFile())
+    try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(path)))
     {
-      try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(newfile)))
-      {
-        return (List<Ingredient>) input.readObject();
-      }
+      return (List<Ingredient>) input.readObject();
     }
-
-    try (InputStream input = Ingredient.class.getResourceAsStream("/" + path);
-        ObjectInputStream objectInput = new ObjectInputStream(input))
-    {
-      return (List<Ingredient>) objectInput.readObject();
-    }
-
   }
 
   /**
@@ -188,19 +176,8 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
    */
   public static void saveIngredients(final String path) throws IOException
   {
-    File file = new File("/" + path);
 
-    // Check if the parent directories exist, if not, create them
-    if (!file.getParentFile().exists())
-    {
-      boolean dirCreated = file.getParentFile().mkdirs();
-      if (!dirCreated)
-      {
-        throw new IOException("Failed to create directory: " + file.getParentFile());
-      }
-    }
-
-    try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
+    try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(path)))
     {
       output.writeObject(ingredients);
     }
