@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -31,9 +30,11 @@ import Information.Ingredient;
 import Information.RecipeIngredient;
 import Information.Step;
 import Information.Utensil;
-import UnitConversion.MassVolumeConverter;
 import gui.EditorListeners.*;
 
+/**
+ * recipe class.
+ */
 public class RecipeEditor extends JFrame {
 
   /**
@@ -53,7 +54,8 @@ public class RecipeEditor extends JFrame {
   private JButton newButton;
   private JButton saveAsButton;
   private ResourceBundle strings;
-  private String state;
+  @SuppressWarnings("unused")
+private String state;
   private Locale currentLocale;
   private List<JComponent> components;
   
@@ -64,7 +66,11 @@ public class RecipeEditor extends JFrame {
   public DefaultListModel<String> dlm2 = new DefaultListModel<>();
   public List<Utensil> fullUtensilList = new ArrayList<>();
   
-  
+  /**
+   * recipe.
+   * 
+   * @param locale l
+   */
   public RecipeEditor(final Locale locale) {
     this.currentLocale = locale;
     this.components = new ArrayList<>();
@@ -342,32 +348,71 @@ public class RecipeEditor extends JFrame {
     add(mainPanel);
   }
   
+  /**
+   * main.
+   * 
+   * @return main
+   */
   protected JPanel getMainPanel() 
   {
     return mainPanel;
   }
 
+  /**
+   * button.
+   * 
+   * @return button
+   */
   protected JButton getOpenButton() 
   {
     return openButton;
   }
+  
+  /**
+   * button.
+   * 
+   * @return button
+   */
   protected JButton getCloseButton() 
   {
     return closeButton;
   }
 
+  /**
+   * button.
+   * 
+   * @return button
+   */
   protected SaveListener getSaveListener() 
   {
     return saveListener;
   }
+  
+  /**
+   * button.
+   * 
+   * @return listen
+   */
   protected OpenListener getOpenListener() 
   {
     return openListener;
   }
+  
+  /**
+   * comps.
+   * 
+   * @return comps
+   */
   protected List<JComponent> getComps() {
     return components;
   }
 
+  /**
+   * create icon.
+   * 
+   * @param path path
+   * @return images
+   */
   public ImageIcon createImageIcon(final String path) 
   {
     java.net.URL imgURL = getClass().getResource(path);
@@ -382,6 +427,9 @@ public class RecipeEditor extends JFrame {
     }
   }
 
+  /**
+   * listen.
+   */
   private class NewListener implements ActionListener 
   {
     @Override
@@ -391,6 +439,9 @@ public class RecipeEditor extends JFrame {
     }
   }
   
+  /**
+   * listen.
+   */
   private class AddIngListener implements ActionListener 
   {
     JTextField ingName;
@@ -399,6 +450,15 @@ public class RecipeEditor extends JFrame {
     JComboBox<String> ingUnit;
     JComboBox<String> stepOnCombo;
   
+    /**
+     * add listen.
+     * 
+     * @param ingName name
+     * @param ingDetail detail
+     * @param ingAmount amount
+     * @param ingUnit unit
+     * @param stepOnCombo combo
+     */
     public AddIngListener(final JTextField ingName, final JTextField ingDetail,
         final JTextField ingAmount, final JComboBox<String> ingUnit, 
         final JComboBox<String> stepOnCombo) 
@@ -412,6 +472,9 @@ public class RecipeEditor extends JFrame {
   
     @SuppressWarnings("unchecked")
   @Override
+  /**
+   * action.
+   */
   public void actionPerformed(final ActionEvent e) 
     {
       try 
@@ -497,6 +560,9 @@ public class RecipeEditor extends JFrame {
     }
   }
   
+  /**
+   * step.
+   */
   private class AddStepListener implements ActionListener 
   {
     JComboBox<String> stepAction;
@@ -505,6 +571,15 @@ public class RecipeEditor extends JFrame {
     JTextField stepDetails;
     JTextField time;
   
+    /**
+     * add step.
+     * 
+     * @param stepAction action
+     * @param stepOn on
+     * @param stepUtensil utensil
+     * @param stepDetails details
+     * @param time time
+     */
     public AddStepListener(final JComboBox<String> stepAction, 
         final JComboBox<String> stepOn, final JComboBox<String> stepUtensil,
         final JTextField stepDetails, final JTextField time) 
@@ -517,6 +592,9 @@ public class RecipeEditor extends JFrame {
     }
   
     @Override
+    /**
+     * action.
+     */
     public void actionPerformed(final ActionEvent e) 
     {
         // Add info to the list
@@ -569,6 +647,9 @@ public class RecipeEditor extends JFrame {
     }
   }
   
+  /**
+   * add utensil.
+   */
   private class AddUtensilListener implements ActionListener 
   {
 
@@ -577,6 +658,14 @@ public class RecipeEditor extends JFrame {
     JComboBox stepUtensilCombo;
     JComboBox stepOn;
     
+    /**
+     * add utensil.
+     * 
+     * @param utensilName name
+     * @param details detail
+     * @param stepUtensilCombo combo
+     * @param stepOn on
+     */
     public AddUtensilListener(final JTextField utensilName, 
         final JTextField details, final JComboBox stepUtensilCombo, final JComboBox stepOn) 
     {
@@ -588,6 +677,9 @@ public class RecipeEditor extends JFrame {
     }
     @SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * action.
+	 */
     public void actionPerformed(final ActionEvent e) 
     {
       //add info to thing
@@ -609,11 +701,20 @@ public class RecipeEditor extends JFrame {
     
   }
   
+  /**
+   * delete.
+   */
   private class DeleteIngListener implements ActionListener 
   {
     JList<String> ingredientList;
     JComboBox<String> stepOnCombo;
 
+    /**
+     * delete.
+     * 
+     * @param ingredientList list
+     * @param stepOnCombo combo
+     */
     public DeleteIngListener(final JList<String> ingredientList, 
         final JComboBox<String> stepOnCombo)
     {
@@ -622,6 +723,9 @@ public class RecipeEditor extends JFrame {
     }
 
     @Override
+    /**
+     * action.
+     */
     public void actionPerformed(final ActionEvent e) 
     {
       int selectedIndex = ingredientList.getSelectedIndex();
@@ -645,12 +749,22 @@ public class RecipeEditor extends JFrame {
     }
   }
   
+  /**
+   * delete.
+   */
   private class DeleteUtensilListener implements ActionListener 
   {
     JList<String> utensilList;
     JComboBox<String> stepUtensilCombo;
     JComboBox stepOn;
 
+    /**
+     * delete utensil.
+     * 
+     * @param utensilList list
+     * @param stepUtensilCombo combo
+     * @param stepOn on
+     */
     public DeleteUtensilListener(final JList<String> utensilList, 
         final JComboBox<String> stepUtensilCombo, JComboBox stepOn) 
     {
@@ -660,6 +774,9 @@ public class RecipeEditor extends JFrame {
     }
 
     @Override
+    /**
+     * action.
+     */
     public void actionPerformed(final ActionEvent e) 
     {
       int selectedIndex = utensilList.getSelectedIndex();
@@ -684,16 +801,27 @@ public class RecipeEditor extends JFrame {
     }
   }
   
+  /**
+   * delete.
+   */
   private class DeleteStepListener implements ActionListener 
   {
     JList<String> stepList;
 
+    /**
+     * delete step.
+     * 
+     * @param stepList step
+     */
     public DeleteStepListener(final JList<String> stepList) 
     {
       this.stepList = stepList;
     }
 
     @Override
+    /**
+     * action.
+     */
     public void actionPerformed(final ActionEvent e) 
     {
       int selectedIndex = stepList.getSelectedIndex();
@@ -713,9 +841,15 @@ public class RecipeEditor extends JFrame {
     }
   }
   
+  /**
+   * close.
+   */
   private class CloseListener implements ActionListener 
   {
     @Override
+    /**
+     * action
+     */
     public void actionPerformed(final ActionEvent e) 
     {
       RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
@@ -725,6 +859,11 @@ public class RecipeEditor extends JFrame {
     }
   }
 
+  /**
+   * main.
+   * 
+   * @param args args
+   */
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> 
     {
