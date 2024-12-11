@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Step class
+ * Step class.
  * 
  * @author ryan mendez
  */
@@ -20,7 +20,7 @@ public class Step implements Serializable
   private double timeEstimate;
     
   /**
-   * Step constructor
+   * Step constructor.
    * 
    * @param action for step, boil, bake etc
    * @param on what to perform the action on
@@ -39,7 +39,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Get action method
+   * Get action method.
    * 
    * @return action of step
    */
@@ -49,7 +49,7 @@ public class Step implements Serializable
   }
 
   /**
-   * Get on (Source utensil or ingredient) method
+   * Get on (Source utensil or ingredient) method.
    * 
    * @return on of step
    */
@@ -59,7 +59,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Get destination utensil method
+   * Get destination utensil method.
    * 
    * @return the destination utensil of step
    */
@@ -69,7 +69,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Get details method
+   * Get details method.
    * 
    * @return details of step
    */
@@ -79,7 +79,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Get time estimate method
+   * Get time estimate method.
    * 
    * @return time estimate of step
    */
@@ -89,7 +89,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Get actions list method
+   * Get actions list method.
    * 
    * @return list of preset actions
    */
@@ -99,7 +99,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Set action method
+   * Set action method.
    * 
    * @param action of step
    */
@@ -109,7 +109,7 @@ public class Step implements Serializable
   }
 
   /**
-   * Set on (Source utensil or ingredient) method
+   * Set on (Source utensil or ingredient) method.
    * 
    * @param on of step
    */
@@ -119,9 +119,9 @@ public class Step implements Serializable
   }
   
   /**
-   * Set destination utensil method
+   * Set destination utensil method.
    * 
-   * @param the destination utensil of step
+   * @param destUtensil the destination utensil of step
    */
   public void setDestinationUtensil(final String destUtensil)
   {
@@ -129,7 +129,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Set details method
+   * Set details method.
    * 
    * @param details of step
    */
@@ -139,7 +139,7 @@ public class Step implements Serializable
   }
   
   /**
-   * Predefined actions list
+   * Predefined actions list.
    */
   static 
   {

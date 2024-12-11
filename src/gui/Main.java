@@ -16,10 +16,11 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
- * Main Window that contains all project functionality
+ * Main Window that contains all project functionality.
  */
 public class Main extends JFrame
 {
+  public static String htmlPath;
   private static final long serialVersionUID = 1293847254;
   private static UnitConverterWindow converterWindow;
   private static CalorieCalculatorWindow calorieWindow;
@@ -30,7 +31,6 @@ public class Main extends JFrame
   private Color backgroundColor = Color.WHITE;
   private ImageIcon logoIcon;
   private JLabel logoLabel;
-  public static String htmlPath;
 
   /**
    * Constructor for the Main class. Initializes the application window with internationalization.
@@ -39,7 +39,7 @@ public class Main extends JFrame
    * @param locale
    *          is the language used
    */
-  public Main(Locale locale)
+  public Main(final Locale locale)
   {
     loadStrings(locale);
     setHtmlPath(locale);
@@ -96,22 +96,27 @@ public class Main extends JFrame
   /**
    * Saves user configs like logo, color, and units.
    */
-  private void saveConfig() {
-    try {
-        Properties config = new Properties();
-        config.setProperty("logo_path", logoPath);
-        config.setProperty("background_color", getColorName(backgroundColor));
-        config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
+  private void saveConfig() 
+  {
+    try 
+    {
+      Properties config = new Properties();
+      config.setProperty("logo_path", logoPath);
+      config.setProperty("background_color", getColorName(backgroundColor));
+      config.setProperty("unit_system", UnitSystemPreferences.getCurrentUnitSystem().name());
 
-        // Create a temporary file for the configuration
-        File tempFile = File.createTempFile("config", ".properties");
-        
-        try (OutputStream output = Files.newOutputStream(tempFile.toPath())) {
-            config.store(output, "Application Configuration");
-            System.out.println("Config saved to: " + tempFile.getAbsolutePath());
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
+      // Create a temporary file for the configuration
+      File tempFile = File.createTempFile("config", ".properties");
+      
+      try (OutputStream output = Files.newOutputStream(tempFile.toPath())) 
+      {
+        config.store(output, "Application Configuration");
+        System.out.println("Config saved to: " + tempFile.getAbsolutePath());
+      }
+    } 
+    catch (Exception e) 
+    {
+      e.printStackTrace();
     }
 }
 
@@ -122,7 +127,7 @@ public class Main extends JFrame
    *          of the background
    * @return the correct color
    */
-  private String getColorName(Color color)
+  private String getColorName(final Color color)
   {
     if (color.equals(Color.BLACK))
       return "BLACK";
@@ -255,7 +260,7 @@ public class Main extends JFrame
    * Creates the button icons in the files.
    * 
    * @param path
-   * @return
+   * @return image icon
    */
   private ImageIcon createImageIcon(final String path)
   {
@@ -295,7 +300,7 @@ public class Main extends JFrame
    * @param menuBar
    *          of the application
    */
-  private void createFileMenu(JMenuBar menuBar)
+  private void createFileMenu(final JMenuBar menuBar)
   {
     JMenu fileMenu = new JMenu(strings.getString("menu_file"));
     menuBar.add(fileMenu);
@@ -311,7 +316,7 @@ public class Main extends JFrame
    * @param unitSystem
    *          the units used
    */
-  private void setUnitSystem(UnitSystemPreferences.UnitSystem unitSystem)
+  private void setUnitSystem(final UnitSystemPreferences.UnitSystem unitSystem)
   {
     UnitSystemPreferences.setCurrentUnitSystem(unitSystem);
     if (converterWindow != null && converterWindow.isDisplayable())
@@ -340,7 +345,8 @@ public class Main extends JFrame
     editMenu.add(recipeEditorItem);
 
     // action listener to open the recipe editor when this item is clicked
-    recipeEditorItem.addActionListener(e -> {
+    recipeEditorItem.addActionListener(e -> 
+    {
       RecipeEditor recipeViewer = new RecipeEditor(currentLocale);
       recipeViewer.setVisible(true);
     });
@@ -349,7 +355,8 @@ public class Main extends JFrame
     editMenu.add(mealEditorItem);
 
     // action listener to open the meal editor when this item is clicked
-    mealEditorItem.addActionListener(e -> {
+    mealEditorItem.addActionListener(e -> 
+    {
       MealEditor mealViewer = new MealEditor(currentLocale);
       mealViewer.setVisible(true);
     });
@@ -369,7 +376,8 @@ public class Main extends JFrame
     JMenuItem shoppingListViewerItem = new JMenuItem(strings.getString("menu_item_shopping_list"));
     viewMenu.add(shoppingListViewerItem);
 
-    shoppingListViewerItem.addActionListener(e -> {
+    shoppingListViewerItem.addActionListener(e -> 
+    {
       ShoppingListWindow shoppingListViewer = new ShoppingListWindow(currentLocale);
       shoppingListViewer.setVisible(true);
     });
@@ -391,7 +399,8 @@ public class Main extends JFrame
     toolsMenu.add(caloriesCalculatorItem);
     toolsMenu.add(unitsConverterItem);
 
-    unitsConverterItem.addActionListener(e -> {
+    unitsConverterItem.addActionListener(e -> 
+    {
       // Check if the converter window doesn't exist or is not visible
       if (converterWindow == null || !converterWindow.isDisplayable())
       {
@@ -409,7 +418,8 @@ public class Main extends JFrame
     });
 
     // action listener for the Calories Calculator item
-    caloriesCalculatorItem.addActionListener(e -> {
+    caloriesCalculatorItem.addActionListener(e -> 
+    {
       // Check if the calorie window doesn't exist or is not visible
       if (calorieWindow == null || !calorieWindow.isDisplayable())
       {
@@ -438,7 +448,8 @@ public class Main extends JFrame
     JMenuItem recipeSearcher = new JMenuItem(strings.getString("search_recipe_searcher"));
     searchMenu.add(recipeSearcher);
     // Add action listener for Recipe Searcher
-    recipeSearcher.addActionListener(e -> {
+    recipeSearcher.addActionListener(e -> 
+    {
       RecipeSearcher rSearcher = new RecipeSearcher(currentLocale);
       rSearcher.setVisible(true);
     });
@@ -446,7 +457,8 @@ public class Main extends JFrame
     JMenuItem mealSearcher = new JMenuItem(strings.getString("search_meal_searcher"));
     searchMenu.add(mealSearcher);
     // Add action listener for Meal Searcher
-    mealSearcher.addActionListener(e -> {
+    mealSearcher.addActionListener(e -> 
+    {
       // Create and display a new Meal Searcher window
       MealSearcher mSearcher = new MealSearcher(currentLocale);
       mSearcher.setVisible(true);
@@ -459,7 +471,7 @@ public class Main extends JFrame
    * @param menuBar
    *          of the application
    */
-  private void createConfigureMenu(JMenuBar menuBar)
+  private void createConfigureMenu(final JMenuBar menuBar)
   {
     JMenu configureMenu = new JMenu(strings.getString("menu_configure"));
     menuBar.add(configureMenu);
@@ -658,7 +670,8 @@ public class Main extends JFrame
   public static void main(final String[] args)
   {
     // Use SwingUtilities.invokeLater to ensure thread safety in Swing applications
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(() -> 
+    {
       // Get the default locale of the system (or set to any other desired locale)
       Locale desiredLocale = Locale.getDefault();
 

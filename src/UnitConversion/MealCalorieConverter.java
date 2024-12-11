@@ -5,9 +5,20 @@ import Information.RecipeIngredient;
 import Information.Meal;
 import Information.Recipe;
 
+/**
+ * Meal Calorie Converter.
+ * 
+ * @author Trevor Lloyd.
+ */
 public class MealCalorieConverter
 {
-  public static double convertMeal(Meal meal) 
+  /**
+   * Converter.
+   * 
+   * @param meal given meal
+   * @return double the number
+   */
+  public static double convertMeal(final Meal meal) 
   {
     double totalCalories = 0.0;
     
@@ -40,7 +51,8 @@ public class MealCalorieConverter
             break;
           } 
         }
-        if (currUnit == null)  {
+        if (currUnit == null)  
+        {
           currUnit = MassVolumeConverter.Unit.OUNCES;
         }
         totalCalories += CalorieConverter.convert(currIngredient,

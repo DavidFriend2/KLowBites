@@ -3,7 +3,7 @@ package Information;
 import java.io.Serializable;
 
 /**
- * Utensil Class
+ * Utensil Class.
  * 
  * @author ryan mendez
  */
@@ -14,19 +14,19 @@ public class Utensil implements Serializable
   String details;
   
   /**
-   * Utensil constructor
+   * Utensil constructor.
    * 
    * @param name of utensil
    * @param details of utensil
    */
-  public Utensil(String name, String details)
+  public Utensil(final String name, final String details)
   {
     this.name = name;
     this.details = details;
   }
   
   /**
-   * Get name method
+   * Get name method.
    * 
    * @return name of the utensil
    */
@@ -36,7 +36,7 @@ public class Utensil implements Serializable
   }
   
   /**
-   * Get details method
+   * Get details method.
    * 
    * @return details of the utensil
    */
@@ -46,21 +46,21 @@ public class Utensil implements Serializable
   }
   
   /**
-   * Set name method
+   * Set name method.
    * 
    * @param name of the utensil
    */
-  public void setName(String name)
+  public void setName(final String name)
   {
     this.name = name;
   }
   
   /**
-   * Set details method
+   * Set details method.
    * 
    * @param details of the utensil
    */
-  public void setDetails(String details)
+  public void setDetails(final String details)
   {
     this.details = details;
   }

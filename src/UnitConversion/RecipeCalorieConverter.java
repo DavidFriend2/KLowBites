@@ -4,9 +4,21 @@ import Information.Ingredient;
 import Information.RecipeIngredient;
 import Information.Recipe;
 
+/**
+ * Recipe Calorie Converter.
+ * 
+ * @author Trevor Lloyd
+ */
 public class RecipeCalorieConverter
 {
-  public static double convertRecipe(Recipe recipe) 
+  
+  /**
+   * Converter.
+   * 
+   * @param recipe 
+   * @return double the number
+   */
+  public static double convertRecipe(final Recipe recipe) 
   {
     double totalCalories = 0.0;
     
@@ -37,7 +49,8 @@ public class RecipeCalorieConverter
           break;
         } 
       }
-      if (currUnit == null)  {
+      if (currUnit == null)  
+      {
         currUnit = MassVolumeConverter.Unit.OUNCES;
       }
       totalCalories += CalorieConverter.convert(currIngredient,

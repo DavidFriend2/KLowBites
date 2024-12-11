@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Recipe class
+ * Recipe class.
  * 
  * @author ryan mendez
  */
@@ -26,18 +26,19 @@ public class Recipe implements Serializable
   private String pairing;
     
   /**
-   * Recipe constructor
+   * Recipe constructor.
    *  
    * @param name
    * @param serves
    * @param ingredients
    * @param utensils
    * @param steps
+   * @param pairing
    */
   public Recipe(final String name, final int serves,
-     final List<RecipeIngredient> ingredients, 
-     final List<Utensil> utensils, final List<Step> steps,
-     final String pairing)
+      final List<RecipeIngredient> ingredients, 
+      final List<Utensil> utensils, final List<Step> steps,
+      final String pairing)
   {
     this.name = name;
     this.serves = serves;
@@ -48,7 +49,7 @@ public class Recipe implements Serializable
   }
  
   /**
-   * Get name method
+   * Get name method.
    * 
    * @return name of recipe
    */
@@ -58,7 +59,7 @@ public class Recipe implements Serializable
   }
   
   /**
-   * Get serves method
+   * Get serves method.
    * 
    * @return amount of people the recipe serves
    */
@@ -68,7 +69,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Get Ingredients method
+   * Get Ingredients method.
    * 
    * @return Ingredients in recipe
    */
@@ -78,7 +79,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Get utensils metod
+   * Get utensils metod.
    * 
    * @return utensils in recipe
    */
@@ -88,7 +89,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Get Recipe method
+   * Get Recipe method.
    * 
    * @return list of recipes
    */
@@ -98,7 +99,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Get steps method
+   * Get steps method.
    * 
    * @return steps in the recipe
    */
@@ -108,16 +109,17 @@ public class Recipe implements Serializable
   }
   
   /**
-   * Get Drink pairings
+   * Get Drink pairings.
    * 
    * @return a given drink pairing
    */
-  public String getPairing() {
+  public String getPairing() 
+  {
     return this.pairing;
   }
    
   /**
-   * Add recipe method
+   * Add recipe method.
    * 
    * @param recipe
    */
@@ -127,7 +129,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * String method
+   * String method.
    */
   @Override
   public String toString()
@@ -136,7 +138,9 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Load recipes method
+   * Load recipes method.
+   * 
+   * @param file
    */
   @SuppressWarnings("unchecked")
   public static void loadRecipes(final String file) throws IOException, ClassNotFoundException
@@ -148,7 +152,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Saves recipes 
+   * Saves recipes.
    * @param file
    * @throws IOException
    */
@@ -161,7 +165,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Get file name helper method
+   * Get file name helper method.
    * 
    * @return file name
    */
@@ -171,7 +175,7 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Save recipe to a file method
+   * Save recipe to a file method.
    * 
    * @param file
    * @throws IOException
@@ -185,9 +189,9 @@ public class Recipe implements Serializable
   }
    
   /**
-   * Load recipe from file method
+   * Load recipe from file method.
    * @param file
-   * @return
+   * @return recipe
    * @throws IOException
    * @throws ClassNotFoundException
    */

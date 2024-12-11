@@ -22,7 +22,7 @@ public class MassVolumeConverter
    * Array of units considered as weights/mass units.
    */
   private static final Unit[] WEIGHTS = {Unit.GRAMS, Unit.DRAMS,
-		      Unit.OUNCES, Unit.POUNDS, Unit.KILOGRAMS};
+      Unit.OUNCES, Unit.POUNDS, Unit.KILOGRAMS};
 
   /**
    * Converts a value from one unit to another for a specific ingredient.
@@ -90,6 +90,11 @@ public class MassVolumeConverter
     return Unit.values();
   }
   
+  /**
+   * Gets weights.
+   * 
+   * @return weights
+   */
   public static Unit[] getWeights()
   {
     return MassVolumeConverter.WEIGHTS;

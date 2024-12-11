@@ -1,10 +1,9 @@
 package Information;
 
-import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Ingredient class
+ * Ingredient class.
  * 
  * @author ryan mendez
  */
@@ -26,7 +25,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   private double gramsPerMl;
 
   /**
-   * Ingredient Constructor
+   * Ingredient Constructor.
    * 
    * @param name
    *          of ingredient
@@ -44,7 +43,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Get name method
+   * Get name method.
    * 
    * @return name of ingredient
    */
@@ -54,7 +53,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Get Calories per 100 grams method
+   * Get Calories per 100 grams method.
    * 
    * @return calories100g of ingredient
    */
@@ -64,7 +63,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Get grams per Ml method
+   * Get grams per Ml method.
    * 
    * @return grams per ml of ingredient
    */
@@ -74,7 +73,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Get ingredient list method
+   * Get ingredient list method.
    * 
    * @return the saved list of ingredients
    */
@@ -85,7 +84,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Set Ingredients list method
+   * Set Ingredients list method.
    * 
    * @param loaded
    *          list of ingredients to set as the saved list
@@ -96,7 +95,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Compare to method
+   * Compare to method.
    * 
    * @param o
    *          ingredient to compare to
@@ -109,7 +108,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Get Ingredient by its name method
+   * Get Ingredient by its name method.
    * 
    * @param name
    *          to search for
@@ -129,7 +128,9 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * To String method
+   * To String method.
+   * 
+   * @return name
    */
   public String toString()
   {
@@ -137,7 +138,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Add Ingredient method
+   * Add Ingredient method.
    * 
    * @param ingredient
    *          to add to the saved list
@@ -148,9 +149,9 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Load Ingredients list method
+   * Load Ingredients list method.
    * 
-   * @param file
+   * @param path file
    *          of list of Ingredient objects to open
    * @return the loaded ingredients list
    * @throws IOException
@@ -168,9 +169,9 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   }
 
   /**
-   * Save Ingredients list method
+   * Save Ingredients list method.
    * 
-   * @param file
+   * @param path file
    *          to save the ingredients list to
    * @throws IOException
    */

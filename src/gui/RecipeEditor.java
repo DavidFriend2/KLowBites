@@ -33,14 +33,20 @@ import Information.Utensil;
 import gui.EditorListeners.*;
 
 /**
- * recipe class.
+ * Recipe Editor Window.
+ * 
+ * @author Nathan Kirby, David Friend
  */
-public class RecipeEditor extends JFrame {
+public class RecipeEditor extends JFrame 
+{
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -1922930697879333939L;
+  public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
+  public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
+  public DefaultListModel<String> dlm3 = new DefaultListModel<>();
+  public List<Step> fullStepList = new ArrayList<>();
+  public DefaultListModel<String> dlm2 = new DefaultListModel<>();
+  public List<Utensil> fullUtensilList = new ArrayList<>();
   private String delete = "Delete";
   private String add = "Add";
   private String name = "Name: ";
@@ -55,23 +61,17 @@ public class RecipeEditor extends JFrame {
   private JButton saveAsButton;
   private ResourceBundle strings;
   @SuppressWarnings("unused")
-private String state;
+  private String state;
   private Locale currentLocale;
   private List<JComponent> components;
-  
-  public DefaultListModel<String> dlm = new DefaultListModel<>(); // ingredients held in this
-  public List<RecipeIngredient> fullIngredientList = new ArrayList<>();
-  public DefaultListModel<String> dlm3 = new DefaultListModel<>();
-  public List<Step> fullStepList = new ArrayList<>();
-  public DefaultListModel<String> dlm2 = new DefaultListModel<>();
-  public List<Utensil> fullUtensilList = new ArrayList<>();
   
   /**
    * recipe.
    * 
    * @param locale l
    */
-  public RecipeEditor(final Locale locale) {
+  public RecipeEditor(final Locale locale) 
+  {
     this.currentLocale = locale;
     this.components = new ArrayList<>();
     strings = ResourceBundle.getBundle("resources.Strings", locale); // Corrected line
@@ -157,8 +157,9 @@ private String state;
     JLabel ingUnits = new JLabel(strings.getString("label_units"));
     JComboBox<String> ingUnitCombo = new JComboBox<String>();
     components.add(ingUnitCombo);
-    for (String unit : UnitSystemPreferences.getUnitsForCurrentSystem(strings)) {
-        ingUnitCombo.addItem(unit);
+    for (String unit : UnitSystemPreferences.getUnitsForCurrentSystem(strings)) 
+    {
+      ingUnitCombo.addItem(unit);
     }
     JButton ingAdd = new JButton(strings.getString("button_add"));
 
@@ -278,8 +279,6 @@ private String state;
     newButton = new JButton(new ImageIcon(newImg));
     newButton.setPreferredSize(new Dimension(50, 50));
     newButton.setToolTipText(strings.getString("tooltip_new"));
-    NewListener newListener = new NewListener();
-    //newButton.addActionListener(newListener);
     imagePanel.add(newButton);
 
     //initialize open button ----------------------------------------------
@@ -349,7 +348,7 @@ private String state;
   }
   
   /**
-   * main.
+   * Gets main panel.
    * 
    * @return main
    */
@@ -359,7 +358,7 @@ private String state;
   }
 
   /**
-   * button.
+   * Gets open button.
    * 
    * @return button
    */
@@ -369,7 +368,7 @@ private String state;
   }
   
   /**
-   * button.
+   * Gets close button.
    * 
    * @return button
    */
@@ -379,7 +378,7 @@ private String state;
   }
 
   /**
-   * button.
+   * Gets save listener.
    * 
    * @return button
    */
@@ -389,7 +388,7 @@ private String state;
   }
   
   /**
-   * button.
+   * Gets open listener.
    * 
    * @return listen
    */
@@ -399,16 +398,17 @@ private String state;
   }
   
   /**
-   * comps.
+   * Gets the list of components.
    * 
    * @return comps
    */
-  protected List<JComponent> getComps() {
+  protected List<JComponent> getComps() 
+  {
     return components;
   }
 
   /**
-   * create icon.
+   * Creates image icon for buttons.
    * 
    * @param path path
    * @return images
@@ -426,21 +426,9 @@ private String state;
       return null;
     }
   }
-
-  /**
-   * listen.
-   */
-  private class NewListener implements ActionListener 
-  {
-    @Override
-    public void actionPerformed(final ActionEvent e) 
-    {
-      //new SaveAsListener()
-    }
-  }
   
   /**
-   * listen.
+   * Adds ingredient.
    */
   private class AddIngListener implements ActionListener 
   {
@@ -451,7 +439,7 @@ private String state;
     JComboBox<String> stepOnCombo;
   
     /**
-     * add listen.
+     * Constructor.
      * 
      * @param ingName name
      * @param ingDetail detail
@@ -470,12 +458,8 @@ private String state;
       this.stepOnCombo = stepOnCombo;
     }
   
-    @SuppressWarnings("unchecked")
-  @Override
-  /**
-   * action.
-   */
-  public void actionPerformed(final ActionEvent e) 
+    @Override
+    public void actionPerformed(final ActionEvent e) 
     {
       try 
       {
@@ -560,7 +544,7 @@ private String state;
   }
   
   /**
-   * step.
+   * Adds step.
    */
   private class AddStepListener implements ActionListener 
   {
@@ -571,7 +555,7 @@ private String state;
     JTextField time;
   
     /**
-     * add step.
+     * Add step.
      * 
      * @param stepAction action
      * @param stepOn on
@@ -591,28 +575,30 @@ private String state;
     }
   
     @Override
-    /**
-     * action.
-     */
     public void actionPerformed(final ActionEvent e) 
     {
         // Add info to the list
       boolean isUtensil = false;
-      for (Utensil ut : fullUtensilList) {
-        if (ut.getName().equals(stepOn.getSelectedItem().toString())) {
+      for (Utensil ut : fullUtensilList) 
+      {
+        if (ut.getName().equals(stepOn.getSelectedItem().toString())) 
+        {
           isUtensil = true;
           break;
         }
       }
       StringBuilder stepDescription;
-      if (isUtensil) {
+      if (isUtensil) 
+      {
         stepDescription = new StringBuilder();
         stepDescription.append(stepAction.getSelectedItem().toString())
                        .append(" the ")
                        .append("contents of the " + stepOn.getSelectedItem().toString())
                        .append(" in the ")
                        .append(stepUtensil.getSelectedItem().toString());
-      } else {
+      } 
+      else 
+      {
         stepDescription = new StringBuilder();
         stepDescription.append(stepAction.getSelectedItem().toString())
                        .append(" the ")
@@ -647,7 +633,7 @@ private String state;
   }
   
   /**
-   * add utensil.
+   * Adds utensil.
    */
   private class AddUtensilListener implements ActionListener 
   {
@@ -674,11 +660,7 @@ private String state;
       this.stepOn = stepOn;
       
     }
-    @SuppressWarnings("unchecked")
-  @Override
-  /**
-   * action.
-   */
+    @Override
     public void actionPerformed(final ActionEvent e) 
     {
       //add info to thing
@@ -701,7 +683,7 @@ private String state;
   }
   
   /**
-   * delete.
+   * Deletes Ingredient.
    */
   private class DeleteIngListener implements ActionListener 
   {
@@ -709,7 +691,7 @@ private String state;
     JComboBox<String> stepOnCombo;
 
     /**
-     * delete.
+     * Deletes ing.
      * 
      * @param ingredientList list
      * @param stepOnCombo combo
@@ -722,9 +704,6 @@ private String state;
     }
 
     @Override
-    /**
-     * action.
-     */
     public void actionPerformed(final ActionEvent e) 
     {
       int selectedIndex = ingredientList.getSelectedIndex();
@@ -749,7 +728,7 @@ private String state;
   }
   
   /**
-   * delete.
+   * Deletes utensil.
    */
   private class DeleteUtensilListener implements ActionListener 
   {
@@ -765,7 +744,7 @@ private String state;
      * @param stepOn on
      */
     public DeleteUtensilListener(final JList<String> utensilList, 
-        final JComboBox<String> stepUtensilCombo, JComboBox stepOn) 
+        final JComboBox<String> stepUtensilCombo, final JComboBox stepOn) 
     {
       this.utensilList = utensilList;
       this.stepUtensilCombo = stepUtensilCombo;
@@ -801,14 +780,14 @@ private String state;
   }
   
   /**
-   * delete.
+   * Deletes step.
    */
   private class DeleteStepListener implements ActionListener 
   {
     JList<String> stepList;
 
     /**
-     * delete step.
+     * Delete step.
      * 
      * @param stepList step
      */
@@ -818,9 +797,6 @@ private String state;
     }
 
     @Override
-    /**
-     * action.
-     */
     public void actionPerformed(final ActionEvent e) 
     {
       int selectedIndex = stepList.getSelectedIndex();
@@ -841,14 +817,11 @@ private String state;
   }
   
   /**
-   * close.
+   * Closes the file.
    */
   private class CloseListener implements ActionListener 
   {
     @Override
-    /**
-     * action
-     */
     public void actionPerformed(final ActionEvent e) 
     {
       RecipeEditor re = new RecipeEditor(currentLocale); // Pass the current locale
@@ -859,11 +832,12 @@ private String state;
   }
 
   /**
-   * main.
+   * Main.
    * 
    * @param args args
    */
-  public static void main(final String[] args) {
+  public static void main(final String[] args) 
+  {
     SwingUtilities.invokeLater(() -> 
     {
       Locale locale = Locale.getDefault(); //change this

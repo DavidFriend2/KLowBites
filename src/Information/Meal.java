@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Meal class
+ * Meal class.
  * 
  * @author ryan mendez
  */
@@ -20,7 +20,7 @@ public class Meal implements Serializable
   List<Recipe> recipes;
   
   /**
-   * Meal constructor
+   * Meal constructor.
    * 
    * @param name
    * @param recipes
@@ -32,7 +32,7 @@ public class Meal implements Serializable
   }
   
   /**
-   * Get name method
+   * Get name method.
    * 
    * @return name of meal
    */
@@ -42,16 +42,17 @@ public class Meal implements Serializable
   }
   
   /**
-   * Get recipes in meal method
+   * Get recipes in meal method.
    * 
    * @return the recipes in the meal
    */
-  public List<Recipe> getRecipes(){
+  public List<Recipe> getRecipes()
+  {
     return recipes;
   }
   
   /**
-   * Add recipe to meal method
+   * Add recipe to meal method.
    * 
    * @param recipe to add
    */
@@ -61,7 +62,7 @@ public class Meal implements Serializable
   }
   
   /**
-   * Get filename method
+   * Get filename method.
    * 
    * @return filename for meal
    */
@@ -71,7 +72,7 @@ public class Meal implements Serializable
   }
   
   /**
-   * To string method
+   * To string method.
    * 
    * @return String rep of meal
    */
@@ -81,7 +82,7 @@ public class Meal implements Serializable
   }
   
   /**
-   * Save meal to file method
+   * Save meal to file method.
    * 
    * @param file
    * @throws IOException
@@ -95,10 +96,10 @@ public class Meal implements Serializable
   }
   
   /**
-   * Load meal from file method
+   * Load meal from file method.
    * 
    * @param file
-   * @return
+   * @return meal
    * @throws IOException
    * @throws ClassNotFoundException
    */

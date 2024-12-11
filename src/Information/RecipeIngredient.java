@@ -3,7 +3,7 @@ package Information;
 import java.io.Serializable;
 
 /**
- * Recipe Ingredient Class
+ * Recipe Ingredient Class.
  * 
  * @author ryan mendez
  */
@@ -16,14 +16,15 @@ public class RecipeIngredient implements Serializable
   private String unit;
   
   /**
-   * Recipe Ingredient Constructor
+   * Recipe Ingredient Constructor.
    * 
    * @param name of ingredient
    * @param details for ingredient
    * @param amount of ingredient
    * @param unit for ingredient
    */
-  public RecipeIngredient(String name, String details, double amount, String unit)
+  public RecipeIngredient(final String name, final String details, 
+      final double amount, final String unit)
   {
     this.name = name;
     this.details = details;
@@ -32,7 +33,7 @@ public class RecipeIngredient implements Serializable
   }
   
   /**
-   * Get name method
+   * Get name method.
    * 
    * @return name of recipe ingredient
    */
@@ -42,7 +43,7 @@ public class RecipeIngredient implements Serializable
   }
   
   /**
-   * Get details method
+   * Get details method.
    * 
    * @return details for the recipe ingredient
    */
@@ -52,7 +53,7 @@ public class RecipeIngredient implements Serializable
   }
 
   /**
-   * Get amount method
+   * Get amount method.
    * 
    * @return amount of the recipe ingredient
    */
@@ -62,7 +63,7 @@ public class RecipeIngredient implements Serializable
   }
   
   /**
-   * Get unit method
+   * Get unit method.
    * 
    * @return unit for the recipe ingredient
    */
@@ -72,7 +73,7 @@ public class RecipeIngredient implements Serializable
   }
   
   /**
-   * Get Ingredient object method
+   * Get Ingredient object method.
    * 
    * Returns the associated ingredient object based off its name for calorie and grams per ml info
    * 
@@ -84,7 +85,7 @@ public class RecipeIngredient implements Serializable
   }
   
   /**
-   * To string method
+   * To string method.
    */
   @Override
   public String toString()
@@ -93,41 +94,41 @@ public class RecipeIngredient implements Serializable
   }
   
   /**
-   * Set name method
+   * Set name method.
    * 
    * @param name to set the recipe ingredient
    */
-  public void setName(String name)
+  public void setName(final String name)
   {
     this.name = name;
   }
   
   /**
-   * Set details method
+   * Set details method.
    * 
    * @param details to set the recipe ingredient
    */
-  public void setDetails(String details)
+  public void setDetails(final String details)
   {
     this.details = details;
   }
 
   /**
-   * Set amount method
+   * Set amount method.
    * 
    * @param amount to set the recipe ingredient
    */
-  public void setAmount(double amount)
+  public void setAmount(final double amount)
   {
     this.amount = amount;
   }
   
   /**
-   * Set unit method
+   * Set unit method.
    * 
    * @param unit to set the recipe ingredient
    */
-  public void setUnit(String unit)
+  public void setUnit(final String unit)
   {
     this.unit = unit;
   }

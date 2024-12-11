@@ -2,7 +2,13 @@ package UnitConversion;
 
 import Information.Ingredient;
 
-public class CalorieConverter {
+/**
+ * Calorie Converter.
+ * 
+ * @author Trevor Lloyd.
+ */
+public class CalorieConverter 
+{
   private static final MassVolumeConverter.Unit[] WEIGHTS  = {
       MassVolumeConverter.Unit.DRAMS, 
       MassVolumeConverter.Unit.GRAMS, 
@@ -11,7 +17,15 @@ public class CalorieConverter {
       MassVolumeConverter.Unit.KILOGRAMS
       
   };
-
+  
+  /**
+   * Converter.
+   * 
+   * @param ingredient
+   * @param amount
+   * @param unit
+   * @return double the number
+   */
   public static double convert(final Ingredient ingredient, 
       final double amount, final MassVolumeConverter.Unit unit) 
   {

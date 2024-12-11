@@ -7,7 +7,7 @@ import java.util.List;
 import UnitConversion.*;
 
 /**
- * Shopping List class
+ * Shopping List class.
  * 
  * @author ryan mendez
  */
@@ -19,14 +19,14 @@ public class ShoppingList
   Meal meal;
 
   /**
-   * Shopping List Constructor for a Recipe
+   * Shopping List Constructor for a Recipe.
    * 
    * @param recipe
    *          to shop for
    * @param numofpeople
    *          to shop for
    */
-  public ShoppingList(Recipe recipe, int numofpeople)
+  public ShoppingList(final Recipe recipe, final int numofpeople)
   {
     // Updated for amount of people
     this.numofpeople = numofpeople;
@@ -36,14 +36,14 @@ public class ShoppingList
   }
 
   /**
-   * Shopping List Constructor for a Meal
+   * Shopping List Constructor for a Meal.
    * 
    * @param meal
    *          to shop for
    * @param numofpeople
    *          to shop for
    */
-  public ShoppingList(Meal meal, int numofpeople)
+  public ShoppingList(final Meal meal, final int numofpeople)
   {
     this.numofpeople = numofpeople;
     this.meal = meal;
@@ -112,7 +112,7 @@ public class ShoppingList
   }
 
   /**
-   * Get number of people method
+   * Get number of people method.
    * 
    * @return the amount of people to shop for
    */
@@ -122,7 +122,7 @@ public class ShoppingList
   }
 
   /**
-   * Get Shopping List method
+   * Get Shopping List method.
    * 
    * @return list of ingredients to shop for
    */
@@ -132,7 +132,7 @@ public class ShoppingList
   }
 
   /**
-   * Change Ingredient amount method
+   * Change Ingredient amount method.
    * 
    * Updates the amount for each ingredient based on the amount of people to shop for
    * 
@@ -140,7 +140,7 @@ public class ShoppingList
    *          to update
    * @return updated recipe
    */
-  private Recipe changeIngredientAmount(Recipe recipeToChange)
+  private Recipe changeIngredientAmount(final Recipe recipeToChange)
   {
     Recipe converted = new Recipe(recipeToChange.getName(), recipeToChange.getServes(),
         recipeToChange.getIngredients(), recipeToChange.getUtenils(), recipeToChange.getSteps(), 
@@ -158,7 +158,7 @@ public class ShoppingList
   }
 
   /**
-   * Convert method
+   * Convert method.
    * 
    * Converts amount of an ingredient from one unit to another
    * 
@@ -172,8 +172,8 @@ public class ShoppingList
    *          to use in case density info is required
    * @return the converted amount
    */
-  public static double convert(double value, MassVolumeConverter.Unit from,
-      MassVolumeConverter.Unit to, Ingredient ingredient)
+  public static double convert(final double value, final MassVolumeConverter.Unit from,
+      final MassVolumeConverter.Unit to, final Ingredient ingredient)
   {
     // Check if both from and to are mass units
     if (isMass(from) && isMass(to))
@@ -191,13 +191,13 @@ public class ShoppingList
   }
 
   /**
-   * Get Unit from its string rep
+   * Get Unit from its string rep.
    * 
    * @param unitString
    *          string rep of unit
    * @return the actual unit
    */
-  public static MassVolumeConverter.Unit getUnitFromString(String unitString)
+  public static MassVolumeConverter.Unit getUnitFromString(final String unitString)
   {
     String unit = unitString.trim().toLowerCase();
 
@@ -245,14 +245,14 @@ public class ShoppingList
   }
 
   /**
-   * Check if unit is mass
+   * Check if unit is mass.
    * 
    * @param unit
    *          to check
    * 
    * @return true if mass unit, false if not
    */
-  private static boolean isMass(MassVolumeConverter.Unit unit)
+  private static boolean isMass(final MassVolumeConverter.Unit unit)
   {
     for (MassVolumeConverter.Unit massUnit : MassVolumeConverter.getWeights())
     {
@@ -265,14 +265,14 @@ public class ShoppingList
   }
 
   /**
-   * Check if unit is volume
+   * Check if unit is volume.
    * 
    * @param unit
    *          to check
    * 
    * @return true if volume unit, false if not
    */
-  private static boolean isVolume(MassVolumeConverter.Unit unit)
+  private static boolean isVolume(final MassVolumeConverter.Unit unit)
   {
     return !isMass(unit);
   }
