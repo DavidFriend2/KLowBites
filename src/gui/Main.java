@@ -523,14 +523,26 @@ public class Main extends JFrame
    */
   private void createHelpMenu(final JMenuBar menuBar)
   {
-    JMenu helpMenu = new JMenu(strings.getString("menu_help"));
-    menuBar.add(helpMenu);
-    JMenuItem userGuide = new JMenuItem(strings.getString("menu_item_user_guide"));
-    helpMenu.add(userGuide);
+      JMenu helpMenu = new JMenu(strings.getString("menu_help"));
+      menuBar.add(helpMenu);
 
-    // Add an action listener to open the HTML guide when User Guide is clicked
-    userGuide.addActionListener(e -> openHtmlGuide());
+      JMenuItem userGuide = new JMenuItem(strings.getString("menu_item_user_guide"));
+      helpMenu.add(userGuide);
+
+      // Add an action listener to open the HTML guide when User Guide is clicked
+      userGuide.addActionListener(e -> openHtmlGuide());
+
+      // Create and add the About menu item
+      JMenuItem aboutItem = new JMenuItem(strings.getString("menu_item_about"));
+      helpMenu.add(aboutItem);
+
+      // Add an action listener to open the About window when clicked
+      aboutItem.addActionListener(e -> {
+          AboutWindow aboutWindow = new AboutWindow(currentLocale);
+          aboutWindow.setVisible(true);
+      });
   }
+
 
   /**
    * Sets the correct html guide based on language.
