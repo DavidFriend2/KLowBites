@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Ingredient implements Serializable, Comparable<Ingredient>
 {
-  
+
   private static final long serialVersionUID = 1L;
   private static List<Ingredient> ingredients = new ArrayList<>();
   private String name;
@@ -28,9 +28,12 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   /**
    * Ingredient Constructor
    * 
-   * @param name of ingredient
-   * @param caloriesPer100g of ingredient
-   * @param gramsPerMl of ingredient
+   * @param name
+   *          of ingredient
+   * @param caloriesPer100g
+   *          of ingredient
+   * @param gramsPerMl
+   *          of ingredient
    */
   public Ingredient(final String name, final int caloriesPer100g, final double gramsPerMl)
   {
@@ -69,7 +72,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   {
     return gramsPerMl;
   }
-  
+
   /**
    * Get ingredient list method
    * 
@@ -80,21 +83,23 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     ingredients.sort(null);
     return ingredients;
   }
-  
+
   /**
    * Set Ingredients list method
    * 
-   * @param loaded list of ingredients to set as the saved list
+   * @param loaded
+   *          list of ingredients to set as the saved list
    */
   public static void setIngredients(final List<Ingredient> loaded)
   {
     ingredients = loaded;
   }
-  
+
   /**
    * Compare to method
    * 
-   * @param o ingredient to compare to
+   * @param o
+   *          ingredient to compare to
    * 
    * @return the result of the comparison
    */
@@ -102,26 +107,27 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   {
     return 0;
   }
-  
+
   /**
    * Get Ingredient by its name method
    * 
-   * @param name to search for
+   * @param name
+   *          to search for
    * 
    * @return the Ingredient if found
    */
   public static Ingredient getIngredientbyName(final String name)
   {
-    for(Ingredient ingredient: ingredients)
+    for (Ingredient ingredient : ingredients)
     {
-      if(ingredient.name.equals(name))
+      if (ingredient.name.equals(name))
       {
         return ingredient;
       }
     }
     return null;
   }
-  
+
   /**
    * To String method
    */
@@ -129,70 +135,88 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
   {
     return this.name;
   }
-  
+
   /**
    * Add Ingredient method
    * 
-   * @param ingredient to add to the saved list
+   * @param ingredient
+   *          to add to the saved list
    */
   public static void addIngredient(final Ingredient ingredient)
   {
     ingredients.add(ingredient);
   }
-  
+
   /**
    * Load Ingredients list method
    * 
-   * @param file of list of Ingredient objects to open
+   * @param file
+   *          of list of Ingredient objects to open
    * @return the loaded ingredients list
    * @throws IOException
    * @throws ClassNotFoundException
    */
   @SuppressWarnings("unchecked")
-  public static List<Ingredient> loadIngredients(final String path) 
+  public static List<Ingredient> loadIngredients(final String path)
       throws IOException, ClassNotFoundException
   {
     File newfile = new File(path);
 
     // Try loading from the external path
-    if (newfile.exists() && newfile.isFile()) {
-        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(newfile))) {
-            return (List<Ingredient>) input.readObject();
-        }
+    if (newfile.exists() && newfile.isFile())
+    {
+      try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(newfile)))
+      {
+        return (List<Ingredient>) input.readObject();
+      }
     }
-    
+
     try (InputStream input = Ingredient.class.getResourceAsStream("/" + path);
-        ObjectInputStream objectInput = new ObjectInputStream(input)) {
-       return (List<Ingredient>) objectInput.readObject();
-   }
-    
+        ObjectInputStream objectInput = new ObjectInputStream(input))
+    {
+      return (List<Ingredient>) objectInput.readObject();
+    }
+
   }
-  
+
   /**
    * Save Ingredients list method
    * 
-   * @param file to save the ingredients list to
+   * @param file
+   *          to save the ingredients list to
    * @throws IOException
    */
-  public static void saveIngredients(final String file) throws IOException
+  public static void saveIngredients(final String path) throws IOException
   {
+    File file = new File(path);
+
+    // Check if the parent directories exist, if not, create them
+    if (!file.getParentFile().exists())
+    {
+      boolean dirCreated = file.getParentFile().mkdirs();
+      if (!dirCreated)
+      {
+        throw new IOException("Failed to create directory: " + file.getParentFile());
+      }
+    }
+
     try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file)))
     {
       output.writeObject(ingredients);
     }
   }
-  
+
   /**
    * Predefined ingredients list
    */
-  static 
+  static
   {
     ingredients.add(new Ingredient("Alcohol", 275, 0.79));
     ingredients.add(new Ingredient("Almond", 601, .46));
     ingredients.add(new Ingredient("American cheese", 440, .34));
     ingredients.add(new Ingredient("Apple", 44, .56));
     ingredients.add(new Ingredient("Apple juice", 48, 1.04));
-    
+
     ingredients.add(new Ingredient("Banana", 65, .56));
     ingredients.add(new Ingredient("Bean", 130, .77));
     ingredients.add(new Ingredient("Beef", 280, 1.05));
@@ -202,7 +226,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     ingredients.add(new Ingredient("Broccoli", 32, .37));
     ingredients.add(new Ingredient("Brown sugar", 380, 1.5));
     ingredients.add(new Ingredient("Butter", 750, .91));
-    
+
     ingredients.add(new Ingredient("Cabbage", 28, 0.36));
     ingredients.add(new Ingredient("Carrot", 41, .64));
     ingredients.add(new Ingredient("Cashew", 553, .5));
@@ -220,39 +244,39 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     ingredients.add(new Ingredient("Crab", 110, .61));
     ingredients.add(new Ingredient("Creme de cacao", 275, .79));
     ingredients.add(new Ingredient("Cucumber", 10, .67));
-    
+
     ingredients.add(new Ingredient("Egg", 150, 0.6));
-    
+
     ingredients.add(new Ingredient("Flour", 364, .45));
-    
+
     ingredients.add(new Ingredient("Garlic", 111, .32));
     ingredients.add(new Ingredient("Grapefruit", 32, .33));
     ingredients.add(new Ingredient("Grape", 62, .37));
     ingredients.add(new Ingredient("Grape juice", 60, 1.04));
     ingredients.add(new Ingredient("Green bean", 31, .53));
-    
+
     ingredients.add(new Ingredient("Haddock", 110, .58));
     ingredients.add(new Ingredient("Ham", 240, 1.4));
     ingredients.add(new Ingredient("Honey", 280, 1.5));
-    
+
     ingredients.add(new Ingredient("Ice cream", 180, .55));
-    
+
     ingredients.add(new Ingredient("Kidney bean", 333, .79));
-    
+
     ingredients.add(new Ingredient("Lamb", 200, 1.3));
     ingredients.add(new Ingredient("lemon", 29, .77));
     ingredients.add(new Ingredient("Lentil", 116, .85));
     ingredients.add(new Ingredient("Lettuce", 15, .06));
-    
+
     ingredients.add(new Ingredient("Macaroni", 371, 1.31));
     ingredients.add(new Ingredient("Milk", 70, 1.04));
     ingredients.add(new Ingredient("Mushroom", 15, 1.17));
-    
+
     ingredients.add(new Ingredient("Oil", 900, .88));
     ingredients.add(new Ingredient("Olive", 80, .65));
     ingredients.add(new Ingredient("Onion", 22, .74));
     ingredients.add(new Ingredient("Orange", 30, .77));
-    
+
     ingredients.add(new Ingredient("Paprika", 282, .46));
     ingredients.add(new Ingredient("Pasta", 371, 1.31));
     ingredients.add(new Ingredient("Peach", 30, .61));
@@ -263,9 +287,9 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     ingredients.add(new Ingredient("Pineapple", 40, .54));
     ingredients.add(new Ingredient("Plum", 39, .58));
     ingredients.add(new Ingredient("Pork", 290, .7));
-    
+
     ingredients.add(new Ingredient("Rum", 275, .79));
-    
+
     ingredients.add(new Ingredient("Salmon", 180, .58));
     ingredients.add(new Ingredient("Salt", 0, 1.38));
     ingredients.add(new Ingredient("Saltine crackers", 421, .43));
@@ -275,12 +299,12 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
     ingredients.add(new Ingredient("Sugar", 400, .95));
     ingredients.add(new Ingredient("Sweet potato", 86, .65));
     ingredients.add(new Ingredient("Syrup", 260, 1.38));
-    
+
     ingredients.add(new Ingredient("Thyme", 101, .46));
     ingredients.add(new Ingredient("Tomato", 20, .67));
-    
+
     ingredients.add(new Ingredient("Wine", 83, .99));
-    
+
   }
 
 }
