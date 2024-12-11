@@ -229,7 +229,16 @@ public class CalorieCalculatorWindow extends JFrame
   private void addInputComponents(UnitSystemPreferences.UnitSystem unitSystem)
   {
     inputPanel.add(new JLabel(strings.getString("calorie_calculator_ingredient_label")));
-
+    try
+    {
+      Ingredient.setIngredients(Ingredient.loadIngredients("ingredients.ntr"));
+    }
+    catch (ClassNotFoundException | IOException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
     List<Ingredient> ingredientsList = Ingredient.getIngredients();
     String[] ingredientChoices = new String[ingredientsList.size() + 1];
     ingredientChoices[0] = "";

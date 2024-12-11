@@ -1,5 +1,6 @@
 package Information;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,16 @@ public class ShoppingList
 
               if (!(ri.getUnit().equals(alreadyin.getUnit())))
               {
+                try
+                {
+                  Ingredient.setIngredients(Ingredient.loadIngredients("ingredients.ntr"));
+                }
+                catch (ClassNotFoundException | IOException e)
+                {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+                }
+                
                 Ingredient riIngredient = Ingredient.getIngredientbyName(ri.getName());
                 MassVolumeConverter.Unit fromUnit = getUnitFromString(ri.getUnit());
                 MassVolumeConverter.Unit toUnit = getUnitFromString(alreadyin.getUnit());
