@@ -195,11 +195,13 @@ public class ShoppingListWindow extends JFrame implements Printable
         fileOpened = file;
         if (file.endsWith(".rcp"))
         {
+          loadedMeal = null;
           loadedRecipe = Recipe.loadRecipeFromFile(file);
           updateShoppingList(new ShoppingList(loadedRecipe, getPeopleCount()));
         }
         else if (file.endsWith(".mel"))
         {
+          loadedRecipe = null;
           loadedMeal = Meal.loadMealFromFile(file);
           updateShoppingList(new ShoppingList(loadedMeal, getPeopleCount()));
         }
