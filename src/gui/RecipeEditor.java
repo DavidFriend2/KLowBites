@@ -480,8 +480,7 @@ private String state;
       try 
       {
           // Load ingredients
-        Ingredient.setIngredients(Ingredient.loadIngredients(
-            "IngredientsNutrition/ingredients.ntr"));
+        Ingredient.setIngredients(Ingredient.loadIngredients("ingredients.ntr"));
   
         Ingredient exists = Ingredient.getIngredientbyName(ingName.getText());
   
