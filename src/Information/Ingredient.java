@@ -1,8 +1,10 @@
 package Information;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -147,13 +149,23 @@ public class Ingredient implements Serializable, Comparable<Ingredient>
    * @throws ClassNotFoundException
    */
   @SuppressWarnings("unchecked")
-  public static List<Ingredient> loadIngredients(final String file) 
+  public static List<Ingredient> loadIngredients(final String path) 
       throws IOException, ClassNotFoundException
   {
-    try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file)))
-    {
-      return (List<Ingredient>) input.readObject();
+    File newfile = new File(path);
+
+    // Try loading from the external path
+    if (newfile.exists() && newfile.isFile()) {
+        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(newfile))) {
+            return (List<Ingredient>) input.readObject();
+        }
     }
+    
+    try (InputStream input = Ingredient.class.getResourceAsStream("/" + path);
+        ObjectInputStream objectInput = new ObjectInputStream(input)) {
+       return (List<Ingredient>) objectInput.readObject();
+   }
+    
   }
   
   /**
