@@ -605,7 +605,13 @@ public class Main extends JFrame
         "gui/unitSelectEn.png", "gui/buttonsLessEn.png", "gui/buttonsMoreEn.png",
         "gui/calorieResultEn.png", "gui/calorieSelectEn.png", "gui/searchRTopEn.png",
         "gui/searchRBottomEn.png", "gui/processStepEn.png", "gui/processUtensil.png",
-        "gui/processButtonEn.png"
+        "gui/processButtonEn.png", "gui/configEn.png", "gui/chooseEn.png",
+        "gui/shoplistEn.png", "gui/print.png", "gui/drinkEn.png","gui/configIt.png",
+        "gui/calorieResultIt.png", "gui/unitResultIt.png", "gui/shoplistIt.png",
+        "gui/chooseIt.png", "gui/searchRBottomIt.png", "gui/searchRTopIt.png",
+        "gui/mealSelectIt.png", "gui/mealNameIt.png", "gui/drinkIt.png",
+        "gui/recipeStepIt.png", "gui/recipeIngredientIt.png", "gui/recipeUtensilIt.png",
+        "gui/recipeButtonsIt.png", "gui/mainIt.png", "gui/calorieSelectIt.png"
 
     };
 
